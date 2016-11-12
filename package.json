@@ -1,0 +1,34 @@
+{
+    "name": "gameboy.ts",
+    "version": "0.0.1",
+    "description": "A gameboy emulator written in typescript.",
+    "main": "build/index.js",
+    "scripts": {
+        "lint": "./node_modules/tslint/bin/tslint src/*.ts",
+        "createTmpDirectory": "mkdir -p tmp",
+        "removeTmpDirectory": "rm -r tmp",
+        "compileTests": "tsc test/*Test.ts --module commonjs --outDir tmp",
+
+        "createBuildDirectory": "mkdir -p build",
+        "compileSrc": "tsc src/*.ts --module commonjs --outDir build",
+
+
+        "pretest": "npm run lint && npm run removeTmpDirectory && npm run createTmpDirectory && npm run compileTests",
+        "test": "mocha tmp/test/*",
+
+        "prebuild": "npm run test",
+        "build": "npm run createBuildDirectory && npm run compileSrc"
+    },
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/chai": "^3.4.34",
+        "@types/mocha": "^2.2.32",
+        "chai": "^3.5.0",
+        "mocha": "^3.1.2",
+        "tslint": "^3.15.1"
+    },
+    "dependencies": {
+        "typescript": "^2.0.9"
+    }
+}
