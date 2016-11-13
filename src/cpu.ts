@@ -18,6 +18,8 @@ export default class Cpu {
         // execute opcode
 
         // update timers
+        delayTimer = this.getUpdatedDelayTimer(this.delayTimer);
+        soundTimer = this.getUpdatedSoundTimer(this.soundTimer);
     }
     */
 
@@ -53,5 +55,26 @@ export default class Cpu {
                 break;
         }
 
+    }
+
+    public getUpdatedDelayTimer(delayTimer: number): number {
+        if (delayTimer > 0) {
+            delayTimer -= 1;
+        }
+
+        return delayTimer;
+    }
+
+    public getUpdatedSoundTimer(soundTimer: number): number {
+        if (soundTimer > 0) {
+
+            if (soundTimer == 1) {
+                console.log("beep!");
+            }
+
+            soundTimer -= 1;
+        }
+
+        return soundTimer;
     }
 }

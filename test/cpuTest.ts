@@ -87,4 +87,22 @@ describe('Cpu', () => {
             expect(cpu.programCounter).equal(2);
         });
     });
+
+    describe('#timer handling', () => {
+        it('can get an updated delay timer', () => {
+            let delayTimer = 10;
+
+            let expectedDelayTimer = 9;
+
+            expect(cpu.getUpdatedDelayTimer(delayTimer)).equal(expectedDelayTimer);
+        });
+
+        it('can get an updated sound timer', () => {
+            let soundTimer = 10;
+
+            let expectedSoundTimer = 9;
+
+            expect(cpu.getUpdatedSoundTimer(soundTimer)).equal(expectedSoundTimer);
+        });
+    });
 });
