@@ -55,4 +55,36 @@ describe('Cpu', () => {
             expect(cpu.stackPointer).equal(0);
         });
     });
+
+    describe('#opcode handling', () => {
+        it('fetches opcode 0xA2F0', () => {
+
+            let memory = [
+                0xA0,
+                0xA1,
+                0xA2,
+                0xF0,
+            ];
+
+            let programCounter = 2;
+
+            expect(cpu.fetchOpcode(memory, programCounter)).equal(0xA2F0);
+        });
+
+        it('decodes opcode 0xA2F0', () => {
+            let memory = [
+                0xA0,
+                0xA1,
+                0xA2,
+                0xF0,
+            ];
+
+            let programCounter = 2;
+
+            cpu.decodeOpcode(0xA2F0);
+
+            expect(cpu.indexRegister).equal(0x2F0);
+            expect(cpu.programCounter).equal(2);
+        });
+    });
 });
