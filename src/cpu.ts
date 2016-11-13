@@ -48,6 +48,8 @@ export default class Cpu {
                 break;
 
             default:
+                console.log('opcode "' + opcode + '" not implemented!');
+
                 break;
         }
 
