@@ -49,6 +49,13 @@ export default class Cpu {
 
                 break;
 
+            case 0x2000:
+                this.stack[this.stackPointer] = this.programCounter;
+                this.stackPointer += 1;
+                this.programCounter = opcode & 0x0FFF;
+
+                break;
+
             default:
                 console.log('opcode "' + opcode + '" not implemented!');
 

@@ -11,80 +11,39 @@ describe('Cpu', () => {
 
     describe('#initial values', () => {
         it('currentOpcode should be 0', () => {
-
             expect(cpu.currentOpcode).equal(0);
         });
 
         it('memory should be empty', () => {
-
             expect(cpu.memory.length).equal(0);
         });
 
         it('registers should be empty', () => {
-
             expect(cpu.registers.length).equal(0);
         });
 
         it('index register should be 0', () => {
-
             expect(cpu.indexRegister).equal(0);
         });
 
         it('programCounter register should be 0', () => {
-
             expect(cpu.programCounter).equal(0);
         });
 
         it('delayTimer should be 0', () => {
-
             expect(cpu.delayTimer).equal(0);
         });
 
         it('soundTimer should be 0', () => {
-
             expect(cpu.soundTimer).equal(0);
         });
 
         it('stack should be empty', () => {
-
             expect(cpu.stack.length).equal(0);
         });
 
         it('stack pointer should be empty', () => {
-
             expect(cpu.stackPointer).equal(0);
-        });
-    });
-
-    describe('#opcode handling', () => {
-        it('fetches opcode 0xA2F0', () => {
-
-            let memory = [
-                0xA0,
-                0xA1,
-                0xA2,
-                0xF0,
-            ];
-
-            let programCounter = 2;
-
-            expect(cpu.fetchOpcode(memory, programCounter)).equal(0xA2F0);
-        });
-
-        it('decodes opcode 0xA2F0', () => {
-            let memory = [
-                0xA0,
-                0xA1,
-                0xA2,
-                0xF0,
-            ];
-
-            let programCounter = 2;
-
-            cpu.decodeOpcode(0xA2F0);
-
-            expect(cpu.indexRegister).equal(0x2F0);
-            expect(cpu.programCounter).equal(2);
         });
     });
 
@@ -94,6 +53,7 @@ describe('Cpu', () => {
 
             let expectedDelayTimer = 9;
 
+
             expect(cpu.getUpdatedDelayTimer(delayTimer)).equal(expectedDelayTimer);
         });
 
@@ -102,7 +62,63 @@ describe('Cpu', () => {
 
             let expectedSoundTimer = 9;
 
+
             expect(cpu.getUpdatedSoundTimer(soundTimer)).equal(expectedSoundTimer);
         });
     });
+
+    describe('#opcode handling', () => {
+        it('fetches opcode 0xANNN (0xA2F0)', () => {
+
+            let memory = [
+                0xA0,
+                0xA1,
+                0xA2,
+                0xF0,
+            ];
+
+            let programCounter = 2;
+
+
+            expect(cpu.fetchOpcode(memory, programCounter)).equal(0xA2F0);
+        });
+
+        it('decodes opcode 0xANNN (0xA2F0)', () => {
+            let programCounter = 2;
+
+
+            cpu.decodeOpcode(0xA2F0);
+
+
+            expect(cpu.indexRegister).equal(0x2F0);
+            expect(cpu.programCounter).equal(2);
+        });
+
+        it('fetches opcode 0x2NNN (0x20F0)', () => {
+            let memory = [
+                0xA0,
+                0xA1,
+                0x20,
+                0xF0,
+            ];
+
+            let programCounter = 2;
+
+
+            expect(cpu.fetchOpcode(memory, programCounter)).equal(0x20F0);
+        });
+
+        it('decodes opcode 0x2NNN (0x20F0)', () => {
+            cpu.programCounter = 4;
+
+
+            cpu.decodeOpcode(0x20F0);
+
+
+            expect(cpu.stack[cpu.stackPointer - 1]).equal(4);
+            expect(cpu.programCounter).equal(0x0F0);
+            expect(cpu.stackPointer).equal(1);
+        });
+    });
+
 });
