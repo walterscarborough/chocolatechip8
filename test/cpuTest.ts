@@ -83,32 +83,18 @@ describe('Cpu', () => {
             expect(cpu.fetchOpcode(memory, programCounter)).equal(0xA2F0);
         });
 
-        it('decodes opcode 0xANNN (0xA2F0)', () => {
-            let programCounter = 2;
+        it('decodes opcode 0xANNN (loadIndexRegister)', () => {
+            cpu.programCounter = 4;
 
 
             cpu.decodeOpcode(0xA2F0);
 
 
             expect(cpu.indexRegister).equal(0x2F0);
-            expect(cpu.programCounter).equal(2);
+            expect(cpu.programCounter).equal(6);
         });
 
-        it('fetches opcode 0x2NNN (0x20F0)', () => {
-            let memory = [
-                0xA0,
-                0xA1,
-                0x20,
-                0xF0,
-            ];
-
-            let programCounter = 2;
-
-
-            expect(cpu.fetchOpcode(memory, programCounter)).equal(0x20F0);
-        });
-
-        it('decodes opcode 0x2NNN (0x20F0)', () => {
+        it('decodes opcode 0x2NNN (jumpToSubroutine)', () => {
             cpu.programCounter = 4;
 
 
@@ -120,32 +106,33 @@ describe('Cpu', () => {
             expect(cpu.stackPointer).equal(1);
         });
 
-        it('fetches opcode 0x8XY4 (0x0004)', () => {
-            let memory = [
-                0xA0,
-                0xA1,
-                0x00,
-                0x04,
-            ];
-
-            let programCounter = 2;
+        describe('decodes opcode 0x8XY4 (addWithCarry)', () => {
+            it('for value less than 256', () => {
+                cpu.registers[0x2] = 6;
+                cpu.registers[0x3] = 6;
 
 
-            expect(cpu.fetchOpcode(memory, programCounter)).equal(0x0004);
+                cpu.decodeOpcode(0x8234);
+
+
+                expect(cpu.registers[0x2]).equal(12);
+                expect(cpu.programCounter).equal(2);
+                expect(cpu.registers[0xF]).equal(0);
+            });
+
+            it('for value greater than 256', () => {
+                cpu.registers[0x2] = 256;
+                cpu.registers[0x3] = 6;
+
+
+                cpu.decodeOpcode(0x8234);
+
+
+                expect(cpu.registers[0x2]).equal(262);
+                expect(cpu.programCounter).equal(2);
+                expect(cpu.registers[0xF]).equal(1);
+            });
         });
 
-        it('decodes opcode 0x8XY4 (0x0004) for value less than 256', () => {
-            cpu.registers[0x2] = 6;
-            cpu.registers[0x3] = 6;
-
-
-            cpu.decodeOpcode(0x8234);
-
-
-            expect(cpu.registers[0x2]).equal(12);
-            expect(cpu.programCounter).equal(2);
-            expect(cpu.registers[0xF]).equal(0);
-        });
     });
-
 });
