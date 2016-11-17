@@ -91,6 +91,23 @@ export default class Cpu {
                 break;
             }
 
+            case 0xF000: {
+                switch (opcode & 0x00FF) {
+
+                    case 0x0033: {
+                        this.storeDecimalValueVX(opcode);
+                        break;
+                    }
+
+                    default: {
+                        console.log('opcode "' + opcode + '" not implemented!');
+                        break;
+                    }
+                }
+
+                break;
+            }
+
             default: {
                 console.log('opcode "' + opcode + '" not implemented!');
                 break;
@@ -119,6 +136,14 @@ export default class Cpu {
         }
 
         this.registers[(opcode & 0x0F00) >> 8] += this.registers[(opcode & 0x00F0) >> 4];
+        this.programCounter += 2;
+    }
+
+    private storeDecimalValueVX(opcode: number) {
+        this.memory[this.indexRegister] = Math.floor(this.registers[(opcode & 0x0F00) >> 8] / 100);
+        this.memory[this.indexRegister + 1] = Math.floor((this.registers[(opcode & 0x0F00) >> 8] / 10) % 10);
+        this.memory[this.indexRegister + 2] = Math.floor((this.registers[(opcode & 0x0F00) >> 8] % 100) % 10);
+
         this.programCounter += 2;
     }
 }

@@ -134,5 +134,19 @@ describe('Cpu', () => {
             });
         });
 
+        it("decodes opcode 0xFX33 (storeDecimalValueVX)", () => {
+            cpu.indexRegister = 0x003;
+            cpu.registers[0x3] = 256;
+
+
+            cpu.decodeOpcode(0xF333);
+
+
+            expect(cpu.memory[cpu.indexRegister]).equal(2);
+            expect(cpu.memory[cpu.indexRegister + 1]).equal(5);
+            expect(cpu.memory[cpu.indexRegister + 2]).equal(6);
+            expect(cpu.programCounter).equal(2);
+        });
+
     });
 });
