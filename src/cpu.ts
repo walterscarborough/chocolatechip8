@@ -42,26 +42,55 @@ export default class Cpu {
         switch (opcode & 0xF000) {
 
             // ANNN: sets indexRegister to address NNN
-            case 0xA000:
+            case 0xA000: {
                 let nnnAddress = opcode & 0x0FFF;
                 this.indexRegister = nnnAddress;
                 this.programCounter += 2;
 
                 break;
+            }
 
-            case 0x2000:
+            case 0x2000: {
                 this.stack[this.stackPointer] = this.programCounter;
                 this.stackPointer += 1;
                 this.programCounter = opcode & 0x0FFF;
 
                 break;
+            }
 
-            default:
+            case 0x8000: {
+                switch (opcode & 0x000F) {
+
+                    case 0x0004: {
+                        if (this.registers[(opcode & 0x00F0) >> 4] > (0xFF - this.registers[(opcode & 0x0F00) >> 8])) {
+                            this.registers[0xF] = 1;
+                        }
+                        else {
+                            this.registers[0xF] = 0;
+                        }
+
+                        this.registers[(opcode & 0x0F00) >> 8] += this.registers[(opcode & 0x00F0) >> 4];
+                        this.programCounter += 2;
+
+                        break;
+                    }
+
+                    default: {
+                        console.log('opcode "' + opcode + '" not implemented!');
+
+                        break;
+                    }
+                }
+
+                break;
+            }
+
+            default: {
                 console.log('opcode "' + opcode + '" not implemented!');
 
                 break;
+            }
         }
-
     }
 
     public getUpdatedDelayTimer(delayTimer: number): number {
@@ -84,4 +113,5 @@ export default class Cpu {
 
         return soundTimer;
     }
+
 }

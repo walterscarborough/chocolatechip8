@@ -9,7 +9,7 @@ describe('Cpu', () => {
         cpu = new Cpu();
     });
 
-    describe('#initial values', () => {
+    describe('initial values', () => {
         it('currentOpcode should be 0', () => {
             expect(cpu.currentOpcode).equal(0);
         });
@@ -47,7 +47,7 @@ describe('Cpu', () => {
         });
     });
 
-    describe('#timer handling', () => {
+    describe('timer handling', () => {
         it('can get an updated delay timer', () => {
             let delayTimer = 10;
 
@@ -67,7 +67,7 @@ describe('Cpu', () => {
         });
     });
 
-    describe('#opcode handling', () => {
+    describe('opcode handling', () => {
         it('fetches opcode 0xANNN (0xA2F0)', () => {
 
             let memory = [
@@ -118,6 +118,33 @@ describe('Cpu', () => {
             expect(cpu.stack[cpu.stackPointer - 1]).equal(4);
             expect(cpu.programCounter).equal(0x0F0);
             expect(cpu.stackPointer).equal(1);
+        });
+
+        it('fetches opcode 0x8XY4 (0x0004)', () => {
+            let memory = [
+                0xA0,
+                0xA1,
+                0x00,
+                0x04,
+            ];
+
+            let programCounter = 2;
+
+
+            expect(cpu.fetchOpcode(memory, programCounter)).equal(0x0004);
+        });
+
+        it('decodes opcode 0x8XY4 (0x0004) for value less than 256', () => {
+            cpu.registers[0x2] = 6;
+            cpu.registers[0x3] = 6;
+
+
+            cpu.decodeOpcode(0x8234);
+
+
+            expect(cpu.registers[0x2]).equal(12);
+            expect(cpu.programCounter).equal(2);
+            expect(cpu.registers[0xF]).equal(0);
         });
     });
 
