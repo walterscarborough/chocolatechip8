@@ -4,16 +4,15 @@
     "description": "A gameboy emulator written in typescript.",
     "main": "build/index.js",
     "scripts": {
-        "lint": "./node_modules/tslint/bin/tslint src/*.ts",
-        "createTmpDirectory": "mkdir -p tmp",
-        "removeTmpDirectory": "rm -r tmp",
+        "lint": "tslint src/*.ts",
+        "cleanTmpDirectory": "mkdir -p tmp && rm -r tmp && mkdir -p tmp",
         "compileTests": "tsc test/*Test.ts --module commonjs --outDir tmp",
 
         "createBuildDirectory": "mkdir -p build",
         "compileSrc": "tsc src/*.ts --module commonjs --outDir build",
 
 
-        "pretest": "npm run lint && npm run removeTmpDirectory && npm run createTmpDirectory && npm run compileTests",
+        "pretest": "npm run lint && npm run cleanTmpDirectory && npm run compileTests",
         "test": "mocha tmp/test/*",
 
         "prebuild": "npm run test",
