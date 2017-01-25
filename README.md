@@ -20,7 +20,7 @@ npm test
 
 ```
 # This will compile all typescript files in the src folder into javascript files, and place them in the build folder.
-npm build
+npm run build
 ```
 
 ## Contributions
