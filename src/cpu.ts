@@ -116,7 +116,7 @@ export default class Cpu {
     }
 
     private loadIndexRegister(opcode: number) {
-        let nnnAddress = opcode & 0x0FFF;
+        const nnnAddress = opcode & 0x0FFF;
         this.indexRegister = nnnAddress;
         this.programCounter += 2;
     }

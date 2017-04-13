@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import Cpu from '../src/cpu';
 
 describe('Cpu', () => {
-    var cpu : Cpu;
+    let cpu : Cpu;
 
     beforeEach(function () {
         cpu = new Cpu();
@@ -49,18 +49,18 @@ describe('Cpu', () => {
 
     describe('timer handling', () => {
         it('can get an updated delay timer', () => {
-            let delayTimer = 10;
+            const delayTimer = 10;
 
-            let expectedDelayTimer = 9;
+            const expectedDelayTimer = 9;
 
 
             expect(cpu.getUpdatedDelayTimer(delayTimer)).equal(expectedDelayTimer);
         });
 
         it('can get an updated sound timer', () => {
-            let soundTimer = 10;
+            const soundTimer = 10;
 
-            let expectedSoundTimer = 9;
+            const expectedSoundTimer = 9;
 
 
             expect(cpu.getUpdatedSoundTimer(soundTimer)).equal(expectedSoundTimer);
@@ -70,14 +70,14 @@ describe('Cpu', () => {
     describe('opcode handling', () => {
         it('fetches opcode 0xANNN (0xA2F0)', () => {
 
-            let memory = [
+            const memory = [
                 0xA0,
                 0xA1,
                 0xA2,
                 0xF0,
             ];
 
-            let programCounter = 2;
+            const programCounter = 2;
 
 
             expect(cpu.fetchOpcode(memory, programCounter)).equal(0xA2F0);
