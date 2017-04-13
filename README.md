@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/walterscarborough/chocolatechip8.svg?branch=master)](https://travis-ci.org/walterscarborough/chocolatechip8)
+
 # Chocolate Chip8
 
 This is a WIP chip8 emulator that is being developed in typescript. It is not currently able to run any chip8 software yet, but it'll get there in time :)
@@ -18,8 +20,9 @@ npm test
 
 ### Building
 
+This will compile all typescript files in the src folder into javascript files, and place them in the build folder.
+
 ```
-# This will compile all typescript files in the src folder into javascript files, and place them in the build folder.
 npm run build
 ```
 
