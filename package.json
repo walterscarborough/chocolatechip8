@@ -9,6 +9,7 @@
     "compileTests": "tsc test/*Test.ts --module commonjs --outDir tmp",
     "createBuildDirectory": "mkdir -p build",
     "compileSrc": "tsc src/*.ts --module commonjs --outDir build",
+
     "pretest": "npm run lint && npm run cleanTmpDirectory && npm run compileTests",
     "test": "mocha tmp/test/*",
     "prebuild": "npm run test",
