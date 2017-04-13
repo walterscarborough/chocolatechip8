@@ -35,7 +35,7 @@ export default class Cpu {
         if (soundTimer > 0) {
 
             if (soundTimer == 1) {
-                console.log("beep!");
+                console.log('beep!');
             }
 
             soundTimer -= 1;
@@ -46,14 +46,14 @@ export default class Cpu {
 
 
     public fetchOpcode(memory: number[], programCounter: number): number {
-        let opcodeFragmentA: number = memory[programCounter];
-        let opcodeFragmentB: number = memory[programCounter + 1];
+        const opcodeFragmentA: number = memory[programCounter];
+        const opcodeFragmentB: number = memory[programCounter + 1];
 
 
-        let leftShiftedOpcodeFragmentA = opcodeFragmentA << 8;
+        const leftShiftedOpcodeFragmentA = opcodeFragmentA << 8;
 
 
-        let completeOpcode = leftShiftedOpcodeFragmentA | opcodeFragmentB;
+        const completeOpcode = leftShiftedOpcodeFragmentA | opcodeFragmentB;
 
         return completeOpcode;
     }

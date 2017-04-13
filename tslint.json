@@ -1,3 +1,8 @@
 {
-    "quotemark": [true, "single", "avoid-escape"]
+    "extends": [
+        "tslint-eslint-rules"
+    ],
+    "rules": {
+        "quotemark": [true, "single", "avoid-escape"]
+    }
 }

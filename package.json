@@ -1,33 +1,28 @@
 {
-    "name": "cpu.ts",
-    "version": "0.0.1",
-    "description": "A Chip 8 emulator written in typescript.",
-    "main": "build/index.js",
-    "scripts": {
-        "lint": "tslint src/*.ts",
-        "cleanTmpDirectory": "mkdir -p tmp && rm -r tmp && mkdir -p tmp",
-        "compileTests": "tsc test/*Test.ts --module commonjs --outDir tmp",
-
-        "createBuildDirectory": "mkdir -p build",
-        "compileSrc": "tsc src/*.ts --module commonjs --outDir build",
-
-
-        "pretest": "npm run lint && npm run cleanTmpDirectory && npm run compileTests",
-        "test": "mocha tmp/test/*",
-
-        "prebuild": "npm run test",
-        "build": "npm run createBuildDirectory && npm run compileSrc"
-    },
-    "author": "",
-    "license": "MIT",
-    "devDependencies": {
-        "@types/chai": "^3.5.0",
-        "@types/mocha": "^2.2.40",
-        "chai": "^3.5.0",
-        "mocha": "^3.2.0",
-        "tslint": "^5.1.0"
-    },
-    "dependencies": {
-        "typescript": "^2.2.2"
-    }
+  "name": "cpu.ts",
+  "version": "0.0.1",
+  "description": "A Chip 8 emulator written in typescript.",
+  "main": "build/index.js",
+  "scripts": {
+    "lint": "tslint src/*.ts",
+    "cleanTmpDirectory": "mkdir -p tmp && rm -r tmp && mkdir -p tmp",
+    "compileTests": "tsc test/*Test.ts --module commonjs --outDir tmp",
+    "createBuildDirectory": "mkdir -p build",
+    "compileSrc": "tsc src/*.ts --module commonjs --outDir build",
+    "pretest": "npm run lint && npm run cleanTmpDirectory && npm run compileTests",
+    "test": "mocha tmp/test/*",
+    "prebuild": "npm run test",
+    "build": "npm run createBuildDirectory && npm run compileSrc"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^3.5.0",
+    "@types/mocha": "^2.2.40",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "tslint": "^5.1.0",
+    "tslint-eslint-rules": "^4.0.0",
+    "typescript": "^2.2.2"
+  }
 }
