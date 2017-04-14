@@ -74,6 +74,11 @@ export default class Cpu {
                 break;
             }
 
+            case 0xC000: {
+                this.storeRandomNumberVX(opcode);
+                break;
+            }
+
             case 0x2000: {
                 this.jumpToSubroutine(opcode);
                 break;
@@ -138,6 +143,17 @@ export default class Cpu {
         this.programCounter = nnnAddress + v0Data;
     }
 
+    private storeRandomNumberVX(opcode: number) {
+        const targetRegister = opcode & 0x0F00;
+        const sourceNumber = opcode & 0x00FF;
+        const randomNumber = this.getRandomIntMax255();
+
+        const adjustedNumber = sourceNumber & randomNumber;
+
+        this.registers[targetRegister] = adjustedNumber;
+        this.programCounter += 2;
+    }
+
     private addWithCarry(opcode: number) {
         if (this.registers[(opcode & 0x00F0) >> 4] > (0xFF - this.registers[(opcode & 0x0F00) >> 8])) {
             this.registers[0xF] = 1;
@@ -156,5 +172,12 @@ export default class Cpu {
         this.memory[this.indexRegister + 2] = Math.floor((this.registers[(opcode & 0x0F00) >> 8] % 100) % 10);
 
         this.programCounter += 2;
+    }
+
+    private getRandomIntMax255(): number {
+        const max = 255;
+        const min = 0;
+
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }

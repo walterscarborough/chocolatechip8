@@ -1,6 +1,7 @@
 
 import { expect } from 'chai';
 import Cpu from '../src/cpu';
+import * as sinon from 'sinon';
 
 describe('Cpu', () => {
     let cpu : Cpu;
@@ -68,95 +69,114 @@ describe('Cpu', () => {
     });
 
     describe('opcode handling', () => {
-        it('fetches opcode 0xANNN (0xA2F0)', () => {
 
-            const memory = [
-                0xA0,
-                0xA1,
-                0xA2,
-                0xF0,
-            ];
+        context('fetching', () => {
+            it('fetches opcode 0xANNN (0xA2F0)', () => {
 
-            const programCounter = 2;
+                const memory = [
+                    0xA0,
+                    0xA1,
+                    0xA2,
+                    0xF0,
+                ];
 
-
-            expect(cpu.fetchOpcode(memory, programCounter)).equal(0xA2F0);
-        });
-
-        it('decodes opcode 0xANNN (loadIndexRegister)', () => {
-            cpu.programCounter = 4;
+                const programCounter = 2;
 
 
-            cpu.decodeOpcode(0xA2F0);
-
-
-            expect(cpu.indexRegister).equal(0x2F0);
-            expect(cpu.programCounter).equal(6);
-        });
-
-        it('decodes opcode 0xBNNN (jumpToAddressNNN)', () => {
-            cpu.programCounter = 4;
-            cpu.registers[0] = 0x2;
-
-
-            cpu.decodeOpcode(0xB002);
-
-
-            expect(cpu.programCounter).equal(4);
-        });
-
-        it('decodes opcode 0x2NNN (jumpToSubroutine)', () => {
-            cpu.programCounter = 4;
-
-
-            cpu.decodeOpcode(0x20F0);
-
-
-            expect(cpu.stack[cpu.stackPointer - 1]).equal(4);
-            expect(cpu.programCounter).equal(0x0F0);
-            expect(cpu.stackPointer).equal(1);
-        });
-
-        describe('decodes opcode 0x8XY4 (addWithCarry)', () => {
-            it('for value less than 256', () => {
-                cpu.registers[0x2] = 6;
-                cpu.registers[0x3] = 6;
-
-
-                cpu.decodeOpcode(0x8234);
-
-
-                expect(cpu.registers[0x2]).equal(12);
-                expect(cpu.programCounter).equal(2);
-                expect(cpu.registers[0xF]).equal(0);
-            });
-
-            it('for value greater than 256', () => {
-                cpu.registers[0x2] = 256;
-                cpu.registers[0x3] = 6;
-
-
-                cpu.decodeOpcode(0x8234);
-
-
-                expect(cpu.registers[0x2]).equal(262);
-                expect(cpu.programCounter).equal(2);
-                expect(cpu.registers[0xF]).equal(1);
+                expect(cpu.fetchOpcode(memory, programCounter)).equal(0xA2F0);
             });
         });
 
-        it("decodes opcode 0xFX33 (storeDecimalValueVX)", () => {
-            cpu.indexRegister = 0x003;
-            cpu.registers[0x3] = 256;
+        context('decoding', () => {
+            it('decodes opcode 0xANNN (loadIndexRegister)', () => {
+                cpu.programCounter = 4;
 
 
-            cpu.decodeOpcode(0xF333);
+                cpu.decodeOpcode(0xA2F0);
 
 
-            expect(cpu.memory[cpu.indexRegister]).equal(2);
-            expect(cpu.memory[cpu.indexRegister + 1]).equal(5);
-            expect(cpu.memory[cpu.indexRegister + 2]).equal(6);
-            expect(cpu.programCounter).equal(2);
+                expect(cpu.indexRegister).equal(0x2F0);
+                expect(cpu.programCounter).equal(6);
+            });
+
+            it('decodes opcode 0xBNNN (jumpWithV0Offset)', () => {
+                cpu.programCounter = 6;
+                cpu.registers[0] = 0x2;
+
+
+                cpu.decodeOpcode(0xB002);
+
+
+                expect(cpu.programCounter).equal(4);
+            });
+
+            it('decodes opcode 0xCXNN (storeRandomNumberVX)', () => {
+                const getRandomIntStub = sinon.stub(cpu, 'getRandomIntMax255');
+                getRandomIntStub.returns(0xAA);
+
+                cpu.programCounter = 4;
+
+
+                cpu.decodeOpcode(0xC0A4);
+
+
+                expect(cpu.registers[0]).equal(0xA0);
+                expect(cpu.programCounter).equal(6);
+            });
+
+            it('decodes opcode 0x2NNN (jumpToSubroutine)', () => {
+                cpu.programCounter = 4;
+
+
+                cpu.decodeOpcode(0x20F0);
+
+
+                expect(cpu.stack[cpu.stackPointer - 1]).equal(4);
+                expect(cpu.programCounter).equal(0x0F0);
+                expect(cpu.stackPointer).equal(1);
+            });
+
+            describe('decodes opcode 0x8XY4 (addWithCarry)', () => {
+                it('for value less than 256', () => {
+                    cpu.registers[0x2] = 6;
+                    cpu.registers[0x3] = 6;
+
+
+                    cpu.decodeOpcode(0x8234);
+
+
+                    expect(cpu.registers[0x2]).equal(12);
+                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.registers[0xF]).equal(0);
+                });
+
+                it('for value greater than 256', () => {
+                    cpu.registers[0x2] = 256;
+                    cpu.registers[0x3] = 6;
+
+
+                    cpu.decodeOpcode(0x8234);
+
+
+                    expect(cpu.registers[0x2]).equal(262);
+                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.registers[0xF]).equal(1);
+                });
+            });
+
+            it("decodes opcode 0xFX33 (storeDecimalValueVX)", () => {
+                cpu.indexRegister = 0x003;
+                cpu.registers[0x3] = 256;
+
+
+                cpu.decodeOpcode(0xF333);
+
+
+                expect(cpu.memory[cpu.indexRegister]).equal(2);
+                expect(cpu.memory[cpu.indexRegister + 1]).equal(5);
+                expect(cpu.memory[cpu.indexRegister + 2]).equal(6);
+                expect(cpu.programCounter).equal(2);
+            });
         });
 
     });

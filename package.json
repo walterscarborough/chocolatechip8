@@ -9,7 +9,6 @@
     "compileTests": "tsc test/*Test.ts --module commonjs --outDir tmp",
     "createBuildDirectory": "mkdir -p build",
     "compileSrc": "tsc src/*.ts --module commonjs --outDir build",
-
     "pretest": "npm run lint && npm run cleanTmpDirectory && npm run compileTests",
     "test": "mocha tmp/test/*",
     "prebuild": "npm run test",
@@ -22,6 +21,7 @@
     "@types/mocha": "^2.2.40",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
+    "sinon": "^2.1.0",
     "tslint": "^5.1.0",
     "tslint-eslint-rules": "^4.0.0",
     "typescript": "^2.2.2"
