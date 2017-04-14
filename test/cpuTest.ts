@@ -218,6 +218,16 @@ describe('Cpu', () => {
                 });
             });
 
+            it("decodes opcode 0xFX07 (storeDelayTimerVX)", () => {
+                cpu.delayTimer = 0x2;
+
+
+                cpu.decodeOpcode(0xF007);
+
+
+                expect(cpu.registers[0]).equal(0x2);
+            });
+
             it("decodes opcode 0xFX33 (storeDecimalValueVX)", () => {
                 cpu.indexRegister = 0x003;
                 cpu.registers[0x3] = 256;

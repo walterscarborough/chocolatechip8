@@ -126,6 +126,11 @@ export default class Cpu {
             case 0xF000: {
                 switch (opcode & 0x00FF) {
 
+                    case 0x0007: {
+                        this.storeDelayTimerVX(opcode);
+                        break;
+                    }
+
                     case 0x0033: {
                         this.storeDecimalValueVX(opcode);
                         break;
@@ -181,6 +186,12 @@ export default class Cpu {
         if (sourceKeyPress !== this.currentKeyPressed) {
             this.programCounter += 2;
         }
+    }
+
+    private storeDelayTimerVX(opcode: number) {
+        const targetRegister = opcode & 0x0F00;
+
+        this.registers[targetRegister] = this.delayTimer;
     }
 
     private storeRandomNumberVX(opcode: number) {
