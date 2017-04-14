@@ -95,8 +95,9 @@ describe('Cpu', () => {
         });
     });
 
-    describe('timer handling', () => {
-        it('can get an updated delay timer', () => {
+    describe('delay timer handling', () => {
+
+        it('returns a decremented value if greater than 0', () => {
             const delayTimer = 10;
             const expectedDelayTimer = 9;
 
@@ -104,12 +105,31 @@ describe('Cpu', () => {
             expect(cpu.getUpdatedDelayTimer(delayTimer)).equal(expectedDelayTimer);
         });
 
-        it('can get an updated sound timer', () => {
+        it('returns the same input value if less than 0', () => {
+            const delayTimer = 0;
+            const expectedDelayTimer = 0;
+
+
+            expect(cpu.getUpdatedDelayTimer(delayTimer)).equal(expectedDelayTimer);
+        });
+    });
+
+    describe('sound timer handling', () => {
+
+        it('returns a decremented value if greater than 0', () => {
             const soundTimer = 10;
             const expectedSoundTimer = 9;
 
 
             expect(cpu.getUpdatedSoundTimer(soundTimer)).equal(expectedSoundTimer);
+        });
+
+        it('returns the same input value if less than 0', () => {
+            const soundTimer = 0;
+            const expectedSoundTimer = 0;
+
+
+            expect(cpu.getUpdatedDelayTimer(soundTimer)).equal(expectedSoundTimer);
         });
     });
 
