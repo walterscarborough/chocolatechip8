@@ -11,7 +11,19 @@ export default class Cpu {
     stackPointer: number = 0;
 
     currentKeyPressed: number = 0;
+    isHalted: boolean = false;
 
+    hasPendingWaitForKeypressVX: boolean = false;
+    pendingWaitForKeypressVXRegister: number = 0;
+
+    public keypress(key: number) {
+
+        this.currentKeyPressed = key;
+
+        if (this.hasPendingWaitForKeypressVX === true) {
+            this.finishWaitForKeypressVX(this.pendingWaitForKeypressVXRegister);
+        }
+    }
     /*
     public emulateCycle(): void {
         // fetch opcode
@@ -131,6 +143,11 @@ export default class Cpu {
                         break;
                     }
 
+                    case 0x000A: {
+                        this.startWaitForKeypressVX(opcode);
+                        break;
+                    }
+
                     case 0x0033: {
                         this.storeDecimalValueVX(opcode);
                         break;
@@ -203,6 +220,19 @@ export default class Cpu {
 
         this.registers[targetRegister] = adjustedNumber;
         this.programCounter += 2;
+    }
+
+    private startWaitForKeypressVX(opcode: number) {
+        const targetRegister = opcode & 0x0F00;
+        this.isHalted = true;
+        this.hasPendingWaitForKeypressVX = true;
+        this.pendingWaitForKeypressVXRegister = targetRegister;
+    }
+
+    private finishWaitForKeypressVX(targetRegister: number) {
+        this.registers[targetRegister] = this.currentKeyPressed;
+        this.hasPendingWaitForKeypressVX = false;
+        this.isHalted = false;
     }
 
     private addWithCarry(opcode: number) {

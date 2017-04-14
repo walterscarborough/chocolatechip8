@@ -228,6 +228,23 @@ describe('Cpu', () => {
                 expect(cpu.registers[0]).equal(0x2);
             });
 
+            it("decodes opcode 0xFX0A (waitForKeypressVX)", () => {
+                cpu.decodeOpcode(0xF00A);
+
+                expect(cpu.isHalted).equal(true);
+                expect(cpu.hasPendingWaitForKeypressVX).equal(true);
+                expect(cpu.pendingWaitForKeypressVXRegister).equal(0);
+                
+
+                cpu.keypress(2);
+                
+
+                expect(cpu.registers[0]).equal(2);
+                expect(cpu.currentKeyPressed).equal(2);
+                expect(cpu.hasPendingWaitForKeypressVX).equal(false);
+                expect(cpu.isHalted).equal(false);
+            });
+
             it("decodes opcode 0xFX33 (storeDecimalValueVX)", () => {
                 cpu.indexRegister = 0x003;
                 cpu.registers[0x3] = 256;
