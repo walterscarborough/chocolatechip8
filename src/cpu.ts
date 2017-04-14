@@ -10,6 +10,7 @@ export default class Cpu {
     stack: number[] = [];
     stackPointer: number = 0;
 
+    currentKeyPressed: number = 0;
 
     /*
     public emulateCycle(): void {
@@ -79,6 +80,23 @@ export default class Cpu {
                 break;
             }
 
+            case 0xE000: {
+                switch (opcode & 0x00FF) {
+
+                    case 0x009E: {
+                        this.skipIfPressed(opcode);
+                        break;
+                    }
+
+                    default: {
+                        console.log('opcode "' + opcode + '" not implemented!');
+                        break;
+                    }
+                }
+
+                break;
+            }
+
             case 0x2000: {
                 this.jumpToSubroutine(opcode);
                 break;
@@ -141,6 +159,15 @@ export default class Cpu {
         const nnnAddress = opcode & 0x0FFF;
         const v0Data = this.registers[0];
         this.programCounter = nnnAddress + v0Data;
+    }
+
+    private skipIfPressed(opcode: number) {
+        const targetRegister = opcode & 0x0F00;
+        const sourceKeyPress = this.registers[targetRegister];
+
+        if (sourceKeyPress === this.currentKeyPressed) {
+            this.programCounter += 2;
+        }
     }
 
     private storeRandomNumberVX(opcode: number) {

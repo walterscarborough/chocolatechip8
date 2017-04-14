@@ -88,42 +88,6 @@ describe('Cpu', () => {
         });
 
         context('decoding', () => {
-            it('decodes opcode 0xANNN (loadIndexRegister)', () => {
-                cpu.programCounter = 4;
-
-
-                cpu.decodeOpcode(0xA2F0);
-
-
-                expect(cpu.indexRegister).equal(0x2F0);
-                expect(cpu.programCounter).equal(6);
-            });
-
-            it('decodes opcode 0xBNNN (jumpWithV0Offset)', () => {
-                cpu.programCounter = 6;
-                cpu.registers[0] = 0x2;
-
-
-                cpu.decodeOpcode(0xB002);
-
-
-                expect(cpu.programCounter).equal(4);
-            });
-
-            it('decodes opcode 0xCXNN (storeRandomNumberVX)', () => {
-                const getRandomIntStub = sinon.stub(cpu, 'getRandomIntMax255');
-                getRandomIntStub.returns(0xAA);
-
-                cpu.programCounter = 4;
-
-
-                cpu.decodeOpcode(0xC0A4);
-
-
-                expect(cpu.registers[0]).equal(0xA0);
-                expect(cpu.programCounter).equal(6);
-            });
-
             it('decodes opcode 0x2NNN (jumpToSubroutine)', () => {
                 cpu.programCounter = 4;
 
@@ -161,6 +125,71 @@ describe('Cpu', () => {
                     expect(cpu.registers[0x2]).equal(262);
                     expect(cpu.programCounter).equal(2);
                     expect(cpu.registers[0xF]).equal(1);
+                });
+            });
+
+            it('decodes opcode 0xANNN (loadIndexRegister)', () => {
+                cpu.programCounter = 4;
+
+
+                cpu.decodeOpcode(0xA2F0);
+
+
+                expect(cpu.indexRegister).equal(0x2F0);
+                expect(cpu.programCounter).equal(6);
+            });
+
+            it('decodes opcode 0xBNNN (jumpWithV0Offset)', () => {
+                cpu.programCounter = 6;
+                cpu.registers[0] = 0x2;
+
+
+                cpu.decodeOpcode(0xB002);
+
+
+                expect(cpu.programCounter).equal(4);
+            });
+
+            it('decodes opcode 0xCXNN (storeRandomNumberVX)', () => {
+                const getRandomIntStub = sinon.stub(cpu, 'getRandomIntMax255');
+                getRandomIntStub.returns(0xAA);
+
+                cpu.programCounter = 4;
+
+
+                cpu.decodeOpcode(0xC0A4);
+
+
+                expect(cpu.registers[0]).equal(0xA0);
+                expect(cpu.programCounter).equal(6);
+            });
+
+            // it('decodes opcode 0xDXYN (drawVxVy)', () => {
+                
+            // });
+
+            context('decodes opcode 0xEX9E (skipIfPressed', () => {
+
+                it('key in V0 is pressed', () => {
+                    cpu.currentKeyPressed = 1;
+                    cpu.registers[0] = 1
+
+
+                    cpu.decodeOpcode(0xE09E);
+
+
+                    expect(cpu.programCounter).equal(2);
+                });
+
+                it('key in V0 is not pressed', () => {
+                    cpu.currentKeyPressed = 2;
+                    cpu.registers[0] = 1
+
+
+                    cpu.decodeOpcode(0xE09E);
+
+
+                    expect(cpu.programCounter).equal(0);
                 });
             });
 
