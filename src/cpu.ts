@@ -64,7 +64,28 @@ export default class Cpu {
         // We only care about the first letter in the opcode for switching purposes
         switch (opcode & 0xF000) {
 
-            // ANNN: sets indexRegister to address NNN
+            case 0x2000: {
+                this.jumpToSubroutine(opcode);
+                break;
+            }
+
+            case 0x8000: {
+                switch (opcode & 0x000F) {
+
+                    case 0x0004: {
+                        this.addWithCarry(opcode);
+                        break;
+                    }
+
+                    default: {
+                        console.log('opcode "' + opcode + '" not implemented!');
+                        break;
+                    }
+                }
+
+                break;
+            }
+
             case 0xA000: {
                 this.loadIndexRegister(opcode);
                 break;
@@ -88,25 +109,8 @@ export default class Cpu {
                         break;
                     }
 
-                    default: {
-                        console.log('opcode "' + opcode + '" not implemented!');
-                        break;
-                    }
-                }
-
-                break;
-            }
-
-            case 0x2000: {
-                this.jumpToSubroutine(opcode);
-                break;
-            }
-
-            case 0x8000: {
-                switch (opcode & 0x000F) {
-
-                    case 0x0004: {
-                        this.addWithCarry(opcode);
+                    case 0x00A1: {
+                        this.skipIfNotPressed(opcode);
                         break;
                     }
 
@@ -166,6 +170,15 @@ export default class Cpu {
         const sourceKeyPress = this.registers[targetRegister];
 
         if (sourceKeyPress === this.currentKeyPressed) {
+            this.programCounter += 2;
+        }
+    }
+
+    private skipIfNotPressed(opcode: number) {
+        const targetRegister = opcode & 0x0F00;
+        const sourceKeyPress = this.registers[targetRegister];
+
+        if (sourceKeyPress !== this.currentKeyPressed) {
             this.programCounter += 2;
         }
     }

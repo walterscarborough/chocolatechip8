@@ -168,11 +168,11 @@ describe('Cpu', () => {
                 
             // });
 
-            context('decodes opcode 0xEX9E (skipIfPressed', () => {
+            context('decodes opcode 0xEX9E (skipIfPressed)', () => {
 
                 it('key in V0 is pressed', () => {
                     cpu.currentKeyPressed = 1;
-                    cpu.registers[0] = 1
+                    cpu.registers[0] = 1;
 
 
                     cpu.decodeOpcode(0xE09E);
@@ -183,13 +183,38 @@ describe('Cpu', () => {
 
                 it('key in V0 is not pressed', () => {
                     cpu.currentKeyPressed = 2;
-                    cpu.registers[0] = 1
+                    cpu.registers[0] = 1;
 
 
                     cpu.decodeOpcode(0xE09E);
 
 
                     expect(cpu.programCounter).equal(0);
+                });
+            });
+
+            context('decodes opcode 0xEXA1 (skipIfNotPressed)', () => {
+
+                it('key in V0 is pressed', () => {
+                    cpu.currentKeyPressed = 1;
+                    cpu.registers[0] = 1;
+
+
+                    cpu.decodeOpcode(0xE0A1);
+
+
+                    expect(cpu.programCounter).equal(0);
+                });
+
+                it('key in V0 is not pressed', () => {
+                    cpu.currentKeyPressed = 2;
+                    cpu.registers[0] = 1;
+
+
+                    cpu.decodeOpcode(0xE0A1);
+
+
+                    expect(cpu.programCounter).equal(2);
                 });
             });
 
