@@ -43,15 +43,61 @@ describe('Cpu', () => {
             expect(cpu.stack.length).equal(0);
         });
 
-        it('stack pointer should be empty', () => {
+        it('stack pointer should be 0', () => {
             expect(cpu.stackPointer).equal(0);
+        });
+
+        it('currentKeyPressed should be 0', () => {
+            expect(cpu.currentKeyPressed).equal(0);
+        });
+
+        it('isHalted should be false', () => {
+            expect(cpu.isHalted).equal(false);
+        });
+
+        it('hasPendingWaitForStoreKeypressToVX should be false', () => {
+            expect(cpu.hasPendingWaitForStoreKeypressToVX).equal(false);
+        });
+
+        it('pendingWaitForStoreKeypressToVXRegister should be 0', () => {
+            expect(cpu.pendingWaitForStoreKeypressToVXRegister).equal(0);
+        });
+    });
+
+    describe('keypress', () => {
+        it('should update currentKeyPressed', () => {
+            cpu.keypress(2);
+
+
+            expect(cpu.currentKeyPressed).equal(2);
+        });
+
+        it('should not call finishWaitForStoreKeypressToVX if hasPendingWaitForStoreKeypressToVX is not set', () => {
+            const spy = sinon.spy(cpu, 'finishWaitForStoreKeypressToVX');
+
+
+            cpu.keypress(2);
+
+
+            expect(spy.notCalled).equal(true);
+        });
+
+        it('should call finishWaitForStoreKeypressToVX if hasPendingWaitForStoreKeypressToVX is set', () => {
+            const spy = sinon.spy(cpu, 'finishWaitForStoreKeypressToVX');
+            cpu.hasPendingWaitForStoreKeypressToVX = true;
+            cpu.pendingWaitForStoreKeypressToVXRegister = 1;
+
+
+            cpu.keypress(2);
+
+
+            expect(spy.calledWithExactly(cpu.pendingWaitForStoreKeypressToVXRegister)).equal(true);
         });
     });
 
     describe('timer handling', () => {
         it('can get an updated delay timer', () => {
             const delayTimer = 10;
-
             const expectedDelayTimer = 9;
 
 
@@ -60,7 +106,6 @@ describe('Cpu', () => {
 
         it('can get an updated sound timer', () => {
             const soundTimer = 10;
-
             const expectedSoundTimer = 9;
 
 
