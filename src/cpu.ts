@@ -69,6 +69,11 @@ export default class Cpu {
                 break;
             }
 
+            case 0xB000: {
+                this.jumpWithV0Offset(opcode);
+                break;
+            }
+
             case 0x2000: {
                 this.jumpToSubroutine(opcode);
                 break;
@@ -125,6 +130,12 @@ export default class Cpu {
         this.stack[this.stackPointer] = this.programCounter;
         this.stackPointer += 1;
         this.programCounter = opcode & 0x0FFF;
+    }
+
+    private jumpWithV0Offset(opcode: number) {
+        const nnnAddress = opcode & 0x0FFF;
+        const v0Data = this.registers[0];
+        this.programCounter = nnnAddress + v0Data;
     }
 
     private addWithCarry(opcode: number) {
