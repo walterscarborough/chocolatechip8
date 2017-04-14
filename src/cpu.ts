@@ -13,15 +13,15 @@ export default class Cpu {
     currentKeyPressed: number = 0;
     isHalted: boolean = false;
 
-    hasPendingWaitForKeypressVX: boolean = false;
-    pendingWaitForKeypressVXRegister: number = 0;
+    hasPendingWaitForStoreKeypressToVX: boolean = false;
+    pendingWaitForStoreKeypressToVXRegister: number = 0;
 
     public keypress(key: number) {
 
         this.currentKeyPressed = key;
 
-        if (this.hasPendingWaitForKeypressVX === true) {
-            this.finishWaitForKeypressVX(this.pendingWaitForKeypressVXRegister);
+        if (this.hasPendingWaitForStoreKeypressToVX === true) {
+            this.finishWaitForStoreKeypressToVX(this.pendingWaitForStoreKeypressToVXRegister);
         }
     }
     /*
@@ -109,7 +109,7 @@ export default class Cpu {
             }
 
             case 0xC000: {
-                this.storeRandomNumberVX(opcode);
+                this.storeRandomNumberToVX(opcode);
                 break;
             }
 
@@ -139,17 +139,22 @@ export default class Cpu {
                 switch (opcode & 0x00FF) {
 
                     case 0x0007: {
-                        this.storeDelayTimerVX(opcode);
+                        this.storeDelayTimerToVX(opcode);
                         break;
                     }
 
                     case 0x000A: {
-                        this.startWaitForKeypressVX(opcode);
+                        this.startWaitForStoreKeypressToVX(opcode);
+                        break;
+                    }
+
+                    case 0x0015: {
+                        this.storeVXToDelayTimer(opcode);
                         break;
                     }
 
                     case 0x0033: {
-                        this.storeDecimalValueVX(opcode);
+                        this.storeDecimalValueToVX(opcode);
                         break;
                     }
 
@@ -205,13 +210,19 @@ export default class Cpu {
         }
     }
 
-    private storeDelayTimerVX(opcode: number) {
+    private storeDelayTimerToVX(opcode: number) {
         const targetRegister = opcode & 0x0F00;
 
         this.registers[targetRegister] = this.delayTimer;
     }
 
-    private storeRandomNumberVX(opcode: number) {
+    private storeVXToDelayTimer(opcode: number) {
+        const targetRegister = opcode & 0x0F00;
+
+        this.delayTimer = this.registers[targetRegister];
+    }
+
+    private storeRandomNumberToVX(opcode: number) {
         const targetRegister = opcode & 0x0F00;
         const sourceNumber = opcode & 0x00FF;
         const randomNumber = this.getRandomIntMax255();
@@ -222,16 +233,16 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private startWaitForKeypressVX(opcode: number) {
+    private startWaitForStoreKeypressToVX(opcode: number) {
         const targetRegister = opcode & 0x0F00;
         this.isHalted = true;
-        this.hasPendingWaitForKeypressVX = true;
-        this.pendingWaitForKeypressVXRegister = targetRegister;
+        this.hasPendingWaitForStoreKeypressToVX = true;
+        this.pendingWaitForStoreKeypressToVXRegister = targetRegister;
     }
 
-    private finishWaitForKeypressVX(targetRegister: number) {
+    private finishWaitForStoreKeypressToVX(targetRegister: number) {
         this.registers[targetRegister] = this.currentKeyPressed;
-        this.hasPendingWaitForKeypressVX = false;
+        this.hasPendingWaitForStoreKeypressToVX = false;
         this.isHalted = false;
     }
 
@@ -247,7 +258,7 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private storeDecimalValueVX(opcode: number) {
+    private storeDecimalValueToVX(opcode: number) {
         this.memory[this.indexRegister] = Math.floor(this.registers[(opcode & 0x0F00) >> 8] / 100);
         this.memory[this.indexRegister + 1] = Math.floor((this.registers[(opcode & 0x0F00) >> 8] / 10) % 10);
         this.memory[this.indexRegister + 2] = Math.floor((this.registers[(opcode & 0x0F00) >> 8] % 100) % 10);

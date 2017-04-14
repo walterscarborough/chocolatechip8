@@ -150,7 +150,7 @@ describe('Cpu', () => {
                 expect(cpu.programCounter).equal(4);
             });
 
-            it('decodes opcode 0xCXNN (storeRandomNumberVX)', () => {
+            it('decodes opcode 0xCXNN (storeRandomNumberToVX)', () => {
                 const getRandomIntStub = sinon.stub(cpu, 'getRandomIntMax255');
                 getRandomIntStub.returns(0xAA);
 
@@ -218,7 +218,7 @@ describe('Cpu', () => {
                 });
             });
 
-            it("decodes opcode 0xFX07 (storeDelayTimerVX)", () => {
+            it('decodes opcode 0xFX07 (storeDelayTimerToVX)', () => {
                 cpu.delayTimer = 0x2;
 
 
@@ -228,12 +228,13 @@ describe('Cpu', () => {
                 expect(cpu.registers[0]).equal(0x2);
             });
 
-            it("decodes opcode 0xFX0A (waitForKeypressVX)", () => {
+            it('decodes opcode 0xFX0A (waitForStoreKeypressToVX)', () => {
                 cpu.decodeOpcode(0xF00A);
 
+
                 expect(cpu.isHalted).equal(true);
-                expect(cpu.hasPendingWaitForKeypressVX).equal(true);
-                expect(cpu.pendingWaitForKeypressVXRegister).equal(0);
+                expect(cpu.hasPendingWaitForStoreKeypressToVX).equal(true);
+                expect(cpu.pendingWaitForStoreKeypressToVXRegister).equal(0);
                 
 
                 cpu.keypress(2);
@@ -241,11 +242,21 @@ describe('Cpu', () => {
 
                 expect(cpu.registers[0]).equal(2);
                 expect(cpu.currentKeyPressed).equal(2);
-                expect(cpu.hasPendingWaitForKeypressVX).equal(false);
+                expect(cpu.hasPendingWaitForStoreKeypressToVX).equal(false);
                 expect(cpu.isHalted).equal(false);
             });
 
-            it("decodes opcode 0xFX33 (storeDecimalValueVX)", () => {
+            it('decodes opcode 0xFX15 (storeVXToDelayTimer)', () => {
+                cpu.registers[0] = 2;
+
+
+                cpu.decodeOpcode(0xF015);
+
+
+                expect(cpu.delayTimer).equal(2);
+            });
+
+            it('decodes opcode 0xFX33 (storeDecimalValueToVX)', () => {
                 cpu.indexRegister = 0x003;
                 cpu.registers[0x3] = 256;
 
