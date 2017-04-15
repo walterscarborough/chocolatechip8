@@ -420,6 +420,34 @@ describe('Cpu', () => {
                 });
             });
 
+            describe('decodes opcode 0x8XY5 (subtractVYFromVXWithCarry)', () => {
+                it('when VX is less than VY', () => {
+                    cpu.registers[0x0] = 1;
+                    cpu.registers[0x1] = 6;
+
+
+                    cpu.decodeOpcode(0x8015);
+
+
+                    expect(cpu.registers[0x0]).equal(-5);
+                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.registers[0xF]).equal(1);
+                });
+
+                it('when VX is greater than VY', () => {
+                    cpu.registers[0x0] = 6;
+                    cpu.registers[0x1] = 1;
+
+
+                    cpu.decodeOpcode(0x8015);
+
+
+                    expect(cpu.registers[0x0]).equal(5);
+                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.registers[0xF]).equal(0);
+                });
+            });
+
             it('decodes opcode 0xANNN (loadIndexRegister)', () => {
                 cpu.programCounter = 4;
 
