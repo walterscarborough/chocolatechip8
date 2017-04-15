@@ -166,6 +166,11 @@ export default class Cpu {
             case 0x8000: {
                 switch (this.parseOpcodeN(opcode)) {
 
+                    case 0x0000: {
+                        this.setVXToVY(opcode);
+                        break;
+                    }
+
                     case 0x0004: {
                         this.addWithCarry(opcode);
                         break;
@@ -274,6 +279,14 @@ export default class Cpu {
                 break;
             }
         }
+    }
+
+    private setVXToVY(opcode: number) {
+        const vX = this.parseOpcodeVX(opcode);
+        const vY = this.parseOpcodeVY(opcode);
+
+        this.registers[vX] = this.registers[vY];
+        this.programCounter += 2;
     }
 
     private addNNToVX(opcode: number) {
