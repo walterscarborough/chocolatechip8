@@ -112,6 +112,22 @@ export default class Cpu {
         // We only care about the first letter in the opcode for switching purposes
         switch (this.parseOpcodeFirstMask(opcode)) {
 
+            case 0x0000: {
+                switch (this.parseOpcodeNN(opcode)) {
+
+                    case 0x00EE: {
+                        this.returnFromSubroutine(opcode);
+                        break;
+                    }
+
+                    default: {
+                        console.log('opcode "' + opcode + '" not implemented!');
+                        break;
+                    }
+                }
+                break;
+            }
+
             case 0x1000: {
                 this.jumpToAddress(opcode);
                 break;
@@ -233,6 +249,11 @@ export default class Cpu {
                 break;
             }
         }
+    }
+
+    private returnFromSubroutine(opcode: number) {
+        this.programCounter = this.stack[this.stackPointer];
+        this.stackPointer -= 1;
     }
 
     private jumpToAddress(opcode: number) {

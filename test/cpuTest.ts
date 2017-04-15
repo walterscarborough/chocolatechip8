@@ -216,6 +216,21 @@ describe('Cpu', () => {
 
         context('decoding', () => {
 
+            it('decodes opcode 0x00EE (returnFromSubroutine)', () => {
+                cpu.stack.push(1);
+                cpu.stack.push(2);
+                cpu.stack.push(3);
+                cpu.stack.push(4);
+                cpu.stackPointer = 2;
+
+
+                cpu.decodeOpcode(0x00EE);
+
+
+                expect(cpu.programCounter).equal(3);
+                expect(cpu.stackPointer).equal(1);
+            });
+
             it('decodes opcode 0x1NNN (jumpToAddress)', () => {
                 cpu.decodeOpcode(0x100A);
 
