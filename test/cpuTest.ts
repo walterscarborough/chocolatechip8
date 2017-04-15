@@ -422,7 +422,7 @@ describe('Cpu', () => {
                 expect(cpu.programCounter).equal(2);
             });
 
-            it('decodes opcode 0xFX55 (storeFromVXToV0InMemory)', () => {
+            it('decodes opcode 0xFX55 (storeFromV0VXToMemory)', () => {
                 cpu.memory[0] = 0;
                 cpu.indexRegister = 1;
                 cpu.registers[0] = 2;
@@ -468,6 +468,51 @@ describe('Cpu', () => {
                 expect(cpu.memory).deep.equal(expectedMemory);
                 expect(cpu.indexRegister).equal(1);
                 expect(cpu.programCounter).equal(2);
+            });
+
+            it('decodes opcode 0xFX65 (storeFromMemoryToV0VX)', () => {
+                cpu.indexRegister = 1;
+
+                cpu.memory[0] = 0;
+                cpu.memory[1] = 2;
+                cpu.memory[2] = 2;
+                cpu.memory[3] = 2;
+                cpu.memory[4] = 2;
+                cpu.memory[5] = 2;
+                cpu.memory[6] = 2;
+                cpu.memory[7] = 2;
+                cpu.memory[8] = 2;
+                cpu.memory[9] = 2;
+                cpu.memory[10] = 2;
+                cpu.memory[11] = 2;
+                cpu.memory[12] = 2;
+                cpu.memory[13] = 2;
+                cpu.memory[14] = 2;
+                cpu.memory[15] = 2;
+                cpu.memory[16] = 2;
+                cpu.memory[17] = 2;
+
+
+                cpu.decodeOpcode(0xFF65);
+
+
+                expect(cpu.registers[0]).equal(2);
+                expect(cpu.registers[1]).equal(2);
+                expect(cpu.registers[2]).equal(2);
+                expect(cpu.registers[3]).equal(2);
+                expect(cpu.registers[4]).equal(2);
+                expect(cpu.registers[5]).equal(2);
+                expect(cpu.registers[6]).equal(2);
+                expect(cpu.registers[7]).equal(2);
+                expect(cpu.registers[8]).equal(2);
+                expect(cpu.registers[9]).equal(2);
+                expect(cpu.registers[10]).equal(2);
+                expect(cpu.registers[11]).equal(2);
+                expect(cpu.registers[12]).equal(2);
+                expect(cpu.registers[13]).equal(2);
+                expect(cpu.registers[14]).equal(2);
+                expect(cpu.registers[15]).equal(2);
+                expect(cpu.registers.length).equal(16);
             });
         });
 

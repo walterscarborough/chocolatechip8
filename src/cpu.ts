@@ -205,7 +205,12 @@ export default class Cpu {
                     }
 
                     case 0x0055: {
-                        this.storeFromVXToV0InMemory(opcode);
+                        this.storeFromV0VXToMemory(opcode);
+                        break;
+                    }
+
+                    case 0x0065: {
+                        this.storeFromMemoryToV0VX(opcode);
                         break;
                     }
 
@@ -337,11 +342,21 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private storeFromVXToV0InMemory(opcode: number) {
+    private storeFromV0VXToMemory(opcode: number) {
         const vX = this.parseOpcodeVX(opcode);
 
         for (let counter = 0; counter <= vX; counter++) {
             this.memory[counter + this.indexRegister] = this.registers[counter]; 
+        }
+
+        this.programCounter += 2;
+    }
+
+    private storeFromMemoryToV0VX(opcode: number) {
+        const vX = this.parseOpcodeVX(opcode);
+        
+        for (let counter = 0; counter <= vX; counter++) {
+            this.registers[counter] = this.memory[this.indexRegister + vX];
         }
 
         this.programCounter += 2;
