@@ -153,6 +153,11 @@ export default class Cpu {
                         break;
                     }
 
+                    case 0x0018: {
+                        this.storeVXToSoundTimer(opcode);
+                        break;
+                    }
+
                     case 0x0033: {
                         this.storeDecimalValueToVX(opcode);
                         break;
@@ -220,6 +225,12 @@ export default class Cpu {
         const targetRegister = opcode & 0x0F00;
 
         this.delayTimer = this.registers[targetRegister];
+    }
+
+    private storeVXToSoundTimer(opcode: number) {
+        const targetRegister = opcode & 0x0F00;
+
+        this.soundTimer = this.registers[targetRegister];
     }
 
     private storeRandomNumberToVX(opcode: number) {

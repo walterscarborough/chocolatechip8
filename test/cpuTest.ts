@@ -321,6 +321,16 @@ describe('Cpu', () => {
                 expect(cpu.delayTimer).equal(2);
             });
 
+            it('decodes opcode 0xFX18 (storeVXToSoundTimer)', () => {
+                cpu.registers[0] = 2;
+
+
+                cpu.decodeOpcode(0xF018);
+
+
+                expect(cpu.soundTimer).equal(2);
+            });
+
             it('decodes opcode 0xFX33 (storeDecimalValueToVX)', () => {
                 cpu.indexRegister = 0x003;
                 cpu.registers[0x3] = 256;
