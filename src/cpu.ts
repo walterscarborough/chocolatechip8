@@ -89,6 +89,12 @@ export default class Cpu {
         return vY;
     }
 
+    public parseOpcodeNN(opcode: number): number {
+        const nn = opcode & 0x00FF;
+
+        return nn;
+    }
+
     public decodeOpcode(opcode: number) {
 
         // We only care about the first letter in the opcode for switching purposes
@@ -132,7 +138,7 @@ export default class Cpu {
             }
 
             case 0xE000: {
-                switch (opcode & 0x00FF) {
+                switch (this.parseOpcodeNN(opcode)) {
 
                     case 0x009E: {
                         this.skipIfPressed(opcode);
@@ -154,7 +160,7 @@ export default class Cpu {
             }
 
             case 0xF000: {
-                switch (opcode & 0x00FF) {
+                switch (this.parseOpcodeNN(opcode)) {
 
                     case 0x0007: {
                         this.storeDelayTimerToVX(opcode);
@@ -270,7 +276,7 @@ export default class Cpu {
 
     private storeRandomNumberToVX(opcode: number) {
         const vX = this.parseOpcodeVX(opcode);
-        const sourceNumber = opcode & 0x00FF;
+        const sourceNumber = this.parseOpcodeNN(opcode);
         const randomNumber = this.getRandomIntMax255();
 
         const adjustedNumber = sourceNumber & randomNumber;

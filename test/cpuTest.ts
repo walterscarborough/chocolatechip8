@@ -164,6 +164,16 @@ describe('Cpu', () => {
 
 
                 expect(decodedXRegister).equal(15);
+            });
+
+            it('decodes NN from opcode', () => {
+                const opcode = 0x00FF;
+
+
+                const decodedXRegister = cpu.parseOpcodeNN(opcode);
+
+
+                expect(decodedXRegister).equal(255);
             })
         });
 
