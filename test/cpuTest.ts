@@ -460,6 +460,35 @@ describe('Cpu', () => {
                 expect(cpu.registers[0xF]).equal(1);
             });
 
+            describe('decodes opcode 0x8XY7 (subtractVXFromVYWithCarry)', () => {
+            
+                it('when VX is greater than VY', () => {
+                    cpu.registers[0x0] = 0x7;
+                    cpu.registers[0x1] = 0x2;
+
+
+                    cpu.decodeOpcode(0x8017);
+
+
+                    expect(cpu.registers[0x0]).equal(-5);
+                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.registers[0xF]).equal(1);
+                });
+
+                it('when VX is less than VY', () => {
+                    cpu.registers[0x0] = 0x2;
+                    cpu.registers[0x1] = 0x7;
+
+
+                    cpu.decodeOpcode(0x8017);
+
+
+                    expect(cpu.registers[0x0]).equal(5);
+                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.registers[0xF]).equal(0);
+                });
+            });
+        
             it('decodes opcode 0xANNN (loadIndexRegister)', () => {
                 cpu.programCounter = 4;
 

@@ -201,6 +201,11 @@ export default class Cpu {
                         break;
                     }
 
+                    case 0x0007: {
+                        this.subtractVXFromVYWithCarry(opcode);
+                        break;
+                    }
+
                     default: {
                         console.log('opcode "' + opcode + '" not implemented!');
                         break;
@@ -350,6 +355,21 @@ export default class Cpu {
         }
 
         this.registers[vX] = this.registers[vX] - this.registers[vY];
+        this.programCounter += 2;
+    }
+
+    private subtractVXFromVYWithCarry(opcode: number) {
+        const vX = this.parseOpcodeVX(opcode);
+        const vY = this.parseOpcodeVY(opcode);
+
+        if (this.registers[vX] < this.registers[vY]) {
+            this.registers[0xF] = 0;
+        }
+        else {
+            this.registers[0xF] = 1;
+        }
+
+        this.registers[vX] = this.registers[vY] - this.registers[vX];
         this.programCounter += 2;
     }
 
