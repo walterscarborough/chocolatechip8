@@ -189,6 +189,12 @@ export default class Cpu {
         }
     }
 
+    public getVX(opcode: number): number {
+        const vX = (opcode & 0x0F00) >> 8;
+
+        return vX;
+    }
+
     private loadIndexRegister(opcode: number) {
         const nnnAddress = opcode & 0x0FFF;
         this.indexRegister = nnnAddress;

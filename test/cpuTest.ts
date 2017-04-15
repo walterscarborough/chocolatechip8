@@ -133,7 +133,16 @@ describe('Cpu', () => {
         });
     });
 
-    describe('opcode handling', () => {
+    describe('opcodes', () => {
+
+        context('parsing', () => {
+            it('decodes X register from opcode', () => {
+                const opcode = 0x0F00;
+
+                const decodedXRegister = cpu.getVX(opcode);
+                expect(decodedXRegister).equal(15);
+            });
+        });
 
         context('fetching', () => {
             it('fetches opcode 0xANNN (0xA2F0)', () => {
