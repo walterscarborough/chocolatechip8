@@ -298,6 +298,30 @@ describe('Cpu', () => {
                 });
             });
 
+            context('decodes opcode 0x5XY0 (skipIfVXEqualsVY)', () => {
+                it('when VX equals VY', () => {
+                    cpu.registers[0] = 3;
+                    cpu.registers[1] = 3;
+                    
+
+                    cpu.decodeOpcode(0x5010);
+
+
+                    expect(cpu.programCounter).equal(4);
+                });
+
+                it('when VX does not equal VY', () => {
+                    cpu.registers[0] = 2;
+                    cpu.registers[1] = 3;
+
+
+                    cpu.decodeOpcode(0x5010);
+
+
+                    expect(cpu.programCounter).equal(2);
+                });
+            });
+
             describe('decodes opcode 0x8XY4 (addWithCarry)', () => {
                 it('for value less than 256', () => {
                     cpu.registers[0x2] = 6;

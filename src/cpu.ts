@@ -148,6 +148,11 @@ export default class Cpu {
                 break;
             }
 
+            case 0x5000: {
+                this.skipIfVXEqualsVY(opcode);
+                break;
+            }
+
             case 0x8000: {
                 switch (this.parseOpcodeN(opcode)) {
 
@@ -258,6 +263,18 @@ export default class Cpu {
                 console.log('opcode "' + opcode + '" not implemented!');
                 break;
             }
+        }
+    }
+
+    private skipIfVXEqualsVY(opcode: number) {
+        const vX = this.parseOpcodeVX(opcode);
+        const vY = this.parseOpcodeVY(opcode);
+
+        if (this.registers[vX] === this.registers[vY]) {
+            this.programCounter += 4;
+        }
+        else {
+            this.programCounter += 2;
         }
     }
 
