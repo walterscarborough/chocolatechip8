@@ -168,6 +168,11 @@ export default class Cpu {
                         break;
                     }
 
+                    case 0x0055: {
+                        this.storeFromVXToV0InMemory(opcode);
+                        break;
+                    }
+
                     default: {
                         console.log('opcode "' + opcode + '" not implemented!');
                         break;
@@ -284,6 +289,16 @@ export default class Cpu {
         this.memory[this.indexRegister] = Math.floor(this.registers[(opcode & 0x0F00) >> 8] / 100);
         this.memory[this.indexRegister + 1] = Math.floor((this.registers[(opcode & 0x0F00) >> 8] / 10) % 10);
         this.memory[this.indexRegister + 2] = Math.floor((this.registers[(opcode & 0x0F00) >> 8] % 100) % 10);
+
+        this.programCounter += 2;
+    }
+
+    private storeFromVXToV0InMemory(opcode: number) {
+        const targetRegister = (opcode & 0x0F00) >> 8;
+
+        for (let counter = 0; counter <= targetRegister; counter++) {
+            this.memory[counter + this.indexRegister] = this.registers[counter]; 
+        }
 
         this.programCounter += 2;
     }

@@ -342,6 +342,10 @@ describe('Cpu', () => {
                 expect(cpu.indexRegister).equal(3);
             });
 
+            // it('decodes opcode 0xFX29 (setIToVXSpriteLocation)', () => {
+                
+            // });
+
             it('decodes opcode 0xFX33 (storeDecimalValueToVX)', () => {
                 cpu.indexRegister = 0x003;
                 cpu.registers[0x3] = 256;
@@ -353,6 +357,54 @@ describe('Cpu', () => {
                 expect(cpu.memory[cpu.indexRegister]).equal(2);
                 expect(cpu.memory[cpu.indexRegister + 1]).equal(5);
                 expect(cpu.memory[cpu.indexRegister + 2]).equal(6);
+                expect(cpu.programCounter).equal(2);
+            });
+
+            it('decodes opcode 0xFX55 (storeFromVXToV0InMemory)', () => {
+                cpu.memory[0] = 0;
+                cpu.indexRegister = 1;
+                cpu.registers[0] = 2;
+                cpu.registers[1] = 2;
+                cpu.registers[2] = 2;
+                cpu.registers[3] = 2;
+                cpu.registers[4] = 2;
+                cpu.registers[5] = 2;
+                cpu.registers[6] = 2;
+                cpu.registers[7] = 2;
+                cpu.registers[8] = 2;
+                cpu.registers[9] = 2;
+                cpu.registers[10] = 2;
+                cpu.registers[11] = 2;
+                cpu.registers[12] = 2;
+                cpu.registers[13] = 2;
+                cpu.registers[14] = 2;
+                cpu.registers[15] = 2;
+
+
+                cpu.decodeOpcode(0xFF55);
+
+
+                const expectedMemory = [];
+                expectedMemory[0] = 0;
+                expectedMemory[1] = 2;
+                expectedMemory[2] = 2;
+                expectedMemory[3] = 2;
+                expectedMemory[4] = 2;
+                expectedMemory[5] = 2;
+                expectedMemory[6] = 2;
+                expectedMemory[7] = 2;
+                expectedMemory[8] = 2;
+                expectedMemory[9] = 2;
+                expectedMemory[10] = 2;
+                expectedMemory[11] = 2;
+                expectedMemory[12] = 2;
+                expectedMemory[13] = 2;
+                expectedMemory[14] = 2;
+                expectedMemory[15] = 2;
+                expectedMemory[16] = 2;
+
+                expect(cpu.memory).deep.equal(expectedMemory);
+                expect(cpu.indexRegister).equal(1);
                 expect(cpu.programCounter).equal(2);
             });
         });
