@@ -216,6 +216,10 @@ describe('Cpu', () => {
 
         context('decoding', () => {
 
+            // it('decodes opcode 0x00E0 (clearDisplay)', () => {
+                
+            // });
+
             it('decodes opcode 0x00EE (returnFromSubroutine)', () => {
                 cpu.stack.push(1);
                 cpu.stack.push(2);
@@ -248,6 +252,28 @@ describe('Cpu', () => {
                 expect(cpu.stack[cpu.stackPointer - 1]).equal(4);
                 expect(cpu.programCounter).equal(0x0F0);
                 expect(cpu.stackPointer).equal(1);
+            });
+
+            context('decodes opcode 0x3XNN (skipIfVXEqualsNN)', () => {
+                it('when VX equals NN', () => {
+                    cpu.registers[0] = 3;
+
+
+                    cpu.decodeOpcode(0x3003);
+
+
+                    expect(cpu.programCounter).equal(4);
+                });
+
+                it('when VX does not equal NN', () => {
+                    cpu.registers[0] = 2;
+
+
+                    cpu.decodeOpcode(0x3003);
+
+
+                    expect(cpu.programCounter).equal(2);
+                });
             });
 
             describe('decodes opcode 0x8XY4 (addWithCarry)', () => {
