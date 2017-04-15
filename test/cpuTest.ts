@@ -155,6 +155,16 @@ describe('Cpu', () => {
 
                 expect(decodedXRegister).equal(15);
             });
+
+            it('decodes Y register from opcode', () => {
+                const opcode = 0x00F0;
+
+
+                const decodedXRegister = cpu.parseOpcodeVY(opcode);
+
+
+                expect(decodedXRegister).equal(15);
+            })
         });
 
         context('fetching', () => {

@@ -83,6 +83,12 @@ export default class Cpu {
         return vX;
     }
 
+    public parseOpcodeVY(opcode: number): number {
+        const vY = (opcode & 0x00F0) >> 4;
+
+        return vY;
+    }
+
     public decodeOpcode(opcode: number) {
 
         // We only care about the first letter in the opcode for switching purposes
@@ -289,15 +295,16 @@ export default class Cpu {
     private addWithCarry(opcode: number) {
 
         const vX = this.parseOpcodeVX(opcode);
+        const vY = this.parseOpcodeVY(opcode);
 
-        if (this.registers[(opcode & 0x00F0) >> 4] > (0xFF - this.registers[vX])) {
+        if (this.registers[vY] > (0xFF - this.registers[vX])) {
             this.registers[0xF] = 1;
         }
         else {
             this.registers[0xF] = 0;
         }
 
-        this.registers[vX] += this.registers[(opcode & 0x00F0) >> 4];
+        this.registers[vX] += this.registers[vY];
         this.programCounter += 2;
     }
 
