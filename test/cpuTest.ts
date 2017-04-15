@@ -276,6 +276,28 @@ describe('Cpu', () => {
                 });
             });
 
+            context('decodes opcode 0x4XNN (skipIfVXDoesNotEqualNN)', () => {
+                it('when VX equals NN', () => {
+                    cpu.registers[0] = 3;
+
+
+                    cpu.decodeOpcode(0x4003);
+
+
+                    expect(cpu.programCounter).equal(2);
+                });
+
+                it('when VX does not equal NN', () => {
+                    cpu.registers[0] = 2;
+
+
+                    cpu.decodeOpcode(0x4003);
+
+
+                    expect(cpu.programCounter).equal(4);
+                });
+            });
+
             describe('decodes opcode 0x8XY4 (addWithCarry)', () => {
                 it('for value less than 256', () => {
                     cpu.registers[0x2] = 6;

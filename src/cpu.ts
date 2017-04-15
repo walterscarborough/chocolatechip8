@@ -143,6 +143,11 @@ export default class Cpu {
                 break;
             }
 
+            case 0x4000: {
+                this.skipIfVXDoesNotEqualNN(opcode);
+                break;
+            }
+
             case 0x8000: {
                 switch (this.parseOpcodeN(opcode)) {
 
@@ -253,6 +258,18 @@ export default class Cpu {
                 console.log('opcode "' + opcode + '" not implemented!');
                 break;
             }
+        }
+    }
+
+    private skipIfVXDoesNotEqualNN(opcode: number) {
+        const vX = this.parseOpcodeVX(opcode);
+        const nnAddress = this.parseOpcodeNN(opcode);
+
+        if (nnAddress !== this.registers[vX]) {
+            this.programCounter += 4;
+        }
+        else {
+            this.programCounter += 2;
         }
     }
 
