@@ -271,24 +271,28 @@ export default class Cpu {
         const vX = this.parseOpcodeVX(opcode);
 
         this.registers[vX] = this.delayTimer;
+        this.programCounter += 2;
     }
 
     private storeVXToDelayTimer(opcode: number) {
         const vX = this.parseOpcodeVX(opcode);
 
         this.delayTimer = this.registers[vX];
+        this.programCounter += 2;
     }
 
     private storeVXToSoundTimer(opcode: number) {
         const vX = this.parseOpcodeVX(opcode);
 
         this.soundTimer = this.registers[vX];
+        this.programCounter += 2;
     }
 
     private addVXToI(opcode: number) {
         const vX = this.parseOpcodeVX(opcode);
 
         this.indexRegister += this.registers[vX];
+        this.programCounter += 2
     }
 
     private storeRandomNumberToVX(opcode: number) {
@@ -313,6 +317,7 @@ export default class Cpu {
         this.registers[targetRegister] = this.currentKeyPressed;
         this.hasPendingWaitForStoreKeypressToVX = false;
         this.isHalted = false;
+        this.programCounter += 2
     }
 
     private addWithCarry(opcode: number) {

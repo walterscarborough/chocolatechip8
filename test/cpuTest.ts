@@ -353,6 +353,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.registers[0]).equal(0x2);
+                expect(cpu.programCounter).equal(2);
             });
 
             it('decodes opcode 0xFX0A (waitForStoreKeypressToVX)', () => {
@@ -371,6 +372,7 @@ describe('Cpu', () => {
                 expect(cpu.currentKeyPressed).equal(2);
                 expect(cpu.hasPendingWaitForStoreKeypressToVX).equal(false);
                 expect(cpu.isHalted).equal(false);
+                expect(cpu.programCounter).equal(2);
             });
 
             it('decodes opcode 0xFX15 (storeVXToDelayTimer)', () => {
@@ -381,6 +383,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.delayTimer).equal(2);
+                expect(cpu.programCounter).equal(2);
             });
 
             it('decodes opcode 0xFX18 (storeVXToSoundTimer)', () => {
@@ -391,6 +394,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.soundTimer).equal(2);
+                expect(cpu.programCounter).equal(2);
             });
 
             it('decodes opcode 0xFX1E (addVXToI)', () => {
@@ -402,6 +406,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.indexRegister).equal(3);
+                expect(cpu.programCounter).equal(2);
             });
 
             // it('decodes opcode 0xFX29 (setIToVXSpriteLocation)', () => {
@@ -513,6 +518,8 @@ describe('Cpu', () => {
                 expect(cpu.registers[14]).equal(2);
                 expect(cpu.registers[15]).equal(2);
                 expect(cpu.registers.length).equal(16);
+                expect(cpu.indexRegister).equal(1);
+                expect(cpu.programCounter).equal(2)
             });
         });
 
