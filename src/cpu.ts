@@ -101,6 +101,12 @@ export default class Cpu {
         return nn;
     }
 
+    public parseOpcodeNNN(opcode: number): number {
+        const nn = opcode & 0x0FFF;
+
+        return nn;
+    }
+
     public decodeOpcode(opcode: number) {
 
         // We only care about the first letter in the opcode for switching purposes
@@ -220,7 +226,7 @@ export default class Cpu {
     }
 
     private loadIndexRegister(opcode: number) {
-        const nnnAddress = opcode & 0x0FFF;
+        const nnnAddress = this.parseOpcodeNNN(opcode);
         this.indexRegister = nnnAddress;
         this.programCounter += 2;
     }
@@ -228,11 +234,11 @@ export default class Cpu {
     private jumpToSubroutine(opcode: number) {
         this.stack[this.stackPointer] = this.programCounter;
         this.stackPointer += 1;
-        this.programCounter = opcode & 0x0FFF;
+        this.programCounter = this.parseOpcodeNNN(opcode);
     }
 
     private jumpWithV0Offset(opcode: number) {
-        const nnnAddress = opcode & 0x0FFF;
+        const nnnAddress = this.parseOpcodeNNN(opcode);
         const v0Data = this.registers[0];
         this.programCounter = nnnAddress + v0Data;
     }
