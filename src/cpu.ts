@@ -69,6 +69,18 @@ export default class Cpu {
         const completeOpcode = leftShiftedOpcodeFragmentA | opcodeFragmentB;
 
         return completeOpcode;
+    }    
+    
+    public parseOpcodeFirstMask(opcode: number): number {
+        const opcodeFirstMask = opcode & 0xF000;
+
+        return opcodeFirstMask;
+    }
+
+    public parseOpcodeVX(opcode: number): number {
+        const vX = (opcode & 0x0F00) >> 8;
+
+        return vX;
     }
 
     public decodeOpcode(opcode: number) {
@@ -187,12 +199,6 @@ export default class Cpu {
                 break;
             }
         }
-    }
-
-    public getVX(opcode: number): number {
-        const vX = (opcode & 0x0F00) >> 8;
-
-        return vX;
     }
 
     private loadIndexRegister(opcode: number) {

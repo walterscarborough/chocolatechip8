@@ -136,10 +136,23 @@ describe('Cpu', () => {
     describe('opcodes', () => {
 
         context('parsing', () => {
+            it('decodes firstMask from opcode', () => {
+                const opcode = 0xE000;
+
+
+                const opcodeFirstMask = cpu.parseOpcodeFirstMask(opcode);
+
+
+                expect(opcodeFirstMask).equal(0xE000);
+            });
+
             it('decodes X register from opcode', () => {
                 const opcode = 0x0F00;
 
-                const decodedXRegister = cpu.getVX(opcode);
+
+                const decodedXRegister = cpu.parseOpcodeVX(opcode);
+
+
                 expect(decodedXRegister).equal(15);
             });
         });
