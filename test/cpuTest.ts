@@ -302,7 +302,7 @@ describe('Cpu', () => {
                 it('when VX equals VY', () => {
                     cpu.registers[0] = 3;
                     cpu.registers[1] = 3;
-                    
+
 
                     cpu.decodeOpcode(0x5010);
 
@@ -320,6 +320,16 @@ describe('Cpu', () => {
 
                     expect(cpu.programCounter).equal(2);
                 });
+            });
+
+            it('decodes opcode 0x6XNN (setVXToNN)', () => {
+                cpu.registers[0] = 3;
+
+
+                cpu.decodeOpcode(0x6006);
+
+
+                expect(cpu.registers[0]).equal(6);
             });
 
             describe('decodes opcode 0x8XY4 (addWithCarry)', () => {
