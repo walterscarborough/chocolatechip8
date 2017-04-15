@@ -69,7 +69,7 @@ export default class Cpu {
         const completeOpcode = leftShiftedOpcodeFragmentA | opcodeFragmentB;
 
         return completeOpcode;
-    }    
+    }
     
     public parseOpcodeFirstMask(opcode: number): number {
         const opcodeFirstMask = opcode & 0xF000;
@@ -86,7 +86,7 @@ export default class Cpu {
     public decodeOpcode(opcode: number) {
 
         // We only care about the first letter in the opcode for switching purposes
-        switch (opcode & 0xF000) {
+        switch (this.parseOpcodeFirstMask(opcode)) {
 
             case 0x2000: {
                 this.jumpToSubroutine(opcode);
@@ -220,8 +220,8 @@ export default class Cpu {
     }
 
     private skipIfPressed(opcode: number) {
-        const targetRegister = opcode & 0x0F00;
-        const sourceKeyPress = this.registers[targetRegister];
+        const vX = this.parseOpcodeVX(opcode);
+        const sourceKeyPress = this.registers[vX];
 
         if (sourceKeyPress === this.currentKeyPressed) {
             this.programCounter += 2;
@@ -229,8 +229,9 @@ export default class Cpu {
     }
 
     private skipIfNotPressed(opcode: number) {
-        const targetRegister = opcode & 0x0F00;
-        const sourceKeyPress = this.registers[targetRegister];
+        const vX = this.parseOpcodeVX(opcode);
+
+       const sourceKeyPress = this.registers[vX];
 
         if (sourceKeyPress !== this.currentKeyPressed) {
             this.programCounter += 2;
@@ -238,45 +239,45 @@ export default class Cpu {
     }
 
     private storeDelayTimerToVX(opcode: number) {
-        const targetRegister = opcode & 0x0F00;
+        const vX = this.parseOpcodeVX(opcode);
 
-        this.registers[targetRegister] = this.delayTimer;
+        this.registers[vX] = this.delayTimer;
     }
 
     private storeVXToDelayTimer(opcode: number) {
-        const targetRegister = opcode & 0x0F00;
+        const vX = this.parseOpcodeVX(opcode);
 
-        this.delayTimer = this.registers[targetRegister];
+        this.delayTimer = this.registers[vX];
     }
 
     private storeVXToSoundTimer(opcode: number) {
-        const targetRegister = opcode & 0x0F00;
+        const vX = this.parseOpcodeVX(opcode);
 
-        this.soundTimer = this.registers[targetRegister];
+        this.soundTimer = this.registers[vX];
     }
 
     private addVXToI(opcode: number) {
-        const targetRegister = opcode & 0x0F00;
+        const vX = this.parseOpcodeVX(opcode);
 
-        this.indexRegister += this.registers[targetRegister];
+        this.indexRegister += this.registers[vX];
     }
 
     private storeRandomNumberToVX(opcode: number) {
-        const targetRegister = opcode & 0x0F00;
+        const vX = this.parseOpcodeVX(opcode);
         const sourceNumber = opcode & 0x00FF;
         const randomNumber = this.getRandomIntMax255();
 
         const adjustedNumber = sourceNumber & randomNumber;
 
-        this.registers[targetRegister] = adjustedNumber;
+        this.registers[vX] = adjustedNumber;
         this.programCounter += 2;
     }
 
     private startWaitForStoreKeypressToVX(opcode: number) {
-        const targetRegister = opcode & 0x0F00;
+        const vX = this.parseOpcodeVX(opcode);
         this.isHalted = true;
         this.hasPendingWaitForStoreKeypressToVX = true;
-        this.pendingWaitForStoreKeypressToVXRegister = targetRegister;
+        this.pendingWaitForStoreKeypressToVXRegister = vX;
     }
 
     private finishWaitForStoreKeypressToVX(targetRegister: number) {
@@ -286,29 +287,35 @@ export default class Cpu {
     }
 
     private addWithCarry(opcode: number) {
-        if (this.registers[(opcode & 0x00F0) >> 4] > (0xFF - this.registers[(opcode & 0x0F00) >> 8])) {
+
+        const vX = this.parseOpcodeVX(opcode);
+
+        if (this.registers[(opcode & 0x00F0) >> 4] > (0xFF - this.registers[vX])) {
             this.registers[0xF] = 1;
         }
         else {
             this.registers[0xF] = 0;
         }
 
-        this.registers[(opcode & 0x0F00) >> 8] += this.registers[(opcode & 0x00F0) >> 4];
+        this.registers[vX] += this.registers[(opcode & 0x00F0) >> 4];
         this.programCounter += 2;
     }
 
     private storeDecimalValueToVX(opcode: number) {
-        this.memory[this.indexRegister] = Math.floor(this.registers[(opcode & 0x0F00) >> 8] / 100);
-        this.memory[this.indexRegister + 1] = Math.floor((this.registers[(opcode & 0x0F00) >> 8] / 10) % 10);
-        this.memory[this.indexRegister + 2] = Math.floor((this.registers[(opcode & 0x0F00) >> 8] % 100) % 10);
+
+        const vX = this.parseOpcodeVX(opcode);
+
+        this.memory[this.indexRegister] = Math.floor(this.registers[vX] / 100);
+        this.memory[this.indexRegister + 1] = Math.floor((this.registers[vX] / 10) % 10);
+        this.memory[this.indexRegister + 2] = Math.floor((this.registers[vX] % 100) % 10);
 
         this.programCounter += 2;
     }
 
     private storeFromVXToV0InMemory(opcode: number) {
-        const targetRegister = (opcode & 0x0F00) >> 8;
+        const vX = this.parseOpcodeVX(opcode);
 
-        for (let counter = 0; counter <= targetRegister; counter++) {
+        for (let counter = 0; counter <= vX; counter++) {
             this.memory[counter + this.indexRegister] = this.registers[counter]; 
         }
 
