@@ -4,7 +4,7 @@
   "description": "A Chip 8 emulator written in typescript.",
   "main": "build/index.js",
   "scripts": {
-    "lint": "tslint src/*.ts",
+    "lint": "tslint src/*.ts && tslint test/*.ts",
     "cleanTmpDirectory": "mkdir -p tmp && rm -r tmp && mkdir -p tmp",
     "compileTests": "tsc test/*Test.ts --module commonjs --outDir tmp",
     "createBuildDirectory": "mkdir -p build",
