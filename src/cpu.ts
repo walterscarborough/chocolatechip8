@@ -89,6 +89,12 @@ export default class Cpu {
         return vY;
     }
 
+    public parseOpcodeN(opcode: number): number {
+        const n = opcode & 0x000F;
+
+        return n;
+    }
+
     public parseOpcodeNN(opcode: number): number {
         const nn = opcode & 0x00FF;
 
@@ -106,7 +112,7 @@ export default class Cpu {
             }
 
             case 0x8000: {
-                switch (opcode & 0x000F) {
+                switch (this.parseOpcodeN(opcode)) {
 
                     case 0x0004: {
                         this.addWithCarry(opcode);

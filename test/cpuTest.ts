@@ -166,6 +166,16 @@ describe('Cpu', () => {
                 expect(decodedXRegister).equal(15);
             });
 
+            it('decodes N from opcode', () => {
+                const opcode = 0x000F;
+
+
+                const decodedXRegister = cpu.parseOpcodeN(opcode);
+
+
+                expect(decodedXRegister).equal(15);
+            });
+
             it('decodes NN from opcode', () => {
                 const opcode = 0x00FF;
 
@@ -174,7 +184,7 @@ describe('Cpu', () => {
 
 
                 expect(decodedXRegister).equal(255);
-            })
+            });
         });
 
         context('fetching', () => {
