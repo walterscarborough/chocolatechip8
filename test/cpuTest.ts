@@ -330,6 +330,18 @@ describe('Cpu', () => {
 
 
                 expect(cpu.registers[0]).equal(6);
+                expect(cpu.programCounter).equal(2);
+            });
+
+            it('decodes opcode 0x7XNN (addNNToVX)', () => {
+                cpu.registers[0] = 3;
+
+
+                cpu.decodeOpcode(0x7006);
+
+
+                expect(cpu.registers[0]).equal(9);
+                expect(cpu.programCounter).equal(2);
             });
 
             describe('decodes opcode 0x8XY4 (addWithCarry)', () => {
