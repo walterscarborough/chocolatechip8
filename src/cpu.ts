@@ -112,6 +112,11 @@ export default class Cpu {
         // We only care about the first letter in the opcode for switching purposes
         switch (this.parseOpcodeFirstMask(opcode)) {
 
+            case 0x1000: {
+                this.jumpToAddress(opcode);
+                break;
+            }
+
             case 0x2000: {
                 this.jumpToSubroutine(opcode);
                 break;
@@ -228,6 +233,11 @@ export default class Cpu {
                 break;
             }
         }
+    }
+
+    private jumpToAddress(opcode: number) {
+        const nnnAddress = this.parseOpcodeNNN(opcode);
+        this.programCounter = nnnAddress;
     }
 
     private loadIndexRegister(opcode: number) {

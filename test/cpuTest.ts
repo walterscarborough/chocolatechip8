@@ -215,6 +215,14 @@ describe('Cpu', () => {
         });
 
         context('decoding', () => {
+
+            it('decodes opcode 0x1NNN (jumpToAddress)', () => {
+                cpu.decodeOpcode(0x100A);
+
+
+                expect(cpu.programCounter).equal(0x00A);
+            });
+
             it('decodes opcode 0x2NNN (jumpToSubroutine)', () => {
                 cpu.programCounter = 4;
 
