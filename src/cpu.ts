@@ -181,6 +181,11 @@ export default class Cpu {
                         break;
                     }
 
+                    case 0x0003: {
+                        this.setVXToBitwiseXorVY(opcode);
+                        break;
+                    }
+
                     case 0x0004: {
                         this.addWithCarry(opcode);
                         break;
@@ -304,6 +309,14 @@ export default class Cpu {
         const vY = this.parseOpcodeVY(opcode);
 
         this.registers[vX] = this.registers[vX] | this.registers[vY];
+        this.programCounter += 2;
+    }
+
+    private setVXToBitwiseXorVY(opcode: number) {
+        const vX = this.parseOpcodeVX(opcode);
+        const vY = this.parseOpcodeVY(opcode);
+
+        this.registers[vX] = this.registers[vX] ^ this.registers[vY];
         this.programCounter += 2;
     }
 

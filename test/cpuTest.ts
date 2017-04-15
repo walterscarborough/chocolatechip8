@@ -380,6 +380,18 @@ describe('Cpu', () => {
                 expect(cpu.programCounter).equal(2);
             });
 
+            it('decodes opcode 0x8XY3 (setVXToBitwiseXorVY)', () => {
+                cpu.registers[0] = 0x3;
+                cpu.registers[1] = 0x7;
+
+
+                cpu.decodeOpcode(0x8013);
+
+
+                expect(cpu.registers[0]).equal(0x4);
+                expect(cpu.programCounter).equal(2);
+            });
+
             describe('decodes opcode 0x8XY4 (addWithCarry)', () => {
                 it('for value less than 256', () => {
                     cpu.registers[0x2] = 6;
