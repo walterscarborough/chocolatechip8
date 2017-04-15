@@ -196,6 +196,11 @@ export default class Cpu {
                         break;
                     }
 
+                    case 0x0006: {
+                        this.shiftVXRight(opcode);
+                        break;
+                    }
+
                     default: {
                         console.log('opcode "' + opcode + '" not implemented!');
                         break;
@@ -361,6 +366,15 @@ export default class Cpu {
         const nnAddress = this.parseOpcodeNN(opcode);
 
         this.registers[vX] = nnAddress;
+        this.programCounter += 2;
+    }
+
+    private shiftVXRight(opcode: number) {
+        const vX = this.parseOpcodeVX(opcode);
+
+        this.registers[0xF] = this.registers[vX] & 0x1;
+
+        this.registers[vX] = this.registers[vX] >> 1;
         this.programCounter += 2;
     }
 

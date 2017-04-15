@@ -448,6 +448,18 @@ describe('Cpu', () => {
                 });
             });
 
+            it('decodes opcode 0x8XY6 (shiftVXRight)', () => {
+                cpu.registers[0x0] = 0x25;
+
+
+                cpu.decodeOpcode(0x8006);
+
+
+                expect(cpu.registers[0x0]).equal(18);
+                expect(cpu.programCounter).equal(2);
+                expect(cpu.registers[0xF]).equal(1);
+            });
+
             it('decodes opcode 0xANNN (loadIndexRegister)', () => {
                 cpu.programCounter = 4;
 
