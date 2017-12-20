@@ -97,68 +97,6 @@ describe('Cpu', () => {
 
     describe('opcodes', () => {
 
-        context('parsing', () => {
-            it('decodes firstMask from opcode', () => {
-                const opcode = 0xE000;
-
-
-                const opcodeFirstMask = cpu.parseOpcodeFirstMask(opcode);
-
-
-                expect(opcodeFirstMask).equal(0xE000);
-            });
-
-            it('decodes X register from opcode', () => {
-                const opcode = 0x0F00;
-
-
-                const decodedXRegister = cpu.parseOpcodeVX(opcode);
-
-
-                expect(decodedXRegister).equal(0xF);
-            });
-
-            it('decodes Y register from opcode', () => {
-                const opcode = 0x00F0;
-
-
-                const decodedXRegister = cpu.parseOpcodeVY(opcode);
-
-
-                expect(decodedXRegister).equal(0xF);
-            });
-
-            it('decodes N from opcode', () => {
-                const opcode = 0x000F;
-
-
-                const decodedXRegister = cpu.parseOpcodeN(opcode);
-
-
-                expect(decodedXRegister).equal(0xF);
-            });
-
-            it('decodes NN from opcode', () => {
-                const opcode = 0x00FF;
-
-
-                const decodedXRegister = cpu.parseOpcodeNN(opcode);
-
-
-                expect(decodedXRegister).equal(0xFF);
-            });
-
-            it('decodes NNN from opcode', () => {
-                const opcode = 0x0FFF;
-
-
-                const decodedXRegister = cpu.parseOpcodeNNN(opcode);
-
-
-                expect(decodedXRegister).equal(0xFFF);
-            });
-        });
-
         context('fetching', () => {
             it('fetches opcode 0xANNN (0xA2F0)', () => {
 
