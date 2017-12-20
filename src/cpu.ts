@@ -37,14 +37,6 @@ export default class Cpu {
     }
     */
 
-    public getUpdatedDelayTimer(delayTimer: number): number {
-        if (delayTimer > 0) {
-            delayTimer -= 1;
-        }
-
-        return delayTimer;
-    }
-
     public getUpdatedSoundTimer(soundTimer: number): number {
         if (soundTimer > 0) {
 
