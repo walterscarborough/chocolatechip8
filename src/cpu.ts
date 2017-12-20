@@ -1,4 +1,5 @@
 import OpcodeReader from './opcodeReader';
+import RandomNumberGenerator from './randomNumberGenerator';
 
 export default class Cpu {
 
@@ -458,7 +459,7 @@ export default class Cpu {
     private storeRandomNumberToVX(opcode: number) {
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const sourceNumber = OpcodeReader.parseOpcodeNN(opcode);
-        const randomNumber = this.getRandomIntMax255();
+        const randomNumber = RandomNumberGenerator.getRandomIntMax255();
 
         const adjustedNumber = sourceNumber & randomNumber;
 
@@ -525,12 +526,5 @@ export default class Cpu {
         }
 
         this.programCounter += 2;
-    }
-
-    public getRandomIntMax255(): number {
-        const max = 255;
-        const min = 0;
-
-        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }

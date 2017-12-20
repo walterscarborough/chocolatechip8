@@ -1,6 +1,7 @@
 
 import { expect } from 'chai';
 import Cpu from '../src/cpu';
+import RandomNumberGenerator from '../src/randomNumberGenerator';
 import * as sinon from 'sinon';
 
 describe('Cpu', () => {
@@ -424,7 +425,7 @@ describe('Cpu', () => {
             });
 
             it('decodes opcode 0xCXNN (storeRandomNumberToVX)', () => {
-                const getRandomIntStub = sinon.stub(cpu, 'getRandomIntMax255');
+                const getRandomIntStub = sinon.stub(RandomNumberGenerator, 'getRandomIntMax255');
                 getRandomIntStub.returns(0xAA);
 
                 cpu.programCounter = 4;
