@@ -24,7 +24,7 @@ export default class Cpu {
             this.finishWaitForStoreKeypressToVX(this.pendingWaitForStoreKeypressToVXRegister);
         }
     }
-    
+
     /*
     public emulateCycle(): void {
         // fetch opcode
@@ -71,7 +71,7 @@ export default class Cpu {
 
         return completeOpcode;
     }
-    
+
     public parseOpcodeFirstMask(opcode: number): number {
         const opcodeFirstMask = opcode & 0xF000;
 
@@ -528,7 +528,7 @@ export default class Cpu {
         this.pendingWaitForStoreKeypressToVXRegister = vX;
     }
 
-    private finishWaitForStoreKeypressToVX(targetRegister: number) {
+    public finishWaitForStoreKeypressToVX(targetRegister: number) {
         this.registers[targetRegister] = this.currentKeyPressed;
         this.hasPendingWaitForStoreKeypressToVX = false;
         this.isHalted = false;
@@ -566,7 +566,7 @@ export default class Cpu {
         const vX = this.parseOpcodeVX(opcode);
 
         for (let counter = 0; counter <= vX; counter++) {
-            this.memory[counter + this.indexRegister] = this.registers[counter]; 
+            this.memory[counter + this.indexRegister] = this.registers[counter];
         }
 
         this.programCounter += 2;
@@ -574,7 +574,7 @@ export default class Cpu {
 
     private storeFromMemoryToV0VX(opcode: number) {
         const vX = this.parseOpcodeVX(opcode);
-        
+
         for (let counter = 0; counter <= vX; counter++) {
             this.registers[counter] = this.memory[this.indexRegister + vX];
         }
@@ -582,7 +582,7 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private getRandomIntMax255(): number {
+    public getRandomIntMax255(): number {
         const max = 255;
         const min = 0;
 
