@@ -32,23 +32,10 @@ export default class Cpu {
         // execute opcode
 
         // update timers
-        delayTimer = this.getUpdatedDelayTimer(this.delayTimer);
-        soundTimer = this.getUpdatedSoundTimer(this.soundTimer);
+        delayTimer = this.updateDelayTimer(this.delayTimer);
+        soundTimer = this.updateSoundTimer(this.soundTimer);
     }
     */
-
-    public getUpdatedSoundTimer(soundTimer: number): number {
-        if (soundTimer > 0) {
-
-            if (soundTimer == 1) {
-                console.log('beep!');
-            }
-
-            soundTimer -= 1;
-        }
-
-        return soundTimer;
-    }
 
 
     public fetchOpcode(memory: number[], programCounter: number): number {
