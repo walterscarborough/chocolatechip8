@@ -153,7 +153,7 @@ describe('Cpu', () => {
                 const decodedXRegister = cpu.parseOpcodeVX(opcode);
 
 
-                expect(decodedXRegister).equal(15);
+                expect(decodedXRegister).equal(0xF);
             });
 
             it('decodes Y register from opcode', () => {
@@ -163,7 +163,7 @@ describe('Cpu', () => {
                 const decodedXRegister = cpu.parseOpcodeVY(opcode);
 
 
-                expect(decodedXRegister).equal(15);
+                expect(decodedXRegister).equal(0xF);
             });
 
             it('decodes N from opcode', () => {
@@ -173,7 +173,7 @@ describe('Cpu', () => {
                 const decodedXRegister = cpu.parseOpcodeN(opcode);
 
 
-                expect(decodedXRegister).equal(15);
+                expect(decodedXRegister).equal(0xF);
             });
 
             it('decodes NN from opcode', () => {
@@ -183,7 +183,7 @@ describe('Cpu', () => {
                 const decodedXRegister = cpu.parseOpcodeNN(opcode);
 
 
-                expect(decodedXRegister).equal(255);
+                expect(decodedXRegister).equal(0xFF);
             });
 
             it('decodes NNN from opcode', () => {
@@ -193,7 +193,7 @@ describe('Cpu', () => {
                 const decodedXRegister = cpu.parseOpcodeNNN(opcode);
 
 
-                expect(decodedXRegister).equal(4095);
+                expect(decodedXRegister).equal(0xFFF);
             });
         });
 
@@ -217,11 +217,11 @@ describe('Cpu', () => {
         context('decoding', () => {
 
             it.skip('decodes opcode 0x0NNN (executeSubroutineNNN)', () => {
-                
+
             });
 
             it.skip('decodes opcode 0x00E0 (clearDisplay)', () => {
-                
+
             });
 
             it('decodes opcode 0x00EE (returnFromSubroutine)', () => {
@@ -465,7 +465,7 @@ describe('Cpu', () => {
             });
 
             describe('decodes opcode 0x8XY7 (subtractVXFromVYWithCarry)', () => {
-            
+
                 it('when VX is greater than VY', () => {
                     cpu.registers[0x0] = 0x7;
                     cpu.registers[0x1] = 0x2;
@@ -494,11 +494,11 @@ describe('Cpu', () => {
             });
 
             it.skip('decodes opcode 0x8XYE (shiftLeftVYStoreVX)', () => {
-                
+
             });
-        
+
             it.skip('decodes opcode 0x9XY0 (skipIfVXNotEqualVY)', () => {
-                
+
             });
 
             it('decodes opcode 0xANNN (loadIndexRegister)', () => {
@@ -538,7 +538,7 @@ describe('Cpu', () => {
             });
 
             it.skip('decodes opcode 0xDXYN (drawVxVy)', () => {
-                
+
             });
 
             context('decodes opcode 0xEX9E (skipIfPressed)', () => {
@@ -609,10 +609,10 @@ describe('Cpu', () => {
                 expect(cpu.isHalted).equal(true);
                 expect(cpu.hasPendingWaitForStoreKeypressToVX).equal(true);
                 expect(cpu.pendingWaitForStoreKeypressToVXRegister).equal(0);
-                
+
 
                 cpu.keypress(2);
-                
+
 
                 expect(cpu.registers[0]).equal(2);
                 expect(cpu.currentKeyPressed).equal(2);
@@ -656,7 +656,7 @@ describe('Cpu', () => {
             });
 
             it.skip('decodes opcode 0xFX29 (setIToVXSpriteLocation)', () => {
-                
+
             });
 
             it('decodes opcode 0xFX33 (storeDecimalValueToVX)', () => {
