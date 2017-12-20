@@ -216,9 +216,13 @@ describe('Cpu', () => {
 
         context('decoding', () => {
 
-            // it('decodes opcode 0x00E0 (clearDisplay)', () => {
+            it.skip('decodes opcode 0x0NNN (executeSubroutineNNN)', () => {
                 
-            // });
+            });
+
+            it.skip('decodes opcode 0x00E0 (clearDisplay)', () => {
+                
+            });
 
             it('decodes opcode 0x00EE (returnFromSubroutine)', () => {
                 cpu.stack.push(1);
@@ -488,7 +492,15 @@ describe('Cpu', () => {
                     expect(cpu.registers[0xF]).equal(0);
                 });
             });
+
+            it.skip('decodes opcode 0x8XYE (shiftLeftVYStoreVX)', () => {
+                
+            });
         
+            it.skip('decodes opcode 0x9XY0 (skipIfVXNotEqualVY)', () => {
+                
+            });
+
             it('decodes opcode 0xANNN (loadIndexRegister)', () => {
                 cpu.programCounter = 4;
 
@@ -525,9 +537,9 @@ describe('Cpu', () => {
                 expect(cpu.programCounter).equal(6);
             });
 
-            // it('decodes opcode 0xDXYN (drawVxVy)', () => {
+            it.skip('decodes opcode 0xDXYN (drawVxVy)', () => {
                 
-            // });
+            });
 
             context('decodes opcode 0xEX9E (skipIfPressed)', () => {
 
@@ -643,9 +655,9 @@ describe('Cpu', () => {
                 expect(cpu.programCounter).equal(2);
             });
 
-            // it('decodes opcode 0xFX29 (setIToVXSpriteLocation)', () => {
+            it.skip('decodes opcode 0xFX29 (setIToVXSpriteLocation)', () => {
                 
-            // });
+            });
 
             it('decodes opcode 0xFX33 (storeDecimalValueToVX)', () => {
                 cpu.indexRegister = 0x003;

@@ -24,6 +24,7 @@ export default class Cpu {
             this.finishWaitForStoreKeypressToVX(this.pendingWaitForStoreKeypressToVXRegister);
         }
     }
+    
     /*
     public emulateCycle(): void {
         // fetch opcode
