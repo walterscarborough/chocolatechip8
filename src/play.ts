@@ -1,23 +1,41 @@
 import Cpu from '../src/cpu';
+import {debuglog, log} from 'util';
 
 async function readRomFile(romFileTarget) {
 
-    const promise = new Promise<String>((resolve, reject) => {
+    const promise = new Promise<ArrayBuffer>((resolve, reject) => {
         const reader = new FileReader();
 
-        reader.onload = (e) => {
+        reader.onload = () => {
             const text = reader.result;
             resolve(text);
+
         };
 
-        reader.readAsText(romFileTarget); 
+        reader.readAsArrayBuffer(romFileTarget);
     });
 
     return promise;
-};
+}
+
+function playGame(gameData) {
+    const cpu = new Cpu();
+
+    cpu.loadGame(gameData);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    const romElement = document.getElementById('romFile');
+    const romElement = (<HTMLInputElement>document.getElementById('romFile'));
 
-    romElement.addEventListener('change', readRomFile);
+    romElement.addEventListener('change', () => {
+        log(
+            'Loading: ' + romElement.files[0].name
+        );
+
+        readRomFile(romElement.files[0])
+            .then((text) => {
+                const gameData = new Uint8Array(text);
+                playGame(gameData);
+            });
+    });
 });

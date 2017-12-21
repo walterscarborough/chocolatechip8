@@ -29,7 +29,7 @@ describe('Cpu', () => {
         });
 
         it('programCounter register should be 0', () => {
-            expect(cpu.programCounter).equal(0);
+            expect(cpu.programCounter).equal(0x200);
         });
 
         it('delayTimer should be 0', () => {
@@ -108,7 +108,7 @@ describe('Cpu', () => {
                     0xF0,
                 ];
 
-                const programCounter = 2;
+                const programCounter = 0x2;
 
 
                 expect(cpu.fetchOpcode(memory, programCounter)).equal(0xA2F0);
@@ -136,7 +136,7 @@ describe('Cpu', () => {
                 cpu.decodeOpcode(0x00EE);
 
 
-                expect(cpu.programCounter).equal(3);
+                expect(cpu.programCounter).equal(0x3);
                 expect(cpu.stackPointer).equal(1);
             });
 
@@ -148,7 +148,7 @@ describe('Cpu', () => {
             });
 
             it('decodes opcode 0x2NNN (jumpToSubroutine)', () => {
-                cpu.programCounter = 4;
+                cpu.programCounter = 0x4;
 
 
                 cpu.decodeOpcode(0x20F0);
@@ -167,7 +167,7 @@ describe('Cpu', () => {
                     cpu.decodeOpcode(0x3003);
 
 
-                    expect(cpu.programCounter).equal(4);
+                    expect(cpu.programCounter).equal(0x204);
                 });
 
                 it('when VX does not equal NN', () => {
@@ -177,7 +177,7 @@ describe('Cpu', () => {
                     cpu.decodeOpcode(0x3003);
 
 
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                 });
             });
 
@@ -189,7 +189,7 @@ describe('Cpu', () => {
                     cpu.decodeOpcode(0x4003);
 
 
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                 });
 
                 it('when VX does not equal NN', () => {
@@ -199,7 +199,7 @@ describe('Cpu', () => {
                     cpu.decodeOpcode(0x4003);
 
 
-                    expect(cpu.programCounter).equal(4);
+                    expect(cpu.programCounter).equal(0x204);
                 });
             });
 
@@ -212,7 +212,7 @@ describe('Cpu', () => {
                     cpu.decodeOpcode(0x5010);
 
 
-                    expect(cpu.programCounter).equal(4);
+                    expect(cpu.programCounter).equal(0x204);
                 });
 
                 it('when VX does not equal VY', () => {
@@ -223,7 +223,7 @@ describe('Cpu', () => {
                     cpu.decodeOpcode(0x5010);
 
 
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                 });
             });
 
@@ -235,7 +235,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.registers[0]).equal(6);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0x7XNN (addNNToVX)', () => {
@@ -246,7 +246,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.registers[0]).equal(9);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0x8XY0 (setVXToVY)', () => {
@@ -258,7 +258,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.registers[0]).equal(7);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0x8XY1 (setVXToBitwiseOrVY)', () => {
@@ -270,7 +270,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.registers[0]).equal(0x7);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0x8XY2 (setVXToBitwiseAndVY)', () => {
@@ -282,7 +282,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.registers[0]).equal(0x4);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0x8XY3 (setVXToBitwiseXorVY)', () => {
@@ -294,7 +294,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.registers[0]).equal(0x4);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             describe('decodes opcode 0x8XY4 (addWithCarry)', () => {
@@ -307,7 +307,7 @@ describe('Cpu', () => {
 
 
                     expect(cpu.registers[0x2]).equal(12);
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                     expect(cpu.registers[0xF]).equal(0);
                 });
 
@@ -320,7 +320,7 @@ describe('Cpu', () => {
 
 
                     expect(cpu.registers[0x2]).equal(262);
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                     expect(cpu.registers[0xF]).equal(1);
                 });
             });
@@ -335,7 +335,7 @@ describe('Cpu', () => {
 
 
                     expect(cpu.registers[0x0]).equal(-5);
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                     expect(cpu.registers[0xF]).equal(1);
                 });
 
@@ -348,7 +348,7 @@ describe('Cpu', () => {
 
 
                     expect(cpu.registers[0x0]).equal(5);
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                     expect(cpu.registers[0xF]).equal(0);
                 });
             });
@@ -361,7 +361,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.registers[0x0]).equal(18);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
                 expect(cpu.registers[0xF]).equal(1);
             });
 
@@ -376,7 +376,7 @@ describe('Cpu', () => {
 
 
                     expect(cpu.registers[0x0]).equal(-5);
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                     expect(cpu.registers[0xF]).equal(1);
                 });
 
@@ -389,7 +389,7 @@ describe('Cpu', () => {
 
 
                     expect(cpu.registers[0x0]).equal(5);
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                     expect(cpu.registers[0xF]).equal(0);
                 });
             });
@@ -403,14 +403,14 @@ describe('Cpu', () => {
             });
 
             it('decodes opcode 0xANNN (loadIndexRegister)', () => {
-                cpu.programCounter = 4;
+                cpu.programCounter = 0x4;
 
 
                 cpu.decodeOpcode(0xA2F0);
 
 
                 expect(cpu.indexRegister).equal(0x2F0);
-                expect(cpu.programCounter).equal(6);
+                expect(cpu.programCounter).equal(0x6);
             });
 
             it('decodes opcode 0xBNNN (jumpWithV0Offset)', () => {
@@ -428,14 +428,14 @@ describe('Cpu', () => {
                 const getRandomIntStub = sinon.stub(RandomNumberGenerator, 'getRandomIntMax255');
                 getRandomIntStub.returns(0xAA);
 
-                cpu.programCounter = 4;
+                cpu.programCounter = 0x4;
 
 
                 cpu.decodeOpcode(0xC0A4);
 
 
                 expect(cpu.registers[0]).equal(0xA0);
-                expect(cpu.programCounter).equal(6);
+                expect(cpu.programCounter).equal(0x6);
             });
 
             it.skip('decodes opcode 0xDXYN (drawVxVy)', () => {
@@ -452,7 +452,7 @@ describe('Cpu', () => {
                     cpu.decodeOpcode(0xE09E);
 
 
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                 });
 
                 it('key in V0 is not pressed', () => {
@@ -463,7 +463,7 @@ describe('Cpu', () => {
                     cpu.decodeOpcode(0xE09E);
 
 
-                    expect(cpu.programCounter).equal(0);
+                    expect(cpu.programCounter).equal(0x200);
                 });
             });
 
@@ -477,7 +477,7 @@ describe('Cpu', () => {
                     cpu.decodeOpcode(0xE0A1);
 
 
-                    expect(cpu.programCounter).equal(0);
+                    expect(cpu.programCounter).equal(0x200);
                 });
 
                 it('key in V0 is not pressed', () => {
@@ -488,7 +488,7 @@ describe('Cpu', () => {
                     cpu.decodeOpcode(0xE0A1);
 
 
-                    expect(cpu.programCounter).equal(2);
+                    expect(cpu.programCounter).equal(0x202);
                 });
             });
 
@@ -500,7 +500,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.registers[0]).equal(0x2);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0xFX0A (waitForStoreKeypressToVX)', () => {
@@ -519,7 +519,7 @@ describe('Cpu', () => {
                 expect(cpu.currentKeyPressed).equal(2);
                 expect(cpu.hasPendingWaitForStoreKeypressToVX).equal(false);
                 expect(cpu.isHalted).equal(false);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0xFX15 (storeVXToDelayTimer)', () => {
@@ -530,7 +530,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.delayTimer).equal(2);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0xFX18 (storeVXToSoundTimer)', () => {
@@ -541,7 +541,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.soundTimer).equal(2);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0xFX1E (addVXToI)', () => {
@@ -553,7 +553,7 @@ describe('Cpu', () => {
 
 
                 expect(cpu.indexRegister).equal(3);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it.skip('decodes opcode 0xFX29 (setIToVXSpriteLocation)', () => {
@@ -571,7 +571,7 @@ describe('Cpu', () => {
                 expect(cpu.memory[cpu.indexRegister]).equal(2);
                 expect(cpu.memory[cpu.indexRegister + 1]).equal(5);
                 expect(cpu.memory[cpu.indexRegister + 2]).equal(6);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0xFX55 (storeFromV0VXToMemory)', () => {
@@ -619,7 +619,7 @@ describe('Cpu', () => {
 
                 expect(cpu.memory).deep.equal(expectedMemory);
                 expect(cpu.indexRegister).equal(1);
-                expect(cpu.programCounter).equal(2);
+                expect(cpu.programCounter).equal(0x202);
             });
 
             it('decodes opcode 0xFX65 (storeFromMemoryToV0VX)', () => {
@@ -666,7 +666,7 @@ describe('Cpu', () => {
                 expect(cpu.registers[15]).equal(2);
                 expect(cpu.registers.length).equal(16);
                 expect(cpu.indexRegister).equal(1);
-                expect(cpu.programCounter).equal(2)
+                expect(cpu.programCounter).equal(0x202)
             });
         });
 

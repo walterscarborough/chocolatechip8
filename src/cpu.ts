@@ -1,5 +1,6 @@
 import OpcodeReader from './opcodeReader';
 import RandomNumberGenerator from './randomNumberGenerator';
+import {log} from 'util';
 
 export default class Cpu {
 
@@ -7,7 +8,7 @@ export default class Cpu {
     memory: number[] = [];
     registers: number[] = [];
     indexRegister: number = 0;
-    programCounter: number = 0;
+    programCounter: number = 0x200;
     delayTimer: number = 0;
     soundTimer: number = 0;
     stack: number[] = [];
@@ -19,6 +20,20 @@ export default class Cpu {
     hasPendingWaitForStoreKeypressToVX: boolean = false;
     pendingWaitForStoreKeypressToVXRegister: number = 0;
 
+    public loadGame(game: Uint8Array) {
+
+        for (let i = 0; i < game.length; i++) {
+            this.memory[0x200 + i] = game[i];
+        }
+
+        let counter = 0;
+        while (counter < 6) {
+            counter++;
+
+            this.emulateCycle();
+        }
+    }
+
     public keypress(key: number) {
 
         this.currentKeyPressed = key;
@@ -28,17 +43,20 @@ export default class Cpu {
         }
     }
 
-    /*
     public emulateCycle(): void {
+
         // fetch opcode
         // decode opcode
         // execute opcode
+        const opcode = this.fetchOpcode(this.memory, this.programCounter);
+        this.decodeOpcode(opcode);
+
+        log('opcode is: ' + opcode.toString(16));
 
         // update timers
-        delayTimer = this.updateDelayTimer(this.delayTimer);
-        soundTimer = this.updateSoundTimer(this.soundTimer);
+        // delayTimer = this.updateDelayTimer(this.delayTimer);
+        // soundTimer = this.updateSoundTimer(this.soundTimer);
     }
-    */
 
 
     public fetchOpcode(memory: number[], programCounter: number): number {
@@ -68,7 +86,7 @@ export default class Cpu {
                     }
 
                     default: {
-                        console.log('opcode "' + opcode + '" not implemented!');
+                        console.log('opcode "' + opcode.toString(16) + '" not implemented!');
                         break;
                     }
                 }
@@ -154,7 +172,7 @@ export default class Cpu {
                     }
 
                     default: {
-                        console.log('opcode "' + opcode + '" not implemented!');
+                        console.log('opcode "' + opcode.toString(16) + '" not implemented!');
                         break;
                     }
                 }
@@ -191,7 +209,7 @@ export default class Cpu {
                     }
 
                     default: {
-                        console.log('opcode "' + opcode + '" not implemented!');
+                        console.log('opcode "' + opcode.toString(16) + '" not implemented!');
                         break;
                     }
                 }
@@ -243,7 +261,7 @@ export default class Cpu {
                     }
 
                     default: {
-                        console.log('opcode "' + opcode + '" not implemented!');
+                        console.log('opcode "' + opcode.toString(16) + '" not implemented!');
                         break;
                     }
                 }
@@ -252,13 +270,14 @@ export default class Cpu {
             }
 
             default: {
-                console.log('opcode "' + opcode + '" not implemented!');
+                console.log('opcode "' + opcode.toString(16) + '" not implemented!');
                 break;
             }
         }
     }
 
     private setVXToBitwiseAndVY(opcode: number) {
+        log('call setVXToBitwiseAndVY');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -267,6 +286,7 @@ export default class Cpu {
     }
 
     private setVXToBitwiseOrVY(opcode: number) {
+        log('call setVXToBitwiseOrVY');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -275,6 +295,7 @@ export default class Cpu {
     }
 
     private setVXToBitwiseXorVY(opcode: number) {
+        log('call setVXToBitwiseXorVY');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -283,6 +304,7 @@ export default class Cpu {
     }
 
     private setVXToVY(opcode: number) {
+        log('call setVXToVY');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -291,6 +313,7 @@ export default class Cpu {
     }
 
     private subtractVYFromVXWithCarry(opcode: number) {
+        log('call subtractVYFromVXWithCarry');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -306,6 +329,7 @@ export default class Cpu {
     }
 
     private subtractVXFromVYWithCarry(opcode: number) {
+        log('call subtractVXFromVYWithCarry');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -321,6 +345,7 @@ export default class Cpu {
     }
 
     private addNNToVX(opcode: number) {
+        log('call addNNToVX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nn = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -329,6 +354,7 @@ export default class Cpu {
     }
 
     private setVXToNN(opcode: number) {
+        log('call setVXToNN');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nnAddress = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -337,6 +363,7 @@ export default class Cpu {
     }
 
     private shiftVXRight(opcode: number) {
+        log('call shiftVXRight');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.registers[0xF] = this.registers[vX] & 0x1;
@@ -346,6 +373,7 @@ export default class Cpu {
     }
 
     private skipIfVXEqualsVY(opcode: number) {
+        log('call skipIfVXEqualsVY');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -358,6 +386,7 @@ export default class Cpu {
     }
 
     private skipIfVXDoesNotEqualNN(opcode: number) {
+        log('call skipIfVXDoesNotEqualNN');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nnAddress = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -370,6 +399,7 @@ export default class Cpu {
     }
 
     private skipIfVXEqualsNN(opcode: number) {
+        log('call skipIfVXEqualsNN');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nnAddress = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -382,34 +412,40 @@ export default class Cpu {
     }
 
     private returnFromSubroutine(opcode: number) {
+        log('call returnFromSubroutine');
         this.programCounter = this.stack[this.stackPointer];
         this.stackPointer -= 1;
     }
 
     private jumpToAddress(opcode: number) {
+        log('call jumpToAddress');
         const nnnAddress = OpcodeReader.parseOpcodeNNN(opcode);
         this.programCounter = nnnAddress;
     }
 
     private loadIndexRegister(opcode: number) {
+        log('call loadIndexRegister');
         const nnnAddress = OpcodeReader.parseOpcodeNNN(opcode);
         this.indexRegister = nnnAddress;
         this.programCounter += 2;
     }
 
     private jumpToSubroutine(opcode: number) {
+        log('call jumpToSubroutine');
         this.stack[this.stackPointer] = this.programCounter;
         this.stackPointer += 1;
         this.programCounter = OpcodeReader.parseOpcodeNNN(opcode);
     }
 
     private jumpWithV0Offset(opcode: number) {
+        log('call jumpWithV0Offset');
         const nnnAddress = OpcodeReader.parseOpcodeNNN(opcode);
         const v0Data = this.registers[0];
         this.programCounter = nnnAddress + v0Data;
     }
 
     private skipIfPressed(opcode: number) {
+        log('call skipIfPressed');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const sourceKeyPress = this.registers[vX];
 
@@ -419,9 +455,10 @@ export default class Cpu {
     }
 
     private skipIfNotPressed(opcode: number) {
+        log('call skipIfNotPressed');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
-       const sourceKeyPress = this.registers[vX];
+        const sourceKeyPress = this.registers[vX];
 
         if (sourceKeyPress !== this.currentKeyPressed) {
             this.programCounter += 2;
@@ -429,6 +466,7 @@ export default class Cpu {
     }
 
     private storeDelayTimerToVX(opcode: number) {
+        log('call storeDelayTimerToVX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.registers[vX] = this.delayTimer;
@@ -436,6 +474,7 @@ export default class Cpu {
     }
 
     private storeVXToDelayTimer(opcode: number) {
+        log('call storeVXToDelayTimer');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.delayTimer = this.registers[vX];
@@ -443,6 +482,7 @@ export default class Cpu {
     }
 
     private storeVXToSoundTimer(opcode: number) {
+        log('call storeVXToSoundTimer');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.soundTimer = this.registers[vX];
@@ -450,6 +490,7 @@ export default class Cpu {
     }
 
     private addVXToI(opcode: number) {
+        log('call addVXToI');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.indexRegister += this.registers[vX];
@@ -457,6 +498,7 @@ export default class Cpu {
     }
 
     private storeRandomNumberToVX(opcode: number) {
+        log('call storeRandomNumberToVX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const sourceNumber = OpcodeReader.parseOpcodeNN(opcode);
         const randomNumber = RandomNumberGenerator.getRandomIntMax255();
@@ -468,6 +510,7 @@ export default class Cpu {
     }
 
     private startWaitForStoreKeypressToVX(opcode: number) {
+        log('call startWaitForStoreKeypressToVX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         this.isHalted = true;
         this.hasPendingWaitForStoreKeypressToVX = true;
@@ -475,6 +518,7 @@ export default class Cpu {
     }
 
     public finishWaitForStoreKeypressToVX(targetRegister: number) {
+        log('call finishWaitForStoreKeypressToVX');
         this.registers[targetRegister] = this.currentKeyPressed;
         this.hasPendingWaitForStoreKeypressToVX = false;
         this.isHalted = false;
@@ -482,7 +526,7 @@ export default class Cpu {
     }
 
     private addWithCarry(opcode: number) {
-
+        log('call addWithCarry');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -498,7 +542,7 @@ export default class Cpu {
     }
 
     private storeDecimalValueToVX(opcode: number) {
-
+        log('call storeDecimalValueToVX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.memory[this.indexRegister] = Math.floor(this.registers[vX] / 100);
@@ -509,6 +553,7 @@ export default class Cpu {
     }
 
     private storeFromV0VXToMemory(opcode: number) {
+        log('call storeFromV0VXToMemory');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         for (let counter = 0; counter <= vX; counter++) {
@@ -519,6 +564,7 @@ export default class Cpu {
     }
 
     private storeFromMemoryToV0VX(opcode: number) {
+        log('call storeFromMemoryToV0VX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         for (let counter = 0; counter <= vX; counter++) {
