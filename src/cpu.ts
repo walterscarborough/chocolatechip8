@@ -5,8 +5,8 @@ import {log} from 'util';
 export default class Cpu {
 
     currentOpcode: number = 0;
-    memory: number[] = [];
-    registers: number[] = [];
+    memory: number[] = this.initializeArrayToZero(4096);
+    registers: number[] = this.initializeArrayToZero(16);
     indexRegister: number = 0;
     programCounter: number = 0x200;
     delayTimer: number = 0;
@@ -19,6 +19,11 @@ export default class Cpu {
 
     hasPendingWaitForStoreKeypressToVX: boolean = false;
     pendingWaitForStoreKeypressToVXRegister: number = 0;
+    graphicsOutput: Array<number> = this.initializeArrayToZero(64 * 32);
+
+    private initializeArrayToZero(length: number): number[] {
+        return Array.apply(null, new Array(length)).map(() => 0);
+    }
 
     public loadGame(game: Uint8Array) {
 
@@ -192,6 +197,11 @@ export default class Cpu {
 
             case 0xC000: {
                 this.storeRandomNumberToVX(opcode);
+                break;
+            }
+
+            case 0xD000: {
+                this.drawVxVy(opcode);
                 break;
             }
 
@@ -506,6 +516,30 @@ export default class Cpu {
         const adjustedNumber = sourceNumber & randomNumber;
 
         this.registers[vX] = adjustedNumber;
+        this.programCounter += 2;
+    }
+
+    private drawVxVy(opcode: number) {
+        log('call drawDxDy');
+        const vX = OpcodeReader.parseOpcodeVX(opcode);
+        const vY = OpcodeReader.parseOpcodeVY(opcode);
+        const height = OpcodeReader.parseOpcodeN(opcode);
+
+        for (let yLine = 0; yLine < height; yLine++) {
+            let pixel = this.memory[this.indexRegister + yLine];
+
+            for (let xLine = 0; xLine < 8; xLine++) {
+                if ((pixel & (0x80 >> xLine)) != 0) {
+
+                    if (this.graphicsOutput[(vX + xLine + ((vY + yLine) * 64))] == 1) {
+                        this.registers[0xF] = 1;
+                    }
+
+                    this.graphicsOutput[vX + xLine + ((vY + yLine) * 64)] ^= 1;
+                }
+            }
+        }
+
         this.programCounter += 2;
     }
 
