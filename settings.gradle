@@ -1,0 +1,3 @@
+rootProject.name = 'chocolatechip8'
+
+include 'components:cpu'

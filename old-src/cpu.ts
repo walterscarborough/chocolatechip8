@@ -4,7 +4,6 @@ import {log} from 'util';
 
 export default class Cpu {
 
-    currentOpcode: number = 0;
     memory: number[] = this.initializeArrayToZero(4096);
     registers: number[] = this.initializeArrayToZero(16);
     indexRegister: number = 0;

@@ -1,7 +1,7 @@
 
 import { expect } from 'chai';
-import Cpu from '../src/cpu';
-import RandomNumberGenerator from '../src/randomNumberGenerator';
+import Cpu from '../old-src/cpu';
+import RandomNumberGenerator from '../old-src/randomNumberGenerator';
 import * as sinon from 'sinon';
 import {log} from 'util';
 
@@ -13,9 +13,6 @@ describe('Cpu', () => {
     });
 
     describe('initial values', () => {
-        it('currentOpcode should be 0', () => {
-            expect(cpu.currentOpcode).equal(0);
-        });
 
         it('memory should be empty', () => {
             for (let i = 0; i < 4096; i++) {

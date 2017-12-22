@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import OpcodeReader from '../src/opcodeReader';
+import OpcodeReader from '../old-src/opcodeReader';
 
 describe('OpcodeReader', () => {
 

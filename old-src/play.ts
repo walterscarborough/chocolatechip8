@@ -1,4 +1,4 @@
-import Cpu from '../src/cpu';
+import Cpu from './/cpu';
 import {debuglog, log} from 'util';
 
 async function readRomFile(romFileTarget) {

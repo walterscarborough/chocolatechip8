@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import DelayTimer from '../src/delayTimer';
+import DelayTimer from '../old-src/delayTimer';
 
 describe('DelayTimer', () => {
     it('returns a decremented value if greater than 0', () => {
