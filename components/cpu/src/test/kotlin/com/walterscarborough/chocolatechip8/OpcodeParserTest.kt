@@ -13,9 +13,7 @@ class OpcodeParserTest {
         fun `decodes firstMask from opcode'`() {
             val opcode = 0xE000
 
-
             val opcodeFirstMask = OpcodeParser.parseOpcodeFirstMask (opcode)
-
 
             assertThat(opcodeFirstMask).isEqualTo(0xE000)
         }
@@ -24,9 +22,7 @@ class OpcodeParserTest {
         fun `decodes X register from opcode'`() {
             val opcode = 0x0F00
 
-
             val decodedXRegister = OpcodeParser.parseOpcodeVX (opcode)
-
 
             assertThat(decodedXRegister).isEqualTo(0xF)
         }
@@ -35,9 +31,7 @@ class OpcodeParserTest {
         fun `decodes Y register from opcode'`() {
             val opcode = 0x00F0
 
-
             val decodedXRegister = OpcodeParser.parseOpcodeVY (opcode)
-
 
             assertThat(decodedXRegister).isEqualTo(0xF)
         }
@@ -46,9 +40,7 @@ class OpcodeParserTest {
         fun `decodes N from opcode'`() {
             val opcode = 0x000F
 
-
             val decodedXRegister = OpcodeParser.parseOpcodeN (opcode)
-
 
             assertThat(decodedXRegister).isEqualTo(0xF)
         }
@@ -57,9 +49,7 @@ class OpcodeParserTest {
         fun `decodes NN from opcode'`() {
             val opcode = 0x00FF
 
-
             val decodedXRegister = OpcodeParser.parseOpcodeNN (opcode)
-
 
             assertThat(decodedXRegister).isEqualTo(0xFF)
         }
@@ -68,12 +58,9 @@ class OpcodeParserTest {
         fun `decodes NNN from opcode'`() {
             val opcode = 0x0FFF
 
-
             val decodedXRegister = OpcodeParser.parseOpcodeNNN (opcode)
-
 
             assertThat(decodedXRegister).isEqualTo(0xFFF)
         }
-
     }
 }

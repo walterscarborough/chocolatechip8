@@ -14,13 +14,11 @@ class OpcodeDecoderTest {
         @Disabled
         @Test
         fun `should decode opcode 0x0NNN (executeSubroutineNNN)`() {
-
         }
 
         @Disabled
         @Test
         fun `should decode opcode 0x00E0 (clearDisplay)`() {
-
         }
 
         @Test
@@ -154,13 +152,11 @@ class OpcodeDecoderTest {
         @Disabled
         @Test
         fun `should decode opcode 0x8XYE (shiftLeftVYStoreVX)`() {
-
         }
 
         @Disabled
         @Test
         fun `should decode opcode 0x9XY0 (skipIfVXNotEqualVY)`() {
-
         }
 
         @Test
@@ -254,7 +250,6 @@ class OpcodeDecoderTest {
         @Disabled
         @Test
         fun `should decode opcode 0xFX29 (setIToVXSpriteLocation)`() {
-
         }
 
         @Test

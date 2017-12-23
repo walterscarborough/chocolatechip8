@@ -116,13 +116,10 @@ class CpuTest {
         fun `should execute opcode 0x00EE (returnFromSubroutine)`() {
 
             val modifiedStackArray = IntArray(16, { it + 1 })
-
             cpu.stack = modifiedStackArray
             cpu.stackPointer = 2
 
-
             cpu.executeOpcode(Opcode_RETURN_FROM_SUBROUTINE(0x00EE))
-
 
             assertCpuState(
                     programCounter = 0x3,
@@ -134,7 +131,6 @@ class CpuTest {
         @Test
         fun `should execute opcode 0x1NNN (jumpToAddress)`() {
             cpu.executeOpcode(Opcode_JUMP_TO_ADDRESS(0x100A))
-
 
             assertCpuState(
                     programCounter = 0x00A

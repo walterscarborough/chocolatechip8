@@ -17,12 +17,12 @@ class Cpu {
 
         val leftShiftedOpcodeFragmentA = opcodeFragmentA shl 8
 
-        val completeOpcode = leftShiftedOpcodeFragmentA or opcodeFragmentB;
+        val completeOpcode = leftShiftedOpcodeFragmentA or opcodeFragmentB
 
-        return completeOpcode;
+        return completeOpcode
     }
 
-    fun executeOpcode(opcode: Opcode_RETURN_FROM_SUBROUTINE) {
+    fun executeOpcode(@Suppress("UNUSED_PARAMETER") opcode: Opcode_RETURN_FROM_SUBROUTINE) {
         this.programCounter = this.stack[this.stackPointer]
         this.stackPointer -= 1
     }
