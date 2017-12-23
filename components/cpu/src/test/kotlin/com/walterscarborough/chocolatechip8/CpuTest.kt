@@ -130,6 +130,16 @@ class CpuTest {
                     stackPointer = 1
             )
         }
+
+        @Test
+        fun `should execute opcode 0x1NNN (jumpToAddress)`() {
+            cpu.executeOpcode(Opcode_JUMP_TO_ADDRESS(0x100A))
+
+
+            assertCpuState(
+                    programCounter = 0x00A
+            )
+        }
     }
 
     private fun assertCpuState(

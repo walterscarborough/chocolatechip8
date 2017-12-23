@@ -26,4 +26,9 @@ class Cpu {
         this.programCounter = this.stack[this.stackPointer]
         this.stackPointer -= 1
     }
+
+    fun executeOpcode(opcode: Opcode_JUMP_TO_ADDRESS) {
+        val nnnAddress = OpcodeParser.parseOpcodeNNN(opcode.value)
+        this.programCounter = nnnAddress
+    }
 }
