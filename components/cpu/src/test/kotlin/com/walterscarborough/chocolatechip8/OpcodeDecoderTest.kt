@@ -288,23 +288,23 @@ class OpcodeDecoderTest {
         }
 
         @Test
-        fun `should throw an exception for unsupported opcode 0x0008`() {
+        fun `should throw an exception for unsupported opcode 0x8008`() {
             assertThrows(Exception::class.java) {
-                OpcodeDecoder.decode(0x0008)
+                OpcodeDecoder.decode(0x8008)
             }
         }
 
         @Test
-        fun `should throw an exception for unsupported opcode 0x00A2`() {
+        fun `should throw an exception for unsupported opcode 0xE0A2`() {
             assertThrows(Exception::class.java) {
-                OpcodeDecoder.decode(0x00A2)
+                OpcodeDecoder.decode(0xE0A2)
             }
         }
 
         @Test
-        fun `should throw an exception for unsupported opcode 0x0066`() {
+        fun `should throw an exception for unsupported opcode 0xF066`() {
             assertThrows(Exception::class.java) {
-                OpcodeDecoder.decode(0x0066)
+                OpcodeDecoder.decode(0xF066)
             }
         }
 
