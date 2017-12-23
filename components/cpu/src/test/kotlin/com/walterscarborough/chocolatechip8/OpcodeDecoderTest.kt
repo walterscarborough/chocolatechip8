@@ -1,6 +1,7 @@
 package com.walterscarborough.chocolatechip8
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -278,6 +279,45 @@ class OpcodeDecoderTest {
             val actual = OpcodeDecoder.decode(0xFF65)
 
             assertThat(actual::class).isEqualTo(expected::class)
+        }
+    }
+
+    @Nested
+    inner class Unsupported {
+
+        @Test
+        fun `should throw an exception for unsupported opcode 0x00EF`() {
+            assertThrows(Exception::class.java) {
+                OpcodeDecoder.decode(0x00EF)
+            }
+        }
+
+        @Test
+        fun `should throw an exception for unsupported opcode 0x0008`() {
+            assertThrows(Exception::class.java) {
+                OpcodeDecoder.decode(0x0008)
+            }
+        }
+
+        @Test
+        fun `should throw an exception for unsupported opcode 0x00A2`() {
+            assertThrows(Exception::class.java) {
+                OpcodeDecoder.decode(0x00A2)
+            }
+        }
+
+        @Test
+        fun `should throw an exception for unsupported opcode 0x0066`() {
+            assertThrows(Exception::class.java) {
+                OpcodeDecoder.decode(0x0066)
+            }
+        }
+
+        @Test
+        fun `should throw an exception for unsupported opcode 0x9000`() {
+            assertThrows(Exception::class.java) {
+                OpcodeDecoder.decode(0x9000)
+            }
         }
     }
 }
