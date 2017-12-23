@@ -1,6 +1,7 @@
 package com.walterscarborough.chocolatechip8
 
 object OpcodeParser {
+
     fun parseOpcodeFirstMask(opcode: Int): Int {
         val opcodeFirstMask = opcode and 0xF000
 

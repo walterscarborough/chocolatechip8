@@ -28,7 +28,7 @@ class CpuTest {
             @Test
             fun `should be initialized to 0`() {
                 for (i in 0..4095) {
-                    assertThat(cpu.memory.get(i)).isEqualTo(0)
+                    assertThat(cpu.memory[i]).isEqualTo(0)
                 }
             }
         }
@@ -44,7 +44,7 @@ class CpuTest {
             @Test
             fun `should be initialized to 0`() {
                 for (i in 0..15) {
-                    assertThat(cpu.registers.get(i)).isEqualTo(0)
+                    assertThat(cpu.registers[i]).isEqualTo(0)
                 }
             }
         }
@@ -85,7 +85,7 @@ class CpuTest {
             @Test
             fun `should be initialized to 0`() {
                 for (i in 0..15) {
-                    assertThat(cpu.stack.get(i)).isEqualTo(0)
+                    assertThat(cpu.stack[i]).isEqualTo(0)
                 }
             }
         }
@@ -96,16 +96,23 @@ class CpuTest {
 
         @Test
         fun `should fetch 2 byte opcode from memory in current program counter location`() {
-            val memory = intArrayOf(
-                    0xA0,
-                    0xA1,
-                    0xA2,
-                    0xF0
+
+            val modifiedMemory = IntArray(4096)
+            modifiedMemory[0] = 0xA0
+            modifiedMemory[1] = 0xA1
+            modifiedMemory[2] = 0xA2
+            modifiedMemory[3] = 0xF0
+
+            val modifiedProgramCounter = 0x2
+
+            cpu.memory = modifiedMemory
+            cpu.programCounter = modifiedProgramCounter
+
+            assertThat(cpu.fetchOpcode()).isEqualTo(0xA2F0)
+            assertCpuState(
+                    memory = modifiedMemory,
+                    programCounter = modifiedProgramCounter
             )
-
-            val programCounter = 0x2
-
-            assertThat(cpu.fetchOpcode(memory, programCounter)).isEqualTo(0xA2F0)
         }
     }
 
@@ -117,14 +124,14 @@ class CpuTest {
 
             val modifiedStackArray = IntArray(16, { it + 1 })
             cpu.stack = modifiedStackArray
-            cpu.stackPointer = 2
+            cpu.stackPointer = 0x2
 
             cpu.executeOpcode(Opcode_RETURN_FROM_SUBROUTINE(0x00EE))
 
             assertCpuState(
                     programCounter = 0x3,
                     stack = modifiedStackArray,
-                    stackPointer = 1
+                    stackPointer = 0x1
             )
         }
 
