@@ -1,13 +1,13 @@
 package com.walterscarborough.chocolatechip8
 
 class Cpu {
-    val memory = IntArray(4096)
-    val registers = IntArray(16)
+    val memory: IntArray = IntArray(4096)
+    val registers: IntArray = IntArray(16)
     val indexRegister: Int = 0
-    val programCounter: Int = 0x200
+    var programCounter: Int = 0x200
     val delayTimer: Int = 0
     val soundTimer: Int = 0
-    val stack = IntArray(16)
+    var stack: IntArray = IntArray(16)
     var stackPointer: Int = 0
 
     fun fetchOpcode(memory: IntArray, programCounter: Int): Int {
@@ -22,7 +22,8 @@ class Cpu {
         return completeOpcode;
     }
 
-//    fun decodeOpcode(opcode: Int): Opcode {
-//
-//    }
+    fun executeOpcode(opcode: Opcode_RETURN_FROM_SUBROUTINE) {
+        this.programCounter = this.stack[this.stackPointer]
+        this.stackPointer -= 1
+    }
 }

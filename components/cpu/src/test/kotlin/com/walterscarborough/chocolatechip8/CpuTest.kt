@@ -2,7 +2,6 @@ package com.walterscarborough.chocolatechip8
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -93,15 +92,15 @@ class CpuTest {
     }
 
     @Nested
-    inner class Opcodes {
+    inner class FetchOpcode {
 
         @Test
         fun `should fetch 2 byte opcode from memory in current program counter location`() {
             val memory = intArrayOf(
-                0xA0,
-                0xA1,
-                0xA2,
-                0xF0
+                    0xA0,
+                    0xA1,
+                    0xA2,
+                    0xF0
             )
 
             val programCounter = 0x2
@@ -110,4 +109,46 @@ class CpuTest {
         }
     }
 
+    @Nested
+    inner class ExecuteOpcode {
+
+        @Test
+        fun `should execute opcode 0x00EE (returnFromSubroutine)`() {
+
+            val modifiedStackArray = IntArray(16, { it + 1 })
+
+            cpu.stack = modifiedStackArray
+            cpu.stackPointer = 2
+
+
+            cpu.executeOpcode(Opcode_RETURN_FROM_SUBROUTINE(0x00EE))
+
+
+            assertCpuState(
+                    programCounter = 0x3,
+                    stack = modifiedStackArray,
+                    stackPointer = 1
+            )
+        }
+    }
+
+    private fun assertCpuState(
+            memory: IntArray = IntArray(4096),
+            registers: IntArray = IntArray(16),
+            indexRegister: Int = 0,
+            programCounter: Int = 0x200,
+            delayTimer: Int = 0,
+            soundTimer: Int = 0,
+            stack: IntArray = IntArray(16),
+            stackPointer: Int = 0
+    ) {
+        assertThat(cpu.memory).isEqualTo(memory)
+        assertThat(cpu.registers).isEqualTo(registers)
+        assertThat(cpu.indexRegister).isEqualTo(indexRegister)
+        assertThat(cpu.programCounter).isEqualTo(programCounter)
+        assertThat(cpu.delayTimer).isEqualTo(delayTimer)
+        assertThat(cpu.soundTimer).isEqualTo(soundTimer)
+        assertThat(cpu.stack).isEqualTo(stack)
+        assertThat(cpu.stackPointer).isEqualTo(stackPointer)
+    }
 }
