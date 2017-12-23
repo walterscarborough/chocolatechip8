@@ -1,41 +1,39 @@
 package com.walterscarborough.chocolatechip8
 
-class OpcodeParser {
-    companion object {
-        fun parseOpcodeFirstMask(opcode: Int): Int {
-            val opcodeFirstMask = opcode and 0xF000
+object OpcodeParser {
+    fun parseOpcodeFirstMask(opcode: Int): Int {
+        val opcodeFirstMask = opcode and 0xF000
 
-            return opcodeFirstMask
-        }
+        return opcodeFirstMask
+    }
 
-        fun parseOpcodeVX(opcode: Int): Int {
-            val vX = (opcode and 0x0F00) shr 8
+    fun parseOpcodeVX(opcode: Int): Int {
+        val vX = (opcode and 0x0F00) shr 8
 
-            return vX
-        }
+        return vX
+    }
 
-        fun parseOpcodeVY(opcode: Int): Int {
-            val vY = (opcode and 0x00F0) shr 4
+    fun parseOpcodeVY(opcode: Int): Int {
+        val vY = (opcode and 0x00F0) shr 4
 
-            return vY
-        }
+        return vY
+    }
 
-        fun parseOpcodeN(opcode: Int): Int {
-            val n = opcode and 0x000F
+    fun parseOpcodeN(opcode: Int): Int {
+        val n = opcode and 0x000F
 
-            return n
-        }
+        return n
+    }
 
-        fun parseOpcodeNN(opcode: Int): Int {
-            val nn = opcode and 0x00FF
+    fun parseOpcodeNN(opcode: Int): Int {
+        val nn = opcode and 0x00FF
 
-            return nn
-        }
+        return nn
+    }
 
-        fun parseOpcodeNNN(opcode: Int): Int {
-            val nn = opcode and 0x0FFF
+    fun parseOpcodeNNN(opcode: Int): Int {
+        val nn = opcode and 0x0FFF
 
-            return nn
-        }
+        return nn
     }
 }
