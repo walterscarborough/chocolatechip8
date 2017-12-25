@@ -66,4 +66,15 @@ class Cpu {
         stackPointer += 1
         programCounter = OpcodeParser.parseOpcodeNNN(opcode.value)
     }
+
+    fun executeOpcode(opcode: Opcode_SKIP_IF_VX_EQUALS_NN) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+        val nnAddress = OpcodeParser.parseOpcodeNN(opcode.value)
+
+        if (nnAddress == registers[vX]) {
+            programCounter += 4
+        } else {
+            programCounter += 2
+        }
+    }
 }

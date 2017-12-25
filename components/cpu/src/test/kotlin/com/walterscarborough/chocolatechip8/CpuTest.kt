@@ -123,7 +123,7 @@ class CpuTest {
 
         @Test
         fun `should execute opcode 0x00EE (returnFromSubroutine)`() {
-            val modifiedStack = IntArray(16, { it + 1 })
+            val modifiedStack = getSequentialIntArray()
 
             cpu = Cpu(
                     stack = modifiedStack,
@@ -150,7 +150,7 @@ class CpuTest {
 
         @Test
         fun `should execute opcode 0x2NNN (jumpToSubroutine)`() {
-            val modifiedStack = IntArray(16, { it + 1 })
+            val modifiedStack = getSequentialIntArray()
 
             cpu = Cpu(
                     stack = modifiedStack,
@@ -160,12 +160,49 @@ class CpuTest {
 
             cpu.executeOpcode(Opcode_JUMP_TO_SUBROUTINE(0x20F0))
 
-            val expectedStack = intArrayOf(1, 4, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
+            val expectedStack = getSequentialIntArray()
+            expectedStack[1] = 4
             assertCpuState(
                     programCounter = 0x0F0,
                     stackPointer = 0x2,
                     stack = expectedStack
             )
+        }
+
+        @Nested
+        inner class `should execute opcode 0x3XNN (skipIfVXEqualsNN)` {
+
+            @Test
+            fun `when VX equals NN`() {
+
+                val modifiedRegisters = getSequentialIntArray()
+                modifiedRegisters[0] = 3
+
+                cpu = Cpu(registers = modifiedRegisters)
+
+                cpu.executeOpcode(Opcode_SKIP_IF_VX_EQUALS_NN(0x3003))
+
+                assertCpuState(
+                        programCounter = 0x204,
+                        registers = modifiedRegisters
+                )
+            }
+
+            @Test
+            fun `when VX does not equal NN`() {
+
+                val modifiedRegisters = getSequentialIntArray()
+                modifiedRegisters[0] = 2
+
+                cpu = Cpu(registers = modifiedRegisters)
+
+                cpu.executeOpcode(Opcode_SKIP_IF_VX_EQUALS_NN(0x3003))
+
+                assertCpuState(
+                        programCounter = 0x202,
+                        registers = modifiedRegisters
+                )
+            }
         }
     }
 
@@ -187,5 +224,9 @@ class CpuTest {
         assertThat(cpu.soundTimer).isEqualTo(soundTimer)
         assertThat(cpu.stack).isEqualTo(stack)
         assertThat(cpu.stackPointer).isEqualTo(stackPointer)
+    }
+
+    private fun getSequentialIntArray(): IntArray {
+        return IntArray(16, { it + 1 })
     }
 }
