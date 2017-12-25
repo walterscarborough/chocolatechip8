@@ -31,4 +31,12 @@ class Cpu {
         val nnnAddress = OpcodeParser.parseOpcodeNNN(opcode.value)
         programCounter = nnnAddress
     }
+
+    fun executeOpcode(opcode: Opcode_JUMP_TO_SUBROUTINE) {
+        stack[stackPointer] = programCounter
+        stackPointer += 1
+        programCounter = OpcodeParser.parseOpcodeNNN(opcode.value)
+    }
+
+
 }

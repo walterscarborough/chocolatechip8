@@ -143,6 +143,23 @@ class CpuTest {
                     programCounter = 0x00A
             )
         }
+
+        @Test
+        fun `should execute opcode 0x2NNN (jumpToSubroutine)`() {
+            val modifiedStack = IntArray(16, { it + 1 })
+            cpu.stack = modifiedStack
+            cpu.programCounter = 0x4
+            cpu.stackPointer = 0x1
+
+            cpu.executeOpcode(Opcode_JUMP_TO_SUBROUTINE(0x20F0))
+
+            val expectedStack = intArrayOf(1, 4, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
+            assertCpuState(
+                    programCounter = 0x0F0,
+                    stackPointer = 0x2,
+                    stack = expectedStack
+            )
+        }
     }
 
     private fun assertCpuState(
