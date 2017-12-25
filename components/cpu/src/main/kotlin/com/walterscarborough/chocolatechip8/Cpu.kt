@@ -4,7 +4,7 @@ class Cpu {
 
     constructor(
             memory: IntArray = IntArray(4096),
-            registers: IntArray  = IntArray(16),
+            registers: IntArray = IntArray(16),
             indexRegister: Int = 0,
             programCounter: Int = 0x200,
             delayTimer: Int = 0,
@@ -66,6 +66,4 @@ class Cpu {
         stackPointer += 1
         programCounter = OpcodeParser.parseOpcodeNNN(opcode.value)
     }
-
-
 }
