@@ -105,8 +105,10 @@ class CpuTest {
 
             val modifiedProgramCounter = 0x2
 
-            cpu.memory = modifiedMemory
-            cpu.programCounter = modifiedProgramCounter
+            cpu = Cpu(
+                    memory = modifiedMemory,
+                    programCounter = modifiedProgramCounter
+            )
 
             assertThat(cpu.fetchOpcode()).isEqualTo(0xA2F0)
             assertCpuState(
@@ -121,16 +123,18 @@ class CpuTest {
 
         @Test
         fun `should execute opcode 0x00EE (returnFromSubroutine)`() {
+            val modifiedStack = IntArray(16, { it + 1 })
 
-            val modifiedStackArray = IntArray(16, { it + 1 })
-            cpu.stack = modifiedStackArray
-            cpu.stackPointer = 0x2
+            cpu = Cpu(
+                    stack = modifiedStack,
+                    stackPointer = 0x2
+            )
 
             cpu.executeOpcode(Opcode_RETURN_FROM_SUBROUTINE(0x00EE))
 
             assertCpuState(
                     programCounter = 0x3,
-                    stack = modifiedStackArray,
+                    stack = modifiedStack,
                     stackPointer = 0x1
             )
         }
@@ -147,9 +151,12 @@ class CpuTest {
         @Test
         fun `should execute opcode 0x2NNN (jumpToSubroutine)`() {
             val modifiedStack = IntArray(16, { it + 1 })
-            cpu.stack = modifiedStack
-            cpu.programCounter = 0x4
-            cpu.stackPointer = 0x1
+
+            cpu = Cpu(
+                    stack = modifiedStack,
+                    programCounter = 0x4,
+                    stackPointer = 0x1
+            )
 
             cpu.executeOpcode(Opcode_JUMP_TO_SUBROUTINE(0x20F0))
 

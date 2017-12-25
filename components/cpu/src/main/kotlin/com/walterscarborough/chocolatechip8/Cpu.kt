@@ -1,14 +1,43 @@
 package com.walterscarborough.chocolatechip8
 
 class Cpu {
-    var memory: IntArray = IntArray(4096)
-    val registers: IntArray = IntArray(16)
-    val indexRegister: Int = 0
-    var programCounter: Int = 0x200
-    val delayTimer: Int = 0
-    val soundTimer: Int = 0
-    var stack: IntArray = IntArray(16)
-    var stackPointer: Int = 0
+
+    constructor(
+            memory: IntArray = IntArray(4096),
+            registers: IntArray  = IntArray(16),
+            indexRegister: Int = 0,
+            programCounter: Int = 0x200,
+            delayTimer: Int = 0,
+            soundTimer: Int = 0,
+            stack: IntArray = IntArray(16),
+            stackPointer: Int = 0
+    ) {
+        this.memory = memory
+        this.registers = registers
+        this.indexRegister = indexRegister
+        this.programCounter = programCounter
+        this.delayTimer = delayTimer
+        this.soundTimer = soundTimer
+        this.stack = stack
+        this.stackPointer = stackPointer
+    }
+
+    var memory: IntArray
+        private set
+    var registers: IntArray
+        private set
+    var indexRegister: Int
+        private set
+    var programCounter: Int
+        private set
+    var delayTimer: Int
+        private set
+    var soundTimer: Int
+        private set
+    var stack: IntArray
+        private set
+    var stackPointer: Int
+        private set
 
     fun fetchOpcode(): Int {
 
