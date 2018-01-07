@@ -116,4 +116,12 @@ class Cpu {
         registers[vX] += nn
         programCounter += 2
     }
+
+    fun executeOpcode(opcode: Opcode_SET_VX_TO_BITWISE_OR_VY) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+        val vY = OpcodeParser.parseOpcodeVY(opcode.value)
+
+        registers[vX] = registers[vX] or registers[vY]
+        programCounter += 2
+    }
 }
