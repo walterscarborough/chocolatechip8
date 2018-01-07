@@ -274,6 +274,23 @@ class CpuTest {
                 )
             }
         }
+
+        @Test
+        fun `should execute opcode 0x6XNN (setVXToNN)`() {
+            val modifiedRegisters = getSequentialIntArray()
+            modifiedRegisters[0] = 3
+
+            cpu = Cpu(registers = modifiedRegisters)
+
+            cpu.executeOpcode(Opcode_SET_VX_TO_NN(0x6006))
+
+            val expectedRegisters = getSequentialIntArray()
+            expectedRegisters[0] = 6
+            assertCpuState(
+                    programCounter = 0x202,
+                    registers = expectedRegisters
+            )
+        }
     }
 
     private fun assertCpuState(

@@ -82,11 +82,11 @@ class Cpu {
         val vX = OpcodeParser.parseOpcodeVX(opcode.value)
         val nnAddress = OpcodeParser.parseOpcodeNN(opcode.value)
 
-        if (nnAddress != this.registers[vX]) {
-            this.programCounter += 4
+        if (nnAddress != registers[vX]) {
+            programCounter += 4
         }
         else {
-            this.programCounter += 2
+            programCounter += 2
         }
     }
 
@@ -94,10 +94,18 @@ class Cpu {
         val vX = OpcodeParser.parseOpcodeVX(opcode.value)
         val vY = OpcodeParser.parseOpcodeVY(opcode.value)
 
-        if (registers[vX] == this.registers[vY]) {
+        if (registers[vX] == registers[vY]) {
             programCounter += 4
         } else {
             programCounter += 2
         }
+    }
+
+    fun executeOpcode(opcode: Opcode_SET_VX_TO_NN) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+        val nnAddress = OpcodeParser.parseOpcodeNN(opcode.value)
+
+        registers[vX] = nnAddress
+        programCounter += 2
     }
 }
