@@ -77,4 +77,27 @@ class Cpu {
             programCounter += 2
         }
     }
+
+    fun executeOpcode(opcode: Opcode_SKIP_IF_VX_DOES_NOT_EQUAL_NN) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+        val nnAddress = OpcodeParser.parseOpcodeNN(opcode.value)
+
+        if (nnAddress != this.registers[vX]) {
+            this.programCounter += 4
+        }
+        else {
+            this.programCounter += 2
+        }
+    }
+
+    fun executeOpcode(opcode: Opcode_SKIP_IF_VX_EQUALS_VY) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+        val vY = OpcodeParser.parseOpcodeVY(opcode.value)
+
+        if (registers[vX] == this.registers[vY]) {
+            programCounter += 4
+        } else {
+            programCounter += 2
+        }
+    }
 }

@@ -204,6 +204,76 @@ class CpuTest {
                 )
             }
         }
+
+        @Nested
+        inner class `should execute opcode 0x4XNN (skipIfVXDoesNotEqualNN)` {
+
+            @Test
+            fun `when VX equals NN`() {
+                val modifiedRegisters = getSequentialIntArray()
+                modifiedRegisters[0] = 3
+
+                cpu = Cpu(registers = modifiedRegisters)
+
+                cpu.executeOpcode(Opcode_SKIP_IF_VX_DOES_NOT_EQUAL_NN(0x4003))
+
+                assertCpuState(
+                        programCounter = 0x202,
+                        registers = modifiedRegisters
+                )
+            }
+
+            @Test
+            fun `when VX does not equal NN`() {
+                val modifiedRegisters = getSequentialIntArray()
+                modifiedRegisters[0] = 2
+
+                cpu = Cpu(registers = modifiedRegisters)
+
+                cpu.executeOpcode(Opcode_SKIP_IF_VX_DOES_NOT_EQUAL_NN(0x4003))
+
+                assertCpuState(
+                        programCounter = 0x204,
+                        registers = modifiedRegisters
+                )
+            }
+        }
+
+        @Nested
+        inner class `should execute opcode 0x5XY0 (skipIfVXEqualsVY)` {
+
+            @Test
+            fun `when VX equals VY`() {
+                val modifiedRegisters = getSequentialIntArray()
+                modifiedRegisters[0] = 3
+                modifiedRegisters[1] = 3
+
+                cpu = Cpu(registers = modifiedRegisters)
+
+                cpu.executeOpcode(Opcode_SKIP_IF_VX_EQUALS_VY(0x5010))
+
+                assertCpuState(
+                        programCounter = 0x204,
+                        registers = modifiedRegisters
+                )
+            }
+
+            @Test
+            fun `when VX does not equal VY`() {
+                val modifiedRegisters = getSequentialIntArray()
+                modifiedRegisters[0] = 2
+                modifiedRegisters[1] = 3
+
+                cpu = Cpu(registers = modifiedRegisters)
+
+                cpu.executeOpcode(Opcode_SKIP_IF_VX_EQUALS_VY(0x5010))
+
+                assertCpuState(
+                        programCounter = 0x202,
+                        registers = modifiedRegisters
+                )
+            }
+        }
     }
 
     private fun assertCpuState(
