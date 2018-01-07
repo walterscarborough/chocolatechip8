@@ -108,4 +108,12 @@ class Cpu {
         registers[vX] = nnAddress
         programCounter += 2
     }
+
+    fun executeOpcode(opcode: Opcode_ADD_NN_TO_VX) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+        val nn = OpcodeParser.parseOpcodeNN(opcode.value)
+
+        registers[vX] += nn
+        programCounter += 2
+    }
 }

@@ -291,6 +291,23 @@ class CpuTest {
                     registers = expectedRegisters
             )
         }
+
+        @Test
+        fun `should execute opcode 0x7XNN (addNNToVX)`() {
+            val modifiedRegisters = getSequentialIntArray()
+            modifiedRegisters[0] = 3
+
+            cpu = Cpu(registers = modifiedRegisters)
+
+            cpu.executeOpcode(Opcode_ADD_NN_TO_VX(0x7006))
+
+            val expectedRegisters = getSequentialIntArray()
+            expectedRegisters[0] = 9
+            assertCpuState(
+                    programCounter = 0x202,
+                    registers = expectedRegisters
+            )
+        }
     }
 
     private fun assertCpuState(
