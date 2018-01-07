@@ -346,6 +346,25 @@ class CpuTest {
                     registers = expectedRegisters
             )
         }
+
+        @Test
+        fun `should execute opcode 0x8XY2 (setVXToBitwiseAndVY)`() {
+            val modifiedRegisters = getSequentialIntArray()
+            modifiedRegisters[0] = 4
+            modifiedRegisters[1] = 4
+
+            cpu = Cpu(registers = modifiedRegisters)
+
+            cpu.executeOpcode(Opcode_SET_VX_TO_BITWISE_AND_VY(0x8012))
+
+            val expectedRegisters = getSequentialIntArray()
+            expectedRegisters[0] = 4
+            expectedRegisters[1] = 4
+            assertCpuState(
+                    programCounter = 0x202,
+                    registers = expectedRegisters
+            )
+        }
     }
 
     private fun assertCpuState(
