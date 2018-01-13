@@ -187,4 +187,19 @@ class Cpu {
         registers[vX] = registers[vX] shr 1
         programCounter += 2
     }
+
+    fun executeOpcode(opcode: Opcode_SUBTRACT_VX_FROM_VY_WITH_CARRY) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+        val vY = OpcodeParser.parseOpcodeVY(opcode.value)
+
+        if (registers[vX] < registers[vY]) {
+            registers[0xF] = 0
+        }
+        else {
+            registers[0xF] = 1
+        }
+
+        registers[vX] = registers[vY] - registers[vX]
+        programCounter += 2
+    }
 }

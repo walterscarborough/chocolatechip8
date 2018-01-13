@@ -488,6 +488,49 @@ class CpuTest {
                     registers = expectedRegisters
             )
         }
+
+        @Nested
+        inner class `should execute opcode 0x8XY7 (subtractVXFromVYWithCarry)` {
+            @Test
+            fun `when VX is greater than VY`() {
+                val modifiedRegisters = getSequentialIntArray()
+                modifiedRegisters[0] = 7
+                modifiedRegisters[1] = 2
+
+                cpu = Cpu(registers = modifiedRegisters)
+
+                cpu.executeOpcode(Opcode_SUBTRACT_VX_FROM_VY_WITH_CARRY(0x8017))
+
+                val expectedRegisters = getSequentialIntArray()
+                expectedRegisters[0] = -5
+                expectedRegisters[1] = 2
+                expectedRegisters[15] = 1
+                assertCpuState(
+                        programCounter = 0x202,
+                        registers = expectedRegisters
+                )
+            }
+
+            @Test
+            fun `when VX is less than VY`() {
+                val modifiedRegisters = getSequentialIntArray()
+                modifiedRegisters[0] = 2
+                modifiedRegisters[1] = 7
+
+                cpu = Cpu(registers = modifiedRegisters)
+
+                cpu.executeOpcode(Opcode_SUBTRACT_VX_FROM_VY_WITH_CARRY(0x8017))
+
+                val expectedRegisters = getSequentialIntArray()
+                expectedRegisters[0] = 5
+                expectedRegisters[1] = 7
+                expectedRegisters[15] = 0
+                assertCpuState(
+                        programCounter = 0x202,
+                        registers = expectedRegisters
+                )
+            }
+        }
     }
 
     private fun assertCpuState(
