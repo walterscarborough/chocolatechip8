@@ -543,15 +543,32 @@ class CpuTest {
 
         @Test
         fun `should execute opcode 0xANNN (loadIndexRegister)`() {
-            val modifiedProgramCounter = 0x4
+            val modifiedProgramCounter = 0x204
 
             cpu = Cpu(programCounter = modifiedProgramCounter)
 
             cpu.executeOpcode(Opcode_LOAD_INDEX_REGISTER(0xA2F0))
 
             assertCpuState(
-                    programCounter = 0x6,
+                    programCounter = 0x206,
                     indexRegister = 0x2F0
+            )
+        }
+
+        @Test
+        fun `should execute opcode 0xBNNN (jumpWithV0Offset)`() {
+            val modifiedRegisters = getSequentialIntArray()
+            modifiedRegisters[0] = 2
+
+            cpu = Cpu(registers = modifiedRegisters)
+
+            cpu.executeOpcode(Opcode_JUMP_WITH_V0_OFFSET(0xB002))
+
+            val expectedRegisters = getSequentialIntArray()
+            expectedRegisters[0] = 2
+            assertCpuState(
+                    programCounter = 0x4,
+                    registers = expectedRegisters
             )
         }
     }

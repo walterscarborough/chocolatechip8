@@ -208,4 +208,11 @@ class Cpu {
         indexRegister = nnnAddress
         programCounter += 2
     }
+
+    fun executeOpcode(opcode: Opcode_JUMP_WITH_V0_OFFSET) {
+        val nnnAddress = OpcodeParser.parseOpcodeNNN(opcode.value)
+        val v0Data = registers[0]
+
+        programCounter = nnnAddress + v0Data
+    }
 }
