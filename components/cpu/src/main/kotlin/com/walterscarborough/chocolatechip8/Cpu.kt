@@ -202,4 +202,10 @@ class Cpu {
         registers[vX] = registers[vY] - registers[vX]
         programCounter += 2
     }
+
+    fun executeOpcode(opcode: Opcode_LOAD_INDEX_REGISTER) {
+        val nnnAddress = OpcodeParser.parseOpcodeNNN(opcode.value)
+        indexRegister = nnnAddress
+        programCounter += 2
+    }
 }

@@ -2,6 +2,7 @@ package com.walterscarborough.chocolatechip8
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -530,6 +531,28 @@ class CpuTest {
                         registers = expectedRegisters
                 )
             }
+        }
+
+        @Test
+        @Disabled
+        fun `should execute opcode 0x8XYE (shiftLeftVYStoreVX)`() {}
+
+        @Test
+        @Disabled
+        fun `should execute opcode 0x9XY0 (skipIfVXNotEqualVY)`() {}
+
+        @Test
+        fun `should execute opcode 0xANNN (loadIndexRegister)`() {
+            val modifiedProgramCounter = 0x4
+
+            cpu = Cpu(programCounter = modifiedProgramCounter)
+
+            cpu.executeOpcode(Opcode_LOAD_INDEX_REGISTER(0xA2F0))
+
+            assertCpuState(
+                    programCounter = 0x6,
+                    indexRegister = 0x2F0
+            )
         }
     }
 
