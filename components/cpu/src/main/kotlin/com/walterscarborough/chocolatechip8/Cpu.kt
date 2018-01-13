@@ -178,4 +178,13 @@ class Cpu {
         registers[vX] = registers[vX] - registers[vY]
         programCounter += 2
     }
+
+    fun executeOpcode(opcode: Opcode_SHIFT_VX_RIGHT) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+
+        registers[0xF] = registers[vX] and 0x1
+
+        registers[vX] = registers[vX] shr 1
+        programCounter += 2
+    }
 }

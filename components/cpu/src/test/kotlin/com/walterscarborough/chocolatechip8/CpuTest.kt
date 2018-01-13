@@ -470,6 +470,24 @@ class CpuTest {
                 )
             }
         }
+
+        @Test
+        fun `should execute opcode 0x8XY6 (shiftVXRight)`() {
+            val modifiedRegisters = getSequentialIntArray()
+            modifiedRegisters[0] = 25
+
+            cpu = Cpu(registers = modifiedRegisters)
+
+            cpu.executeOpcode(Opcode_SHIFT_VX_RIGHT(0x8006))
+
+            val expectedRegisters = getSequentialIntArray()
+            expectedRegisters[0] = 12
+            expectedRegisters[15] = 1
+            assertCpuState(
+                    programCounter = 0x202,
+                    registers = expectedRegisters
+            )
+        }
     }
 
     private fun assertCpuState(
