@@ -1,5 +1,6 @@
 package com.walterscarborough.chocolatechip8
 
+import com.walterscarborough.chocolatechip8.stubs.RandomNumberGeneratorStub
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
@@ -568,6 +569,29 @@ class CpuTest {
             expectedRegisters[0] = 2
             assertCpuState(
                     programCounter = 0x4,
+                    registers = expectedRegisters
+            )
+        }
+
+        @Test
+        fun `should execute opcode 0xCXNN (storeRandomNumberToVX)`() {
+
+            val randomNumberGeneratorStub = RandomNumberGeneratorStub()
+            randomNumberGeneratorStub.randomNumber = 0xAA
+
+            val modifiedRegisters = getSequentialIntArray()
+
+            cpu = Cpu(
+                    randomNumberGenerator = randomNumberGeneratorStub,
+                    registers = modifiedRegisters
+            )
+
+            cpu.executeOpcode(Opcode_STORE_RANDOM_NUMBER_TO_VX(0xC0A4))
+
+            val expectedRegisters = getSequentialIntArray()
+            expectedRegisters[0] = 0xA0
+            assertCpuState(
+                    programCounter = 0x202,
                     registers = expectedRegisters
             )
         }

@@ -10,7 +10,8 @@ class Cpu {
             delayTimer: Int = 0,
             soundTimer: Int = 0,
             stack: IntArray = IntArray(16),
-            stackPointer: Int = 0
+            stackPointer: Int = 0,
+            randomNumberGenerator: RandomNumberGenerator = Max255RandomNumberGenerator()
     ) {
         this.memory = memory
         this.registers = registers
@@ -20,6 +21,7 @@ class Cpu {
         this.soundTimer = soundTimer
         this.stack = stack
         this.stackPointer = stackPointer
+        this.randomNumberGenerator = randomNumberGenerator
     }
 
     var memory: IntArray
@@ -38,6 +40,7 @@ class Cpu {
         private set
     var stackPointer: Int
         private set
+    val randomNumberGenerator: RandomNumberGenerator
 
     fun fetchOpcode(): Int {
 
@@ -214,5 +217,16 @@ class Cpu {
         val v0Data = registers[0]
 
         programCounter = nnnAddress + v0Data
+    }
+
+    fun executeOpcode(opcode: Opcode_STORE_RANDOM_NUMBER_TO_VX) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+        val sourceNumber = OpcodeParser.parseOpcodeNN(opcode.value)
+        val randomNumber = randomNumberGenerator.getRandomInt()
+
+        val adjustedNumber = sourceNumber and randomNumber
+
+        registers[vX] = adjustedNumber
+        programCounter += 2
     }
 }
