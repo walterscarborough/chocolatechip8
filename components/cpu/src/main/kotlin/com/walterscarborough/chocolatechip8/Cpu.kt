@@ -11,7 +11,8 @@ class Cpu {
             soundTimer: Int = 0,
             stack: IntArray = IntArray(16),
             stackPointer: Int = 0,
-            randomNumberGenerator: RandomNumberGenerator = Max255RandomNumberGenerator()
+            randomNumberGenerator: RandomNumberGenerator = Max255RandomNumberGenerator(),
+            display: Display = OutputDisplay()
     ) {
         this.memory = memory
         this.registers = registers
@@ -22,6 +23,7 @@ class Cpu {
         this.stack = stack
         this.stackPointer = stackPointer
         this.randomNumberGenerator = randomNumberGenerator
+        this.display = display
     }
 
     var memory: IntArray
@@ -41,6 +43,7 @@ class Cpu {
     var stackPointer: Int
         private set
     val randomNumberGenerator: RandomNumberGenerator
+    val display: Display
 
     fun fetchOpcode(): Int {
 
@@ -227,6 +230,34 @@ class Cpu {
         val adjustedNumber = sourceNumber and randomNumber
 
         registers[vX] = adjustedNumber
+        programCounter += 2
+    }
+
+    fun executeOpcode(opcode: Opcode_DRAW_VX_VY) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+        val vY = OpcodeParser.parseOpcodeVY(opcode.value)
+        val height = OpcodeParser.parseOpcodeN(opcode.value)
+
+        var yLine = 0
+        while (yLine < height) {
+            val pixel = memory[indexRegister + yLine]
+
+            var xLine = 0
+            while (xLine < 8) {
+                if ((pixel and (0x80 shr xLine)) != 0) {
+                    if (display.graphicsData[(vX + xLine + ((vY + yLine) * 64))] == 1) {
+                        registers[0xF] = 1
+                    }
+
+                    display.graphicsData[vX + xLine + ((vY + yLine) * 64)] = display.graphicsData[vX + xLine + ((vY + yLine) * 64)] xor 1
+                }
+
+                xLine++
+            }
+
+            yLine++
+        }
+
         programCounter += 2
     }
 }
