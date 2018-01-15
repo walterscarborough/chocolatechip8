@@ -896,11 +896,8 @@ class CpuTest {
     private fun assertIntArrayContents(actual: IntArray, expected: IntArray) {
         assertThat(actual.size).isEqualTo(expected.size)
 
-        var counter = 0
-        while (counter < expected.size) {
-            assertThat(actual[counter]).isEqualTo(expected[counter])
-
-            counter++
+        for (i in 0 until expected.size) {
+            assertThat(actual[i]).isEqualTo(expected[i])
         }
     }
 }
