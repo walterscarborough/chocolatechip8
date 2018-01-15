@@ -742,6 +742,22 @@ class CpuTest {
                     programCounter = 0x202
             )
         }
+
+        @Test
+        fun `should execute opcode 0xFX18 (storeVXToSoundTimer)`() {
+            val modifiedRegisters = getSequentialIntArray()
+            modifiedRegisters[0] = 0x2
+
+            cpu = Cpu(registers = modifiedRegisters)
+
+            cpu.executeOpcode(Opcode_STORE_VX_TO_SOUND_TIMER(0xF018))
+
+            assertCpuState(
+                    registers = modifiedRegisters,
+                    soundTimer = 2,
+                    programCounter = 0x202
+            )
+        }
     }
 
     private fun assertCpuState(

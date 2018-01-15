@@ -274,4 +274,11 @@ class Cpu {
         delayTimer = registers[vX]
         programCounter += 2
     }
+
+    fun executeOpcode(opcode: Opcode_STORE_VX_TO_SOUND_TIMER) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+
+        soundTimer = registers[vX]
+        programCounter += 2
+    }
 }
