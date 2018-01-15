@@ -720,6 +720,28 @@ class CpuTest {
                     delayTimer = modifiedDelayTimer
             )
         }
+
+        @Disabled
+        @Test
+        fun `should execute opcode 0xFX0A (waitForStoreKeypressToVX)`() {
+
+        }
+
+        @Test
+        fun `should execute opcode 0xFX15 (storeVXToDelayTimer)`() {
+            val modifiedRegisters = getSequentialIntArray()
+            modifiedRegisters[0] = 0x2
+
+            cpu = Cpu(registers = modifiedRegisters)
+
+            cpu.executeOpcode(Opcode_STORE_VX_TO_DELAY_TIMER(0xF015))
+
+            assertCpuState(
+                    registers = modifiedRegisters,
+                    delayTimer = 2,
+                    programCounter = 0x202
+            )
+        }
     }
 
     private fun assertCpuState(
