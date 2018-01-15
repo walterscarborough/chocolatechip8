@@ -758,6 +758,28 @@ class CpuTest {
                     programCounter = 0x202
             )
         }
+
+        @Test
+        fun `should execute opcode 0xFX1E (addVXToI)`() {
+            val modifiedRegisters = getSequentialIntArray()
+            modifiedRegisters[0] = 0x2
+
+            val modifiedIndexRegister = 1
+
+            cpu = Cpu(
+                    registers = modifiedRegisters,
+                    indexRegister = modifiedIndexRegister
+            )
+
+            cpu.executeOpcode(Opcode_ADD_VX_TO_I(0xF01E))
+
+            assertCpuState(
+                    registers = modifiedRegisters,
+                    indexRegister = 3,
+                    programCounter = 0x202
+            )
+        }
+
     }
 
     private fun assertCpuState(
