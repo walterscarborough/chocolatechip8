@@ -839,6 +839,34 @@ class CpuTest {
                     programCounter = 0x202
             )
         }
+
+        @Test
+        fun `should execute opcode 0xFX65 (storeFromMemoryToV0VX)`() {
+
+            val modifiedMemory = IntArray(4096)
+
+            for (i in 1..17) {
+                modifiedMemory[i] = 2
+            }
+
+            val modifiedIndexRegister = 1
+
+            cpu = Cpu(
+                    indexRegister = modifiedIndexRegister,
+                    memory = modifiedMemory
+            )
+
+            cpu.executeOpcode(Opcode_STORE_FROM_MEMORY_TO_V0_VX(0xFF65))
+
+            val expectedRegisters = IntArray(16, { _ -> 2})
+
+            assertCpuState(
+                    registers = expectedRegisters,
+                    memory = modifiedMemory,
+                    indexRegister = 1,
+                    programCounter = 0x202
+            )
+        }
     }
 
     private fun assertCpuState(
