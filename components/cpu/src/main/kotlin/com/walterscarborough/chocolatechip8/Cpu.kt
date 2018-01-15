@@ -1,5 +1,7 @@
 package com.walterscarborough.chocolatechip8
 
+import kotlin.math.floor
+
 class Cpu {
 
     constructor(
@@ -286,6 +288,16 @@ class Cpu {
         val vX = OpcodeParser.parseOpcodeVX(opcode.value)
 
         indexRegister += registers[vX]
+        programCounter += 2
+    }
+
+    fun executeOpcode(opcode: Opcode_STORE_DECIMAL_VALUE_TO_VX) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+
+        memory[indexRegister] = floor((registers[vX] / 100).toDouble()).toInt()
+        memory[indexRegister + 1] = floor(((registers[vX] / 10) % 10).toDouble()).toInt()
+        memory[indexRegister + 2] = floor(((registers[vX] % 100) % 10).toDouble()).toInt()
+
         programCounter += 2
     }
 }

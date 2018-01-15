@@ -780,6 +780,38 @@ class CpuTest {
             )
         }
 
+        @Disabled
+        @Test
+        fun `should execute opcode 0xFX29 (setIToVXSpriteLocation)`() {
+
+        }
+
+        @Test
+        fun `should execute opcode 0xFX33 (storeDecimalValueToVX)`() {
+            val modifiedRegisters = getSequentialIntArray()
+            modifiedRegisters[0x3] = 256
+
+            val modifiedIndexRegister = 0x003
+
+            cpu = Cpu(
+                    registers = modifiedRegisters,
+                    indexRegister = modifiedIndexRegister
+            )
+
+            cpu.executeOpcode(Opcode_STORE_DECIMAL_VALUE_TO_VX(0xF333))
+
+            val expectedMemory = IntArray(4096)
+            expectedMemory[modifiedIndexRegister] = 2
+            expectedMemory[modifiedIndexRegister + 1] = 5
+            expectedMemory[modifiedIndexRegister + 2] = 6
+
+            assertCpuState(
+                    registers = modifiedRegisters,
+                    memory = expectedMemory,
+                    indexRegister = 3,
+                    programCounter = 0x202
+            )
+        }
     }
 
     private fun assertCpuState(
