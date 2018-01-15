@@ -672,6 +672,54 @@ class CpuTest {
                 )
             }
         }
+
+        @Nested
+        inner class `should execute opcode 0xEX9E (skipIfPressed)` {
+            @Disabled
+            @Test
+            fun `when key in V0 is pressed`() {
+
+            }
+
+            @Disabled
+            @Test
+            fun `when key in V0 is not pressed`() {
+
+            }
+        }
+
+        @Nested
+        inner class `should execute opcode 0xEXA1 (skipIfNotPressed)` {
+            @Disabled
+            @Test
+            fun `when key in V0 is pressed`() {
+
+            }
+
+            @Disabled
+            @Test
+            fun `when key in V0 is not pressed`() {
+
+            }
+        }
+
+        @Test
+        fun `should execute opcode 0xFX07 (storeDelayTimerToVX)`() {
+            val modifiedDelayTimer = 0x2
+
+            cpu = Cpu(delayTimer = modifiedDelayTimer)
+
+            cpu.executeOpcode(Opcode_STORE_DELAY_TIMER_TO_VX(0xF007))
+
+            val expectedRegisters = IntArray(16)
+            expectedRegisters[0] = 0x2
+
+            assertCpuState(
+                    registers = expectedRegisters,
+                    programCounter = 0x202,
+                    delayTimer = modifiedDelayTimer
+            )
+        }
     }
 
     private fun assertCpuState(

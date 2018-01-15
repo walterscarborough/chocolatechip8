@@ -260,4 +260,11 @@ class Cpu {
 
         programCounter += 2
     }
+
+    fun executeOpcode(opcode: Opcode_STORE_DELAY_TIMER_TO_VX) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+
+        registers[vX] = delayTimer
+        programCounter += 2
+    }
 }
