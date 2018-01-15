@@ -812,6 +812,33 @@ class CpuTest {
                     programCounter = 0x202
             )
         }
+
+        @Test
+        fun `should execute opcode 0xFX55 (storeFromV0VXToMemory)`() {
+            val modifiedRegisters = IntArray(16, { _ -> 2})
+
+            val modifiedIndexRegister = 1
+
+            cpu = Cpu(
+                    registers = modifiedRegisters,
+                    indexRegister = modifiedIndexRegister
+            )
+
+            cpu.executeOpcode(Opcode_STORE_FROM_V0_VX_TO_MEMORY(0xFF55))
+
+            val expectedMemory = IntArray(4096)
+
+            for (i in 1..16) {
+                expectedMemory[i] = 2
+            }
+
+            assertCpuState(
+                    registers = modifiedRegisters,
+                    memory = expectedMemory,
+                    indexRegister = 1,
+                    programCounter = 0x202
+            )
+        }
     }
 
     private fun assertCpuState(
@@ -824,7 +851,7 @@ class CpuTest {
             stack: IntArray = IntArray(16),
             stackPointer: Int = 0
     ) {
-        assertThat(cpu.memory).isEqualTo(memory)
+        assertIntArrayContents(cpu.memory, memory)
         assertThat(cpu.registers).isEqualTo(registers)
         assertThat(cpu.indexRegister).isEqualTo(indexRegister)
         assertThat(cpu.programCounter).isEqualTo(programCounter)

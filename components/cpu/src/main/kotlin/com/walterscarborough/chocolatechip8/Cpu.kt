@@ -300,4 +300,14 @@ class Cpu {
 
         programCounter += 2
     }
+
+    fun executeOpcode(opcode: Opcode_STORE_FROM_V0_VX_TO_MEMORY) {
+        val vX = OpcodeParser.parseOpcodeVX(opcode.value)
+
+        for (i in 0..vX) {
+            memory[i + indexRegister] = registers[i]
+        }
+
+        programCounter += 2
+    }
 }
