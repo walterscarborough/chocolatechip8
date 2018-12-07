@@ -1,0 +1,10 @@
+apply from: "$project.rootDir/kotlin.gradle"
+
+dependencies {
+
+    compile project(":components:domain")
+
+    testImplementation "org.assertj:assertj-core:$assertj_version"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:$junit_version"
+}

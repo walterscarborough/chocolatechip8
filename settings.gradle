@@ -1,3 +1,6 @@
 rootProject.name = 'chocolatechip8'
 
-include 'components:cpu'
+include 'application'
+include 'components:domain'
+include 'components:interpreter'
+include 'components:peripherals'

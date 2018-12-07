@@ -1,0 +1,25 @@
+apply from: "$project.rootDir/kotlin.gradle"
+apply plugin: 'application'
+
+dependencies {
+
+    compile project(":components:domain")
+    compile project(":components:interpreter")
+    compile project(":components:peripherals")
+
+    testImplementation "org.assertj:assertj-core:$assertj_version"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:$junit_version"
+}
+
+mainClassName = 'com.walterscarborough.chocolatechip8.application.AppKt'
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': "com.walterscarborough.chocolatechip8.application.AppKt"
+        )
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
