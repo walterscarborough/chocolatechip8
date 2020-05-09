@@ -1,33 +1,32 @@
 import Cpu from '../src/cpu';
-import {debuglog, log} from 'util';
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+import * as log from 'loglevel';
 
-async function readRomFile(romFileTarget) {
-
-    const promise = new Promise<ArrayBuffer>((resolve, reject) => {
+function readRomFile(romFileTarget): Promise<ArrayBuffer> {
+    return new Promise<ArrayBuffer>((resolve) => {
         const reader = new FileReader();
 
-        reader.onload = () => {
+        reader.onload = (): void => {
             const text = reader.result as ArrayBuffer;
             resolve(text);
         };
 
         reader.readAsArrayBuffer(romFileTarget);
     });
-
-    return promise;
 }
 
-function playGame(gameData) {
+function playGame(gameData): void {
     const cpu = new Cpu();
 
     cpu.loadGame(gameData);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const romElement = (<HTMLInputElement>document.getElementById('romFile'));
+    const romElement = document.getElementById('romFile') as HTMLInputElement;
 
     romElement.addEventListener('change', () => {
-        log(
+        log.debug(
             'Loading: ' + romElement.files[0].name
         );
 
