@@ -4,11 +4,15 @@ import {Opcodes} from "../opcodes";
 describe('opcodes', () => {
 
     it.skip('decodes opcode 0x0NNN (executeSubroutineNNN)', () => {
+        const decodedOpcode = OpcodeDecoder.decodeOpcode(0x0000);
 
+        expect(decodedOpcode).toEqual(Opcodes.EXECUTE_SUBROUTINE_NNN);
     });
 
-    it.skip('decodes opcode 0x00E0 (clearDisplay)', () => {
+    it('decodes opcode 0x00E0 (clearDisplay)', () => {
+        const decodedOpcode = OpcodeDecoder.decodeOpcode(0x00E0);
 
+        expect(decodedOpcode).toEqual(Opcodes.CLEAR_DISPLAY);
     });
 
     it('decodes opcode 0x00EE (returnFromSubroutine)', () => {
@@ -107,12 +111,16 @@ describe('opcodes', () => {
         expect(decodedOpcode).toEqual(Opcodes.SUBTRACT_VX_FROM_VY_WITH_CARRY);
     });
 
-    it.skip('decodes opcode 0x8XYE (shiftLeftVYStoreVX)', () => {
+    it('decodes opcode 0x8XYE (shiftLeftVYStoreVX)', () => {
+        const decodedOpcode = OpcodeDecoder.decodeOpcode(0x800E);
 
+        expect(decodedOpcode).toEqual(Opcodes.SHIFT_LEFT_VY_STORE_VX);
     });
 
-    it.skip('decodes opcode 0x9XY0 (skipIfVXNotEqualVY)', () => {
+    it('decodes opcode 0x9XY0 (skipIfVXNotEqualVY)', () => {
+        const decodedOpcode = OpcodeDecoder.decodeOpcode(0x9000);
 
+        expect(decodedOpcode).toEqual(Opcodes.SKIP_IF_VX_NOT_EQUAL_VY);
     });
 
     it('decodes opcode 0xANNN (loadIndexRegister)', () => {
@@ -181,8 +189,10 @@ describe('opcodes', () => {
         expect(decodedOpcode).toEqual(Opcodes.ADD_VX_TO_I);
     });
 
-    it.skip('decodes opcode 0xFX29 (setIToVXSpriteLocation)', () => {
+    it('decodes opcode 0xFX29 (setIToVXSpriteLocation)', () => {
+        const decodedOpcode = OpcodeDecoder.decodeOpcode(0xF029);
 
+        expect(decodedOpcode).toEqual(Opcodes.SET_I_TO_VX_SPRITE_LOCATION);
     });
 
     it('decodes opcode 0xFX33 (storeDecimalValueToVX)', () => {

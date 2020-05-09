@@ -206,8 +206,7 @@ export default class Cpu {
             break;
         }
         default: {
-            console.log('ERROR: opcode not implemented!');
-            break;
+            throw new Error('Error: cpu found unknown opcode')
         }
         }
     }

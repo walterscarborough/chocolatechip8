@@ -15,12 +15,14 @@ export default class OpcodeDecoder {
               return Opcodes.RETURN_FROM_SUBROUTINE
           }
 
+          case 0x00E0: {
+              return Opcodes.CLEAR_DISPLAY;
+          }
+
           default: {
-              console.log('opcode "' + opcode.toString(16) + '" not implemented!');
-              break;
+              throw new Error(`opcode "${opcode.toString(16)}" not implemented!`)
           }
           }
-          break;
       }
 
       case 0x1000: {
@@ -86,13 +88,18 @@ export default class OpcodeDecoder {
               return Opcodes.SUBTRACT_VX_FROM_VY_WITH_CARRY;
           }
 
-          default: {
-              console.log('opcode "' + opcode.toString(16) + '" not implemented!');
-              break;
-          }
+          case 0x000E: {
+              return Opcodes.SHIFT_LEFT_VY_STORE_VX
           }
 
-          break;
+          default: {
+              throw new Error(`opcode "${opcode.toString(16)}" not implemented!`);
+          }
+          }
+      }
+
+      case 0x9000: {
+          return Opcodes.SKIP_IF_VX_NOT_EQUAL_VY
       }
 
       case 0xA000: {
@@ -123,12 +130,9 @@ export default class OpcodeDecoder {
           }
 
           default: {
-              console.log('opcode "' + opcode.toString(16) + '" not implemented!');
-              break;
+              throw new Error(`opcode "${opcode.toString(16)}" not implemented!`);
           }
           }
-
-          break;
       }
 
       case 0xF000: {
@@ -166,18 +170,18 @@ export default class OpcodeDecoder {
               return Opcodes.STORE_FROM_MEMORY_TO_V0_VX;
           }
 
-          default: {
-              console.log('opcode "' + opcode.toString(16) + '" not implemented!');
-              break;
-          }
+          case 0x0029: {
+              return Opcodes.SET_I_TO_VX_SPRITE_LOCATION;
           }
 
-          break;
+          default: {
+              throw new Error(`opcode "${opcode.toString(16)}" not implemented!`);
+          }
+          }
       }
 
       default: {
-          console.log('opcode "' + opcode.toString(16) + '" not implemented!');
-          break;
+          throw new Error(`opcode "${opcode.toString(16)}" not implemented!`);
       }
       }
   }
