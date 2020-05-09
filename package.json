@@ -4,9 +4,8 @@
   "description": "A Chip 8 emulator written in typescript.",
   "main": "build/index.js",
   "scripts": {
-    "lint": "npm run lint:test && npm run lint:src",
-    "lint:test": "eslint --ext .js,.jsx,.ts,.tsx src --color",
-    "lint:src": "eslint --ext .js,.jsx,.ts,.tsx test --color",
+    "lint": "eslint --color --ext ts src",
+    "lint:fix": "eslint --color --fix --ext ts src",
     "createBuildDirectory": "mkdir -p build",
     "compileSrc": "tsc src/*.ts --outDir build",
     "build": "npm run createBuildDirectory && npm run compileSrc",
@@ -17,6 +16,8 @@
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.5",
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
     "eslint": "^7.0.0",
     "jest": "^26.0.1",
     "ts-jest": "^25.5.1",
