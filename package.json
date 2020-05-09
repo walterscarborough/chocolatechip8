@@ -4,33 +4,24 @@
   "description": "A Chip 8 emulator written in typescript.",
   "main": "build/index.js",
   "scripts": {
-    "lint": "tslint src/*.ts && tslint test/*.ts",
-    "cleanTmpDirectory": "mkdir -p tmp && rm -r tmp && mkdir -p tmp",
-    "compileTests": "tsc test/*Test.ts --outDir tmp",
+    "lint": "npm run lint:test && npm run lint:src",
+    "lint:test": "eslint --ext .js,.jsx,.ts,.tsx src --color",
+    "lint:src": "eslint --ext .js,.jsx,.ts,.tsx test --color",
     "createBuildDirectory": "mkdir -p build",
     "compileSrc": "tsc src/*.ts --outDir build",
-    "pretest": "npm run lint && npm run cleanTmpDirectory && npm run compileTests",
-    "test": "mocha tmp/test/*",
-    "prebuild": "npm run test",
-    "build": "npm run createBuildDirectory && npm run compileSrc"
+    "build": "npm run createBuildDirectory && npm run compileSrc",
+    "test": "jest src"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/chai": "^4.0.10",
-    "@types/mocha": "^2.2.44",
-    "@types/node": "^8.5.1",
-    "@types/sinon": "^4.1.2",
-    "chai": "^4.1.2",
-    "mocha": "^4.0.1",
-    "sinon": "^4.1.3",
-    "ts-loader": "^3.2.0",
-    "ts-node": "^4.0.2",
-    "tslint": "^5.8.0",
-    "tslint-eslint-rules": "^4.1.1",
-    "typescript": "^2.6.2"
-  },
-  "dependencies": {
-    "@types/es6-promise": "0.0.33"
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.5",
+    "eslint": "^7.0.0",
+    "jest": "^26.0.1",
+    "ts-jest": "^25.5.1",
+    "ts-loader": "^7.0.3",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.8.3"
   }
 }

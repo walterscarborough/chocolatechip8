@@ -1,9 +1,8 @@
-import {expect} from 'chai';
-import OpcodeReader from '../src/opcodeReader';
+import OpcodeReader from '../opcodeReader';
 
 describe('OpcodeReader', () => {
 
-    context('parsing', () => {
+    describe('parsing', () => {
         it('decodes firstMask from opcode', () => {
             const opcode = 0xE000;
 
@@ -11,7 +10,7 @@ describe('OpcodeReader', () => {
             const opcodeFirstMask = OpcodeReader.parseOpcodeFirstMask(opcode);
 
 
-            expect(opcodeFirstMask).equal(0xE000);
+            expect(opcodeFirstMask).toEqual(0xE000);
         });
 
         it('decodes X register from opcode', () => {
@@ -21,7 +20,7 @@ describe('OpcodeReader', () => {
             const decodedXRegister = OpcodeReader.parseOpcodeVX(opcode);
 
 
-            expect(decodedXRegister).equal(0xF);
+            expect(decodedXRegister).toEqual(0xF);
         });
 
         it('decodes Y register from opcode', () => {
@@ -31,7 +30,7 @@ describe('OpcodeReader', () => {
             const decodedXRegister = OpcodeReader.parseOpcodeVY(opcode);
 
 
-            expect(decodedXRegister).equal(0xF);
+            expect(decodedXRegister).toEqual(0xF);
         });
 
         it('decodes N from opcode', () => {
@@ -41,7 +40,7 @@ describe('OpcodeReader', () => {
             const decodedXRegister = OpcodeReader.parseOpcodeN(opcode);
 
 
-            expect(decodedXRegister).equal(0xF);
+            expect(decodedXRegister).toEqual(0xF);
         });
 
         it('decodes NN from opcode', () => {
@@ -51,7 +50,7 @@ describe('OpcodeReader', () => {
             const decodedXRegister = OpcodeReader.parseOpcodeNN(opcode);
 
 
-            expect(decodedXRegister).equal(0xFF);
+            expect(decodedXRegister).toEqual(0xFF);
         });
 
         it('decodes NNN from opcode', () => {
@@ -61,7 +60,7 @@ describe('OpcodeReader', () => {
             const decodedXRegister = OpcodeReader.parseOpcodeNNN(opcode);
 
 
-            expect(decodedXRegister).equal(0xFFF);
+            expect(decodedXRegister).toEqual(0xFFF);
         });
     });
 

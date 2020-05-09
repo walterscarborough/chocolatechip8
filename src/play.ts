@@ -7,9 +7,8 @@ async function readRomFile(romFileTarget) {
         const reader = new FileReader();
 
         reader.onload = () => {
-            const text = reader.result;
+            const text = reader.result as ArrayBuffer;
             resolve(text);
-
         };
 
         reader.readAsArrayBuffer(romFileTarget);

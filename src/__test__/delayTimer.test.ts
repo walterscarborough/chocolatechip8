@@ -1,5 +1,4 @@
-import {expect} from 'chai';
-import DelayTimer from '../src/delayTimer';
+import DelayTimer from '../delayTimer';
 
 describe('DelayTimer', () => {
     it('returns a decremented value if greater than 0', () => {
@@ -7,7 +6,7 @@ describe('DelayTimer', () => {
         const expectedDelayTimer = 9;
 
 
-        expect(DelayTimer.updateDelayTimer(delayTimer)).equal(expectedDelayTimer);
+        expect(DelayTimer.updateDelayTimer(delayTimer)).toEqual(expectedDelayTimer);
     });
 
     it('returns the same input value if less than 0', () => {
@@ -15,6 +14,6 @@ describe('DelayTimer', () => {
         const expectedDelayTimer = 0;
 
 
-        expect(DelayTimer.updateDelayTimer(delayTimer)).equal(expectedDelayTimer);
+        expect(DelayTimer.updateDelayTimer(delayTimer)).toEqual(expectedDelayTimer);
     });
 });
