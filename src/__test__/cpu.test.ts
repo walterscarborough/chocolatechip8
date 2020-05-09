@@ -3,7 +3,7 @@ import RandomNumberGenerator from '../randomNumberGenerator';
 import {log} from 'util';
 
 describe('Cpu', () => {
-    let cpu : Cpu;
+    let cpu: Cpu;
 
     beforeEach(function () {
         cpu = new Cpu();
