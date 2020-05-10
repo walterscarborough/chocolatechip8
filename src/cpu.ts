@@ -48,7 +48,7 @@ export default class Cpu {
         }
 
         let counter = 0;
-        while (counter > -1) {
+        while (counter < 20) {
             counter++;
 
             this.emulateCycle();
@@ -72,9 +72,11 @@ export default class Cpu {
         // decode opcode
         // execute opcode
         const opcode = this.fetchOpcode(this.memory, this.programCounter);
+
+        console.log('EMULATE_CYCLE opcode is: ' + opcode.toString(16));
+
         this.decodeOpcode(opcode);
 
-        console.log('opcode is: ' + opcode.toString(16));
 
         // update timers
         // delayTimer = this.updateDelayTimer(this.delayTimer);
@@ -100,140 +102,140 @@ export default class Cpu {
         const decodedOpcode = OpcodeDecoder.decodeOpcode(opcode);
 
         switch (decodedOpcode.toString()) {
-        case Opcodes.CLEAR_DISPLAY.toString(): {
-            this.clearDisplay();
+        case Opcodes.OPCODE_00E0_CLEAR_DISPLAY.toString(): {
+            this.executeOpcode_00E0_clearDisplay();
             break;
         }
-        case Opcodes.SET_VX_TO_BITWISE_AND_VY.toString(): {
-            this.setVXToBitwiseAndVY(opcode);
+        case Opcodes.OPCODE_8XY2_SET_VX_TO_BITWISE_AND_VY.toString(): {
+            this.executeOpcode_8XY2_setVXToBitwiseAndVY(opcode);
             break;
         }
-        case Opcodes.SET_VX_TO_BITWISE_OR_VY.toString(): {
-            this.setVXToBitwiseOrVY(opcode);
+        case Opcodes.OPCODE_8XY1_SET_VX_TO_BITWISE_OR_VY.toString(): {
+            this.executeOpcode_8XY1_setVXToBitwiseOrVY(opcode);
             break;
         }
-        case Opcodes.SET_VX_TO_BITWISE_X_OR_VY.toString(): {
-            this.setVXToBitwiseXorVY(opcode);
+        case Opcodes.OPCODE_8XY3_SET_VX_TO_BITWISE_X_OR_VY.toString(): {
+            this.executeOpcode_8XY3_setVXToBitwiseXorVY(opcode);
             break;
         }
-        case Opcodes.SET_VX_TO_VY.toString(): {
-            this.setVXToVY(opcode);
+        case Opcodes.OPCODE_8XY0_SET_VX_TO_VY.toString(): {
+            this.executeOpcode_8XY0_setVXToVY(opcode);
             break;
         }
-        case Opcodes.SUBTRACT_VY_FROM_VX_WITH_CARRY.toString(): {
-            this.subtractVYFromVXWithCarry(opcode);
+        case Opcodes.OPCODE_8XY5_SUBTRACT_VY_FROM_VX_WITH_CARRY.toString(): {
+            this.executeOpcode_8XY5_subtractVYFromVXWithCarry(opcode);
             break;
         }
-        case Opcodes.SUBTRACT_VX_FROM_VY_WITH_CARRY.toString(): {
-            this.subtractVXFromVYWithCarry(opcode);
+        case Opcodes.OPCODE_8XY7_SUBTRACT_VX_FROM_VY_WITH_CARRY.toString(): {
+            this.executeOpcode_8XY7_subtractVXFromVYWithCarry(opcode);
             break;
         }
-        case Opcodes.ADD_NN_TO_VX.toString(): {
-            this.addNNToVX(opcode);
+        case Opcodes.OPCODE_7XNN_ADD_NN_TO_VX.toString(): {
+            this.executeOpcode_7XNN_addNNToVX(opcode);
             break;
         }
-        case Opcodes.SET_VX_TO_NN.toString(): {
-            this.setVXToNN(opcode);
+        case Opcodes.OPCODE_6XNN_SET_VX_TO_NN.toString(): {
+            this.executeOpcode_6XNN_setVXToNN(opcode);
             break;
         }
-        case Opcodes.SHIFT_RIGHT_VX_VY.toString(): {
-            this.shiftRightVxVy(opcode);
+        case Opcodes.OPCODE_8XY6_SHIFT_RIGHT_VX_VY.toString(): {
+            this.executeOpcode_8XY6_shiftRightVxVy(opcode);
             break;
         }
-        case Opcodes.SKIP_IF_VX_EQUALS_VY.toString(): {
-            this.skipIfVXEqualsVY(opcode);
+        case Opcodes.OPCODE_5XY0_SKIP_IF_VX_EQUALS_VY.toString(): {
+            this.executeOpcode_5XY0_skipIfVXEqualsVY(opcode);
             break;
         }
-        case Opcodes.SKIP_IF_VX_DOES_NOT_EQUAL_NN.toString(): {
-            this.skipIfVXDoesNotEqualNN(opcode);
+        case Opcodes.OPCODE_4XNN_SKIP_IF_VX_DOES_NOT_EQUAL_NN.toString(): {
+            this.executeOpcode_4XNN_skipIfVXDoesNotEqualNN(opcode);
             break;
         }
-        case Opcodes.SKIP_IF_VX_EQUALS_NN.toString(): {
-            this.skipIfVXEqualsNN(opcode);
+        case Opcodes.OPCODE_3XNN_SKIP_IF_VX_EQUALS_NN.toString(): {
+            this.executeOpcode_3XNN_skipIfVXEqualsNN(opcode);
             break;
         }
-        case Opcodes.RETURN_FROM_SUBROUTINE.toString(): {
-            this.returnFromSubroutine(opcode);
+        case Opcodes.OPCODE_00EE_RETURN_FROM_SUBROUTINE.toString(): {
+            this.executeOpcode_00EE_returnFromSubroutine(opcode);
             break;
         }
-        case Opcodes.JUMP_TO_ADDRESS.toString(): {
-            this.jumpToAddress(opcode);
+        case Opcodes.OPCODE_1NNN_JUMP_TO_ADDRESS.toString(): {
+            this.executeOpcode_1NNN_jumpToAddress(opcode);
             break;
         }
-        case Opcodes.LOAD_INDEX_REGISTER.toString(): {
-            this.loadIndexRegister(opcode);
+        case Opcodes.OPCODE_ANNN_LOAD_INDEX_REGISTER.toString(): {
+            this.executeOpcode_ANNN_loadIndexRegister(opcode);
             break;
         }
-        case Opcodes.JUMP_TO_SUBROUTINE.toString(): {
-            this.jumpToSubroutine(opcode);
+        case Opcodes.OPCODE_2NNN_JUMP_TO_SUBROUTINE.toString(): {
+            this.executeOpcode_2NNN_jumpToSubroutine(opcode);
             break;
         }
-        case Opcodes.JUMP_WITH_V0_OFFSET.toString(): {
-            this.jumpWithV0Offset(opcode);
+        case Opcodes.OPCODE_BNNN_JUMP_WITH_V0_OFFSET.toString(): {
+            this.executeOpcode_BNNN_jumpWithV0Offset(opcode);
             break;
         }
-        case Opcodes.SKIP_IF_PRESSED.toString(): {
-            this.skipIfPressed(opcode);
+        case Opcodes.OPCODE_EX9E_SKIP_IF_PRESSED.toString(): {
+            this.executeOpcode_EX9E_skipIfPressed(opcode);
             break;
         }
-        case Opcodes.SKIP_IF_NOT_PRESSED.toString(): {
-            this.skipIfNotPressed(opcode);
+        case Opcodes.OPCODE_EXA1_SKIP_IF_NOT_PRESSED.toString(): {
+            this.executeOpcode_EXA1_skipIfNotPressed(opcode);
             break;
         }
-        case Opcodes.STORE_DELAY_TIMER_TO_VX.toString(): {
-            this.storeDelayTimerToVX(opcode);
+        case Opcodes.OPCODE_FX07_STORE_DELAY_TIMER_TO_VX.toString(): {
+            this.executeOpcode_FX07_storeDelayTimerToVX(opcode);
             break;
         }
-        case Opcodes.STORE_VX_TO_DELAY_TIMER.toString(): {
-            this.storeVXToDelayTimer(opcode);
+        case Opcodes.OPCODE_FX15_STORE_VX_TO_DELAY_TIMER.toString(): {
+            this.executeOpcode_FX15_storeVXToDelayTimer(opcode);
             break;
         }
-        case Opcodes.STORE_VX_TO_SOUND_TIMER.toString(): {
-            this.storeVXToSoundTimer(opcode);
+        case Opcodes.OPCODE_FX18_STORE_VX_TO_SOUND_TIMER.toString(): {
+            this.executeOpcode_FX18_storeVXToSoundTimer(opcode);
             break;
         }
-        case Opcodes.ADD_VX_TO_I.toString(): {
-            this.addVXToI(opcode);
+        case Opcodes.OPCODE_FX1E_ADD_VX_TO_I.toString(): {
+            this.executeOpcode_FX1E_addVXToI(opcode);
             break;
         }
-        case Opcodes.STORE_RANDOM_NUMBER_TO_VX.toString(): {
-            this.storeRandomNumberToVX(opcode);
+        case Opcodes.OPCODE_CXNN_STORE_RANDOM_NUMBER_TO_VX.toString(): {
+            this.executeOpcode_CXNN_storeRandomNumberToVX(opcode);
             break;
         }
-        case Opcodes.DRAW_VX_VY.toString(): {
-            this.drawVxVy(opcode);
+        case Opcodes.OPCODE_DXYN_DRAW_VX_VY.toString(): {
+            this.executeOpcode_DXYN_drawVxVy(opcode);
             break;
         }
-        case Opcodes.START_WAIT_FOR_STORE_KEYPRESS_TO_VX.toString(): {
-            this.startWaitForStoreKeypressToVX(opcode);
+        case Opcodes.OPCODE_FX0A_START_WAIT_FOR_STORE_KEYPRESS_TO_VX.toString(): {
+            this.executeOpcode_FX0A_startWaitForStoreKeypressToVX(opcode);
             break;
         }
-        case Opcodes.ADD_WITH_CARRY.toString(): {
-            this.addWithCarry(opcode);
+        case Opcodes.OPCODE_8XY4_ADD_WITH_CARRY.toString(): {
+            this.executeOpcode_8XY4_addWithCarry(opcode);
             break;
         }
-        case Opcodes.STORE_DECIMAL_VALUE_TO_VX.toString(): {
-            this.storeDecimalValueToVX(opcode);
+        case Opcodes.OPCODE_FX33_STORE_DECIMAL_VALUE_TO_VX.toString(): {
+            this.executeOpcode_FX33_storeDecimalValueToVX(opcode);
             break;
         }
-        case Opcodes.STORE_FROM_V0_VX_TO_MEMORY.toString(): {
-            this.storeFromV0VXToMemory(opcode);
+        case Opcodes.OPCODE_FX55_STORE_FROM_V0_VX_TO_MEMORY.toString(): {
+            this.executeOpcode_FX55_storeFromV0VXToMemory(opcode);
             break;
         }
-        case Opcodes.STORE_FROM_MEMORY_TO_V0_VX.toString(): {
-            this.storeFromMemoryToV0VX(opcode);
+        case Opcodes.OPCODE_FX65_STORE_FROM_MEMORY_TO_V0_VX.toString(): {
+            this.executeOpcode_FX65_storeFromMemoryToV0VX(opcode);
             break;
         }
-        case Opcodes.SHIFT_LEFT_VX_VY.toString(): {
-            this.shiftLeftVXVY(opcode);
+        case Opcodes.OPCODE_8XYE_SHIFT_LEFT_VX_VY.toString(): {
+            this.executeOpcode_8XYE_shiftLeftVXVY(opcode);
             break;
         }
-        case Opcodes.SKIP_IF_VX_NOT_EQUAL_VY.toString(): {
-            this.skipIfVXDoesNotEqualVY(opcode);
+        case Opcodes.OPCODE_9XY0_SKIP_IF_VX_NOT_EQUAL_VY.toString(): {
+            this.executeOpcode_9XY0_skipIfVXDoesNotEqualVY(opcode);
             break;
         }
-        case Opcodes.SET_I_TO_VX_SPRITE_LOCATION.toString(): {
-            this.setIToVxSpriteLocation(opcode);
+        case Opcodes.OPCODE_FX29_SET_I_TO_VX_SPRITE_LOCATION.toString(): {
+            this.executeOpcode_FX29_setIToVxSpriteLocation(opcode);
             break;
         }
         default: {
@@ -242,13 +244,13 @@ export default class Cpu {
         }
     }
 
-    private clearDisplay(): void {
+    private executeOpcode_00E0_clearDisplay(): void {
         this.display.clearDisplay();
         this.programCounter += 2;
     }
 
-    private setVXToBitwiseAndVY(opcode: number): void {
-        console.log('call setVXToBitwiseAndVY');
+    private executeOpcode_8XY2_setVXToBitwiseAndVY(opcode: number): void {
+        console.log('call executeOpcode_8XY2_setVXToBitwiseAndVY ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -256,8 +258,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private setVXToBitwiseOrVY(opcode: number): void {
-        console.log('call setVXToBitwiseOrVY');
+    private executeOpcode_8XY1_setVXToBitwiseOrVY(opcode: number): void {
+        console.log('call executeOpcode_8XY1_setVXToBitwiseOrVY ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -265,8 +267,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private setVXToBitwiseXorVY(opcode: number): void {
-        console.log('call setVXToBitwiseXorVY');
+    private executeOpcode_8XY3_setVXToBitwiseXorVY(opcode: number): void {
+        console.log('call executeOpcode_8XY3_setVXToBitwiseXorVY ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -274,8 +276,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private setVXToVY(opcode: number): void {
-        console.log('call setVXToVY');
+    private executeOpcode_8XY0_setVXToVY(opcode: number): void {
+        console.log('call executeOpcode_8XY0_setVXToVY ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -283,8 +285,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private subtractVYFromVXWithCarry(opcode: number): void {
-        console.log('call subtractVYFromVXWithCarry');
+    private executeOpcode_8XY5_subtractVYFromVXWithCarry(opcode: number): void {
+        console.log('call executeOpcode_8XY5_subtractVYFromVXWithCarry ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -299,8 +301,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private subtractVXFromVYWithCarry(opcode: number): void {
-        console.log('call subtractVXFromVYWithCarry');
+    private executeOpcode_8XY7_subtractVXFromVYWithCarry(opcode: number): void {
+        console.log('call executeOpcode_8XY7_subtractVXFromVYWithCarry ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -315,8 +317,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private addNNToVX(opcode: number): void {
-        console.log('call addNNToVX');
+    private executeOpcode_7XNN_addNNToVX(opcode: number): void {
+        console.log('call executeOpcode_7XNN_addNNToVX ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nn = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -324,8 +326,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private setVXToNN(opcode: number): void {
-        console.log('call setVXToNN');
+    private executeOpcode_6XNN_setVXToNN(opcode: number): void {
+        console.log('call executeOpcode_6XNN_setVXToNN ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nnAddress = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -333,8 +335,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private shiftRightVxVy(opcode: number): void {
-        console.log('call shiftRightVxVy');
+    private executeOpcode_8XY6_shiftRightVxVy(opcode: number): void {
+        console.log('call executeOpcode_8XY6_shiftRightVxVy ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -345,8 +347,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private skipIfVXEqualsVY(opcode: number): void {
-        console.log('call skipIfVXEqualsVY');
+    private executeOpcode_5XY0_skipIfVXEqualsVY(opcode: number): void {
+        console.log('call executeOpcode_5XY0_skipIfVXEqualsVY ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -358,8 +360,8 @@ export default class Cpu {
         }
     }
 
-    private skipIfVXDoesNotEqualNN(opcode: number): void {
-        console.log('call skipIfVXDoesNotEqualNN');
+    private executeOpcode_4XNN_skipIfVXDoesNotEqualNN(opcode: number): void {
+        console.log('call executeOpcode_4XNN_skipIfVXDoesNotEqualNN ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nnAddress = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -371,8 +373,8 @@ export default class Cpu {
         }
     }
 
-    private skipIfVXEqualsNN(opcode: number): void {
-        console.log('call skipIfVXEqualsNN');
+    private executeOpcode_3XNN_skipIfVXEqualsNN(opcode: number): void {
+        console.log('call executeOpcode_3XNN_skipIfVXEqualsNN ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nnAddress = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -384,41 +386,50 @@ export default class Cpu {
         }
     }
 
-    private returnFromSubroutine(opcode: number): void {
-        console.log('call returnFromSubroutine');
+    private executeOpcode_00EE_returnFromSubroutine(opcode: number): void {
+        console.log('call executeOpcode_00EE_returnFromSubroutine ' + opcode.toString(16));
+
+        console.log(`returnFromSubroutine PRE: this.stack is: ${this.stack}`)
+        console.log(`returnFromSubroutine PRE: this.stackPointer is: ${this.stackPointer}`)
+        console.log(`returnFromSubroutine PRE: this.programCounter is: ${this.programCounter}`)
+
         this.programCounter = this.stack[this.stackPointer];
         this.stackPointer -= 1;
+
+        console.log(`returnFromSubroutine POST: this.stack is: ${this.stack}`)
+        console.log(`returnFromSubroutine POST: this.stackPointer is: ${this.stackPointer}`)
+        console.log(`returnFromSubroutine POST: this.programCounter is: ${this.programCounter}`)
     }
 
-    private jumpToAddress(opcode: number): void {
-        console.log('call jumpToAddress');
+    private executeOpcode_1NNN_jumpToAddress(opcode: number): void {
+        console.log('call executeOpcode_1NNN_jumpToAddress ' + opcode.toString(16));
         const nnnAddress = OpcodeReader.parseOpcodeNNN(opcode);
         this.programCounter = nnnAddress;
     }
 
-    private loadIndexRegister(opcode: number): void {
-        console.log('call loadIndexRegister');
+    private executeOpcode_ANNN_loadIndexRegister(opcode: number): void {
+        console.log('call executeOpcode_ANNN_loadIndexRegister ' + opcode.toString(16));
         const nnnAddress = OpcodeReader.parseOpcodeNNN(opcode);
         this.indexRegister = nnnAddress;
         this.programCounter += 2;
     }
 
-    private jumpToSubroutine(opcode: number): void {
-        console.log('call jumpToSubroutine');
-        this.stack[this.stackPointer] = this.programCounter;
+    private executeOpcode_2NNN_jumpToSubroutine(opcode: number): void {
+        console.log('call executeOpcode_2NNN_jumpToSubroutine ' + opcode.toString(16));
         this.stackPointer += 1;
+        this.stack[this.stackPointer] = this.programCounter;
         this.programCounter = OpcodeReader.parseOpcodeNNN(opcode);
     }
 
-    private jumpWithV0Offset(opcode: number): void {
-        console.log('call jumpWithV0Offset');
+    private executeOpcode_BNNN_jumpWithV0Offset(opcode: number): void {
+        console.log('call executeOpcode_BNNN_jumpWithV0Offset ' + opcode.toString(16));
         const nnnAddress = OpcodeReader.parseOpcodeNNN(opcode);
         const v0Data = this.registers[0];
         this.programCounter = nnnAddress + v0Data;
     }
 
-    private skipIfPressed(opcode: number): void {
-        console.log('call skipIfPressed');
+    private executeOpcode_EX9E_skipIfPressed(opcode: number): void {
+        console.log('call executeOpcode_EX9E_skipIfPressed ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const sourceKeyPress = this.registers[vX];
 
@@ -427,8 +438,8 @@ export default class Cpu {
         }
     }
 
-    private skipIfNotPressed(opcode: number): void {
-        console.log('call skipIfNotPressed');
+    private executeOpcode_EXA1_skipIfNotPressed(opcode: number): void {
+        console.log('call executeOpcode_EXA1_skipIfNotPressed ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         const sourceKeyPress = this.registers[vX];
@@ -438,40 +449,40 @@ export default class Cpu {
         }
     }
 
-    private storeDelayTimerToVX(opcode: number): void {
-        console.log('call storeDelayTimerToVX');
+    private executeOpcode_FX07_storeDelayTimerToVX(opcode: number): void {
+        console.log('call executeOpcode_FX07_storeDelayTimerToVX ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.registers[vX] = this.delayTimer;
         this.programCounter += 2;
     }
 
-    private storeVXToDelayTimer(opcode: number): void {
-        console.log('call storeVXToDelayTimer');
+    private executeOpcode_FX15_storeVXToDelayTimer(opcode: number): void {
+        console.log('call executeOpcode_FX15_storeVXToDelayTimer ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.delayTimer = this.registers[vX];
         this.programCounter += 2;
     }
 
-    private storeVXToSoundTimer(opcode: number): void {
-        console.log('call storeVXToSoundTimer');
+    private executeOpcode_FX18_storeVXToSoundTimer(opcode: number): void {
+        console.log('call executeOpcode_FX18_storeVXToSoundTimer ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.soundTimer = this.registers[vX];
         this.programCounter += 2;
     }
 
-    private addVXToI(opcode: number): void {
-        console.log('call addVXToI');
+    private executeOpcode_FX1E_addVXToI(opcode: number): void {
+        console.log('call executeOpcode_FX1E_addVXToI ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.indexRegister += this.registers[vX];
         this.programCounter += 2
     }
 
-    private storeRandomNumberToVX(opcode: number): void {
-        console.log('call storeRandomNumberToVX');
+    private executeOpcode_CXNN_storeRandomNumberToVX(opcode: number): void {
+        console.log('call executeOpcode_CXNN_storeRandomNumberToVX ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const sourceNumber = OpcodeReader.parseOpcodeNN(opcode);
         const randomNumber = RandomNumberGenerator.getRandomIntMax255();
@@ -482,8 +493,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private drawVxVy(opcode: number): void {
-        console.log('call drawDxDy');
+    private executeOpcode_DXYN_drawVxVy(opcode: number): void {
+        console.log('call drawDxDy ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
         const height = OpcodeReader.parseOpcodeN(opcode);
@@ -506,8 +517,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private startWaitForStoreKeypressToVX(opcode: number): void {
-        console.log('call startWaitForStoreKeypressToVX');
+    private executeOpcode_FX0A_startWaitForStoreKeypressToVX(opcode: number): void {
+        console.log('call executeOpcode_FX0A_startWaitForStoreKeypressToVX ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         this.isHalted = true;
         this.hasPendingWaitForStoreKeypressToVX = true;
@@ -515,15 +526,15 @@ export default class Cpu {
     }
 
     public finishWaitForStoreKeypressToVX(targetRegister: number) {
-        console.log('call finishWaitForStoreKeypressToVX');
+        console.log ('call finishWaitForStoreKeypressToVX' + targetRegister);
         this.registers[targetRegister] = this.currentKeyPressed;
         this.hasPendingWaitForStoreKeypressToVX = false;
         this.isHalted = false;
         this.programCounter += 2
     }
 
-    private addWithCarry(opcode: number): void {
-        console.log('call addWithCarry');
+    private executeOpcode_8XY4_addWithCarry(opcode: number): void {
+        console.log('call executeOpcode_8XY4_addWithCarry ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -538,8 +549,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private storeDecimalValueToVX(opcode: number): void {
-        console.log('call storeDecimalValueToVX');
+    private executeOpcode_FX33_storeDecimalValueToVX(opcode: number): void {
+        console.log('call executeOpcode_FX33_storeDecimalValueToVX ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.memory[this.indexRegister] = Math.floor(this.registers[vX] / 100);
@@ -549,8 +560,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private storeFromV0VXToMemory(opcode: number): void {
-        console.log('call storeFromV0VXToMemory');
+    private executeOpcode_FX55_storeFromV0VXToMemory(opcode: number): void {
+        console.log('call executeOpcode_FX55_storeFromV0VXToMemory ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         for (let counter = 0; counter <= vX; counter++) {
@@ -560,8 +571,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private storeFromMemoryToV0VX(opcode: number): void {
-        console.log('call storeFromMemoryToV0VX');
+    private executeOpcode_FX65_storeFromMemoryToV0VX(opcode: number): void {
+        console.log('call executeOpcode_FX65_storeFromMemoryToV0VX ' + opcode.toString(16));
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         for (let counter = 0; counter <= vX; counter++) {
@@ -571,8 +582,8 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private shiftLeftVXVY(opcode: number): void {
-        console.log('call shiftLeftVXVY');
+    private executeOpcode_8XYE_shiftLeftVXVY(opcode: number): void {
+        console.log('call executeOpcode_8XYE_shiftLeftVXVY ' + opcode.toString(16));
 
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
@@ -585,7 +596,7 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private skipIfVXDoesNotEqualVY(opcode: number): void {
+    private executeOpcode_9XY0_skipIfVXDoesNotEqualVY(opcode: number): void {
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -596,7 +607,7 @@ export default class Cpu {
         }
     }
 
-    private setIToVxSpriteLocation(opcode: number): void {
+    private executeOpcode_FX29_setIToVxSpriteLocation(opcode: number): void {
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.indexRegister = this.registers[vX] * 5;

@@ -176,7 +176,7 @@ describe('Cpu', () => {
                 cpu.decodeOpcode(0x20F0);
 
 
-                expect(cpu.stack[cpu.stackPointer - 1]).toEqual(4);
+                expect(cpu.stack[cpu.stackPointer]).toEqual(4);
                 expect(cpu.programCounter).toEqual(0x0F0);
                 expect(cpu.stackPointer).toEqual(1);
             });
@@ -375,7 +375,7 @@ describe('Cpu', () => {
                 });
             });
 
-            describe(`decodes opcode 8XY6 ${Opcodes.SHIFT_RIGHT_VX_VY}`, () => {
+            describe(`decodes opcode 8XY6 ${Opcodes.OPCODE_8XY6_SHIFT_RIGHT_VX_VY}`, () => {
                 it('when least significant bit is 1', () => {
                     cpu.registers[0xF] = 0x004;
                     cpu.registers[0xA] = 0x003;
