@@ -1,9 +1,7 @@
-import Cpu from '../src/cpu';
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import * as log from 'loglevel';
+import CanvasDisplay from "./display/CanvasDisplay";
+import Cpu from "./cpu";
 
-function readRomFile(romFileTarget): Promise<ArrayBuffer> {
+function readRomFile(romFileTarget: File): Promise<ArrayBuffer> {
     return new Promise<ArrayBuffer>((resolve) => {
         const reader = new FileReader();
 
@@ -16,8 +14,9 @@ function readRomFile(romFileTarget): Promise<ArrayBuffer> {
     });
 }
 
-function playGame(gameData): void {
-    const cpu = new Cpu();
+function playGame(gameData: Uint8Array): void {
+    const canvasDisplay = new CanvasDisplay();
+    const cpu = new Cpu(canvasDisplay);
 
     cpu.loadGame(gameData);
 }
@@ -26,11 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const romElement = document.getElementById('romFile') as HTMLInputElement;
 
     romElement.addEventListener('change', () => {
-        log.debug(
-            'Loading: ' + romElement.files[0].name
+        const file = romElement?.files![0];
+        console.log(
+            'Loading: ' + file.name
         );
 
-        readRomFile(romElement.files[0])
+        readRomFile(file)
             .then((text) => {
                 const gameData = new Uint8Array(text);
                 playGame(gameData);

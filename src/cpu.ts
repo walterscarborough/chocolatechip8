@@ -2,10 +2,8 @@ import OpcodeReader from './opcodeReader';
 import RandomNumberGenerator from './randomNumberGenerator';
 import OpcodeDecoder from './opcodeDecoder';
 import {Opcodes} from './opcodes';
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import * as log from 'loglevel';
 import {Display} from "./display/display";
+import {font} from "./font";
 
 export default class Cpu {
 
@@ -24,12 +22,12 @@ export default class Cpu {
 
     hasPendingWaitForStoreKeypressToVX: boolean = false;
     pendingWaitForStoreKeypressToVXRegister: number = 0;
-    graphicsOutput: Array<number> = Cpu.initializeArrayToZero(64 * 32);
-
     display: Display;
+
 
     constructor(display: Display) {
         this.display = display;
+        this.display.initializeDisplay();
     }
 
     private static initializeArrayToZero(length: number): number[] {
@@ -39,16 +37,24 @@ export default class Cpu {
 
     public loadGame(game: Uint8Array): void {
 
+        console.log('loadGame called');
+
+        for (let i = 0; i < font.length; i++) {
+            this.memory[i] = font[i];
+        }
+
         for (let i = 0; i < game.length; i++) {
             this.memory[0x200 + i] = game[i];
         }
 
         let counter = 0;
-        while (counter < 6) {
+        while (counter > -1) {
             counter++;
 
             this.emulateCycle();
         }
+
+        console.log('emulateCycle ended');
     }
 
     public keypress(key: number): void {
@@ -68,7 +74,7 @@ export default class Cpu {
         const opcode = this.fetchOpcode(this.memory, this.programCounter);
         this.decodeOpcode(opcode);
 
-        log.debug('opcode is: ' + opcode.toString(16));
+        console.log('opcode is: ' + opcode.toString(16));
 
         // update timers
         // delayTimer = this.updateDelayTimer(this.delayTimer);
@@ -242,7 +248,7 @@ export default class Cpu {
     }
 
     private setVXToBitwiseAndVY(opcode: number): void {
-        log.debug('call setVXToBitwiseAndVY');
+        console.log('call setVXToBitwiseAndVY');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -251,7 +257,7 @@ export default class Cpu {
     }
 
     private setVXToBitwiseOrVY(opcode: number): void {
-        log.debug('call setVXToBitwiseOrVY');
+        console.log('call setVXToBitwiseOrVY');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -260,7 +266,7 @@ export default class Cpu {
     }
 
     private setVXToBitwiseXorVY(opcode: number): void {
-        log.debug('call setVXToBitwiseXorVY');
+        console.log('call setVXToBitwiseXorVY');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -269,7 +275,7 @@ export default class Cpu {
     }
 
     private setVXToVY(opcode: number): void {
-        log.debug('call setVXToVY');
+        console.log('call setVXToVY');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -278,7 +284,7 @@ export default class Cpu {
     }
 
     private subtractVYFromVXWithCarry(opcode: number): void {
-        log.debug('call subtractVYFromVXWithCarry');
+        console.log('call subtractVYFromVXWithCarry');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -294,7 +300,7 @@ export default class Cpu {
     }
 
     private subtractVXFromVYWithCarry(opcode: number): void {
-        log.debug('call subtractVXFromVYWithCarry');
+        console.log('call subtractVXFromVYWithCarry');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -310,7 +316,7 @@ export default class Cpu {
     }
 
     private addNNToVX(opcode: number): void {
-        log.debug('call addNNToVX');
+        console.log('call addNNToVX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nn = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -319,7 +325,7 @@ export default class Cpu {
     }
 
     private setVXToNN(opcode: number): void {
-        log.debug('call setVXToNN');
+        console.log('call setVXToNN');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nnAddress = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -328,7 +334,7 @@ export default class Cpu {
     }
 
     private shiftRightVxVy(opcode: number): void {
-        log.debug('call shiftRightVxVy');
+        console.log('call shiftRightVxVy');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -340,7 +346,7 @@ export default class Cpu {
     }
 
     private skipIfVXEqualsVY(opcode: number): void {
-        log.debug('call skipIfVXEqualsVY');
+        console.log('call skipIfVXEqualsVY');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -353,7 +359,7 @@ export default class Cpu {
     }
 
     private skipIfVXDoesNotEqualNN(opcode: number): void {
-        log.debug('call skipIfVXDoesNotEqualNN');
+        console.log('call skipIfVXDoesNotEqualNN');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nnAddress = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -366,7 +372,7 @@ export default class Cpu {
     }
 
     private skipIfVXEqualsNN(opcode: number): void {
-        log.debug('call skipIfVXEqualsNN');
+        console.log('call skipIfVXEqualsNN');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const nnAddress = OpcodeReader.parseOpcodeNN(opcode);
 
@@ -379,40 +385,40 @@ export default class Cpu {
     }
 
     private returnFromSubroutine(opcode: number): void {
-        log.debug('call returnFromSubroutine');
+        console.log('call returnFromSubroutine');
         this.programCounter = this.stack[this.stackPointer];
         this.stackPointer -= 1;
     }
 
     private jumpToAddress(opcode: number): void {
-        log.debug('call jumpToAddress');
+        console.log('call jumpToAddress');
         const nnnAddress = OpcodeReader.parseOpcodeNNN(opcode);
         this.programCounter = nnnAddress;
     }
 
     private loadIndexRegister(opcode: number): void {
-        log.debug('call loadIndexRegister');
+        console.log('call loadIndexRegister');
         const nnnAddress = OpcodeReader.parseOpcodeNNN(opcode);
         this.indexRegister = nnnAddress;
         this.programCounter += 2;
     }
 
     private jumpToSubroutine(opcode: number): void {
-        log.debug('call jumpToSubroutine');
+        console.log('call jumpToSubroutine');
         this.stack[this.stackPointer] = this.programCounter;
         this.stackPointer += 1;
         this.programCounter = OpcodeReader.parseOpcodeNNN(opcode);
     }
 
     private jumpWithV0Offset(opcode: number): void {
-        log.debug('call jumpWithV0Offset');
+        console.log('call jumpWithV0Offset');
         const nnnAddress = OpcodeReader.parseOpcodeNNN(opcode);
         const v0Data = this.registers[0];
         this.programCounter = nnnAddress + v0Data;
     }
 
     private skipIfPressed(opcode: number): void {
-        log.debug('call skipIfPressed');
+        console.log('call skipIfPressed');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const sourceKeyPress = this.registers[vX];
 
@@ -422,7 +428,7 @@ export default class Cpu {
     }
 
     private skipIfNotPressed(opcode: number): void {
-        log.debug('call skipIfNotPressed');
+        console.log('call skipIfNotPressed');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         const sourceKeyPress = this.registers[vX];
@@ -433,7 +439,7 @@ export default class Cpu {
     }
 
     private storeDelayTimerToVX(opcode: number): void {
-        log.debug('call storeDelayTimerToVX');
+        console.log('call storeDelayTimerToVX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.registers[vX] = this.delayTimer;
@@ -441,7 +447,7 @@ export default class Cpu {
     }
 
     private storeVXToDelayTimer(opcode: number): void {
-        log.debug('call storeVXToDelayTimer');
+        console.log('call storeVXToDelayTimer');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.delayTimer = this.registers[vX];
@@ -449,7 +455,7 @@ export default class Cpu {
     }
 
     private storeVXToSoundTimer(opcode: number): void {
-        log.debug('call storeVXToSoundTimer');
+        console.log('call storeVXToSoundTimer');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.soundTimer = this.registers[vX];
@@ -457,7 +463,7 @@ export default class Cpu {
     }
 
     private addVXToI(opcode: number): void {
-        log.debug('call addVXToI');
+        console.log('call addVXToI');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.indexRegister += this.registers[vX];
@@ -465,7 +471,7 @@ export default class Cpu {
     }
 
     private storeRandomNumberToVX(opcode: number): void {
-        log.debug('call storeRandomNumberToVX');
+        console.log('call storeRandomNumberToVX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const sourceNumber = OpcodeReader.parseOpcodeNN(opcode);
         const randomNumber = RandomNumberGenerator.getRandomIntMax255();
@@ -477,7 +483,7 @@ export default class Cpu {
     }
 
     private drawVxVy(opcode: number): void {
-        log.debug('call drawDxDy');
+        console.log('call drawDxDy');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
         const height = OpcodeReader.parseOpcodeN(opcode);
@@ -486,13 +492,13 @@ export default class Cpu {
             const pixel = this.memory[this.indexRegister + yLine];
 
             for (let xLine = 0; xLine < 8; xLine++) {
-                if ((pixel & (0x80 >> xLine)) != 0) {
 
-                    if (this.graphicsOutput[(vX + xLine + ((vY + yLine) * 64))] == 1) {
-                        this.registers[0xF] = 1;
-                    }
+                const x = this.registers[vX] + xLine;
+                const y = this.registers[vY] + yLine;
+                const value = pixel & (1 << (7 - xLine)) ? 1: 0;
 
-                    this.graphicsOutput[vX + xLine + ((vY + yLine) * 64)] ^= 1;
+                if (this.display.drawPixel(x, y, value)) {
+                    this.registers[0xF] = 1;
                 }
             }
         }
@@ -501,7 +507,7 @@ export default class Cpu {
     }
 
     private startWaitForStoreKeypressToVX(opcode: number): void {
-        log.debug('call startWaitForStoreKeypressToVX');
+        console.log('call startWaitForStoreKeypressToVX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         this.isHalted = true;
         this.hasPendingWaitForStoreKeypressToVX = true;
@@ -509,7 +515,7 @@ export default class Cpu {
     }
 
     public finishWaitForStoreKeypressToVX(targetRegister: number) {
-        log.debug('call finishWaitForStoreKeypressToVX');
+        console.log('call finishWaitForStoreKeypressToVX');
         this.registers[targetRegister] = this.currentKeyPressed;
         this.hasPendingWaitForStoreKeypressToVX = false;
         this.isHalted = false;
@@ -517,7 +523,7 @@ export default class Cpu {
     }
 
     private addWithCarry(opcode: number): void {
-        log.debug('call addWithCarry');
+        console.log('call addWithCarry');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
 
@@ -533,7 +539,7 @@ export default class Cpu {
     }
 
     private storeDecimalValueToVX(opcode: number): void {
-        log.debug('call storeDecimalValueToVX');
+        console.log('call storeDecimalValueToVX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         this.memory[this.indexRegister] = Math.floor(this.registers[vX] / 100);
@@ -544,7 +550,7 @@ export default class Cpu {
     }
 
     private storeFromV0VXToMemory(opcode: number): void {
-        log.debug('call storeFromV0VXToMemory');
+        console.log('call storeFromV0VXToMemory');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         for (let counter = 0; counter <= vX; counter++) {
@@ -555,7 +561,7 @@ export default class Cpu {
     }
 
     private storeFromMemoryToV0VX(opcode: number): void {
-        log.debug('call storeFromMemoryToV0VX');
+        console.log('call storeFromMemoryToV0VX');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
 
         for (let counter = 0; counter <= vX; counter++) {
@@ -566,7 +572,7 @@ export default class Cpu {
     }
 
     private shiftLeftVXVY(opcode: number): void {
-        log.debug('call shiftLeftVXVY');
+        console.log('call shiftLeftVXVY');
 
         const vX = OpcodeReader.parseOpcodeVX(opcode);
         const vY = OpcodeReader.parseOpcodeVY(opcode);
