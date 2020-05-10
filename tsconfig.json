@@ -3,10 +3,20 @@
     "outDir": "build",
     "sourceMap": true,
     "target": "es5",
+    "lib": [
+      "es2019",
+      "dom"
+    ],
     "module": "es6",
-    "allowJs": true
+    "esModuleInterop": true,
+    "strict": true,
+    "allowJs": true,
+    "moduleResolution": "node"
   },
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+    "**/*.test.ts"
   ]
 }
