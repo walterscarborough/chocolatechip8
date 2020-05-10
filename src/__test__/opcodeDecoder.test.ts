@@ -99,10 +99,10 @@ describe('opcodes', () => {
         expect(decodedOpcode).toEqual(Opcodes.SUBTRACT_VY_FROM_VX_WITH_CARRY);
     });
 
-    it('decodes opcode 0x8XY6 (shiftVXRight)', () => {
+    it('decodes opcode 0x8XY6 (shiftRightVxVy)', () => {
         const decodedOpcode = OpcodeDecoder.decodeOpcode(0x8006);
 
-        expect(decodedOpcode).toEqual(Opcodes.SHIFT_VX_RIGHT);
+        expect(decodedOpcode).toEqual(Opcodes.SHIFT_RIGHT_VX_VY);
     });
 
     it('decodes opcode 0x8XY7 (subtractVXFromVYWithCarry)', () => {
@@ -111,10 +111,10 @@ describe('opcodes', () => {
         expect(decodedOpcode).toEqual(Opcodes.SUBTRACT_VX_FROM_VY_WITH_CARRY);
     });
 
-    it('decodes opcode 0x8XYE (shiftLeftVYStoreVX)', () => {
+    it('decodes opcode 0x8XYE (shiftLeftVxVy)', () => {
         const decodedOpcode = OpcodeDecoder.decodeOpcode(0x800E);
 
-        expect(decodedOpcode).toEqual(Opcodes.SHIFT_LEFT_VY_STORE_VX);
+        expect(decodedOpcode).toEqual(Opcodes.SHIFT_LEFT_VX_VY);
     });
 
     it('decodes opcode 0x9XY0 (skipIfVXNotEqualVY)', () => {

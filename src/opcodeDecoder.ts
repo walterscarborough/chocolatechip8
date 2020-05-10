@@ -81,7 +81,7 @@ export default class OpcodeDecoder {
           }
 
           case 0x0006: {
-              return Opcodes.SHIFT_VX_RIGHT;
+              return Opcodes.SHIFT_RIGHT_VX_VY;
           }
 
           case 0x0007: {
@@ -89,7 +89,7 @@ export default class OpcodeDecoder {
           }
 
           case 0x000E: {
-              return Opcodes.SHIFT_LEFT_VY_STORE_VX
+              return Opcodes.SHIFT_LEFT_VX_VY
           }
 
           default: {

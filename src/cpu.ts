@@ -5,6 +5,7 @@ import {Opcodes} from './opcodes';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import * as log from 'loglevel';
+import {Display} from "./display/display";
 
 export default class Cpu {
 
@@ -24,6 +25,12 @@ export default class Cpu {
     hasPendingWaitForStoreKeypressToVX: boolean = false;
     pendingWaitForStoreKeypressToVXRegister: number = 0;
     graphicsOutput: Array<number> = Cpu.initializeArrayToZero(64 * 32);
+
+    display: Display;
+
+    constructor(display: Display) {
+        this.display = display;
+    }
 
     private static initializeArrayToZero(length: number): number[] {
         // eslint-disable-next-line prefer-spread
@@ -87,6 +94,10 @@ export default class Cpu {
         const decodedOpcode = OpcodeDecoder.decodeOpcode(opcode);
 
         switch (decodedOpcode.toString()) {
+        case Opcodes.CLEAR_DISPLAY.toString(): {
+            this.clearDisplay();
+            break;
+        }
         case Opcodes.SET_VX_TO_BITWISE_AND_VY.toString(): {
             this.setVXToBitwiseAndVY(opcode);
             break;
@@ -119,8 +130,8 @@ export default class Cpu {
             this.setVXToNN(opcode);
             break;
         }
-        case Opcodes.SHIFT_VX_RIGHT.toString(): {
-            this.shiftVXRight(opcode);
+        case Opcodes.SHIFT_RIGHT_VX_VY.toString(): {
+            this.shiftRightVxVy(opcode);
             break;
         }
         case Opcodes.SKIP_IF_VX_EQUALS_VY.toString(): {
@@ -207,12 +218,28 @@ export default class Cpu {
             this.storeFromMemoryToV0VX(opcode);
             break;
         }
+        case Opcodes.SHIFT_LEFT_VX_VY.toString(): {
+            this.shiftLeftVXVY(opcode);
+            break;
+        }
+        case Opcodes.SKIP_IF_VX_NOT_EQUAL_VY.toString(): {
+            this.skipIfVXDoesNotEqualVY(opcode);
+            break;
+        }
+        case Opcodes.SET_I_TO_VX_SPRITE_LOCATION.toString(): {
+            this.setIToVxSpriteLocation(opcode);
+            break;
+        }
         default: {
             throw new Error('Error: cpu found unknown opcode')
         }
         }
     }
 
+    private clearDisplay(): void {
+        this.display.clearDisplay();
+        this.programCounter += 2;
+    }
 
     private setVXToBitwiseAndVY(opcode: number): void {
         log.debug('call setVXToBitwiseAndVY');
@@ -300,13 +327,15 @@ export default class Cpu {
         this.programCounter += 2;
     }
 
-    private shiftVXRight(opcode: number): void {
-        log.debug('call shiftVXRight');
+    private shiftRightVxVy(opcode: number): void {
+        log.debug('call shiftRightVxVy');
         const vX = OpcodeReader.parseOpcodeVX(opcode);
+        const vY = OpcodeReader.parseOpcodeVY(opcode);
 
-        this.registers[0xF] = this.registers[vX] & 0x1;
+        const leastSignificantBitOfVy = this.registers[vY] & 0x00F;
+        this.registers[0xF] = leastSignificantBitOfVy;
 
-        this.registers[vX] = this.registers[vX] >> 1;
+        this.registers[vX] = this.registers[vY] >> 1;
         this.programCounter += 2;
     }
 
@@ -532,6 +561,39 @@ export default class Cpu {
         for (let counter = 0; counter <= vX; counter++) {
             this.registers[counter] = this.memory[this.indexRegister + vX];
         }
+
+        this.programCounter += 2;
+    }
+
+    private shiftLeftVXVY(opcode: number): void {
+        log.debug('call shiftLeftVXVY');
+
+        const vX = OpcodeReader.parseOpcodeVX(opcode);
+        const vY = OpcodeReader.parseOpcodeVY(opcode);
+
+        const mostSignificantBitOfVy = this.registers[vY] >> 8;
+        this.registers[0xF] = mostSignificantBitOfVy;
+
+        this.registers[vX] = this.registers[vY] << 1;
+
+        this.programCounter += 2;
+    }
+
+    private skipIfVXDoesNotEqualVY(opcode: number): void {
+        const vX = OpcodeReader.parseOpcodeVX(opcode);
+        const vY = OpcodeReader.parseOpcodeVY(opcode);
+
+        if (this.registers[vX] !== this.registers[vY]) {
+            this.programCounter += 4;
+        } else {
+            this.programCounter += 2;
+        }
+    }
+
+    private setIToVxSpriteLocation(opcode: number): void {
+        const vX = OpcodeReader.parseOpcodeVX(opcode);
+
+        this.indexRegister = this.registers[vX] * 5;
 
         this.programCounter += 2;
     }
